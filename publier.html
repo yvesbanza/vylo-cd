@@ -41,13 +41,21 @@ document.getElementById('annonceForm').addEventListener('submit', e => {
   e.preventDefault();
   const msg = document.getElementById('msg');
   msg.innerText = "Envoi en cours...";
-  fetch(URL_SHEET, { method: 'POST', body: new FormData(e.target) })
-  .then(res => res.json())
-  .then(data => {
-    msg.innerText = "Annonce publiée avec succès !";
-    e.target.reset();
-  })
-  .catch(err => msg.innerText = "Erreur: " + err);
+  fetch(SCRIPT_URL, {
+  method: 'POST',
+  mode: 'no-cors',
+  cache: 'no-cache',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(Object.fromEntries(new FormData(form)))
+})
+.then(() => {
+  msg.innerText = "Annonce publiée avec succès !";
+  form.reset();
+})
+.catch((err) => {
+  msg.innerText = "Erreur: " + err;
 });
 </script>
 </body>
