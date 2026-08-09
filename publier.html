@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Publier - VYLO</title>
+    <style>
+        body {background-color: black; color: white; text-align: center; padding: 30px; font-family: Arial;}
+        .btn-vert {background-color: #00FF00; color: black; padding: 15px 30px; border: none; border-radius: 10px; font-weight: bold; margin: 10px;}
+        input, select, textarea {padding: 15px; width: 90%; margin: 10px; border-radius: 10px; border: none; font-size: 16px;}
+        h1 {color: #00FF00;}
+        textarea {height: 100px;}
+    </style>
+</head>
+<body>
+    <h1>Publier une annonce</h1>
+    
+    <input type="text" placeholder="Titre de l'annonce: Ex: iPhone 14 Pro">
+    <br>
+    <select>
+        <option>Choisir une catégorie</option>
+        <option>📱 Téléphones</option>
+        <option>🚗 Voitures</option>
+        <option>🏠 Maisons</option>
+        <option>👕 Vêtements</option>
+    </select>
+    <br>
+    <input type="number" placeholder="Prix en $">
+    <br>
+    <textarea placeholder="Description de votre produit"></textarea>
+    <br>
+    <button class="btn-vert">Publier maintenant</button>
+    <br><br>
+    <a href="index.html"><button class="btn-vert">Retour à l'accueil</button></a>
+</body>
+</html>
