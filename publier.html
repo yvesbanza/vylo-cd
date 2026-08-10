@@ -47,12 +47,14 @@
       msg.innerText = "Envoi en cours...";
 
       const data = {
-        titre: document.getElementById("titre").value,
-        prix: document.getElementById("prix").value,
-        ville: document.getElementById("ville").value,
-        tel: "", 
-        description: document.getElementById("description").value + " | Cat: " + document.getElementById("categorie").value
-      };
+  date: document.getElementById("date").value,
+  titre: document.getElementById("titre").value,
+  prix: document.getElementById("prix").value,
+  ville: document.getElementById("ville").value,
+  photo: document.getElementById("photo").value, // AJOUTE ÇA
+  tel: "", 
+  description: document.getElementById("description").value + " | Cat: " + document.getElementById("categorie").value
+};
 
       fetch(SCRIPT_URL, {
         method: 'POST',
