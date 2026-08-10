@@ -14,6 +14,7 @@ h1 { text-align:center; }
 </head>
 <body>
 <h1>Publier une annonce</h1>
+    <input type="hidden" id="date" name="date">
 <form id="annonceForm">
 <input type="text" id="titre" name="Titre" placeholder="Titre de l'annonce" required>
 <input type="number" id="prix" name="Prix" placeholder="Prix en $ required">
@@ -30,13 +31,6 @@ h1 { text-align:center; }
     <option>Electronique</option>
   </select>
   <input type="text" id="titre" name="Titre" placeholder="Titre de l'annonce" required>
-<input type="number" id="prix" name="Prix" placeholder="Prix en $ required">
-<textarea id="description" name="Description" placeholder="Description" rows="4" required></textarea>
-<select id="categorie" name="Categorie" required>
-<input type="text" id="ville" name="Ville" placeholder="Ville: Kinshasa, Lubumbashi...">
-<input type="url" id="photo" name="Photo" placeholder="Lien de la photo">
-<input type="hidden" id="date" name="Date">
-  <button type="submit">Publier maintenant</button>
 </form>
 <p id="msg"></p>
 
