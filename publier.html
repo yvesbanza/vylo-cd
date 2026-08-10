@@ -15,10 +15,13 @@ h1 { text-align:center; }
 <body>
 <h1>Publier une annonce</h1>
 <form id="annonceForm">
-  <input type="text" name="Titre" placeholder="Titre de l'annonce" required>
-  <input type="number" name="Prix" placeholder="Prix en $" required>
-  <textarea name="Description" placeholder="Description" rows="4" required></textarea>
-  <select name="Categorie" required>
+<input type="text" id="titre" name="Titre" placeholder="Titre de l'annonce" required>
+<input type="number" id="prix" name="Prix" placeholder="Prix en $ required">
+<textarea id="description" name="Description" placeholder="Description" rows="4" required></textarea>
+<select id="categorie" name="Categorie" required>
+<input type="text" id="ville" name="Ville" placeholder="Ville: Kinshasa, Lubumbashi...">
+<input type="url" id="photo" name="Photo" placeholder="Lien de la photo">
+<input type="hidden" id="date" name="Date">
     <option value="">Choisir catégorie</option>
     <option>Telephones</option>
     <option>Vehicules</option>
@@ -26,37 +29,48 @@ h1 { text-align:center; }
     <option>Mode</option>
     <option>Electronique</option>
   </select>
-  <input type="text" name="Ville" placeholder="Ville: Kinshasa, Lubumbashi..." required>
-  <input type="url" name="Photo" placeholder="Lien de la photo">
-  <input type="hidden" name="Date" id="date">
+  <input type="text" id="titre" name="Titre" placeholder="Titre de l'annonce" required>
+<input type="number" id="prix" name="Prix" placeholder="Prix en $ required">
+<textarea id="description" name="Description" placeholder="Description" rows="4" required></textarea>
+<select id="categorie" name="Categorie" required>
+<input type="text" id="ville" name="Ville" placeholder="Ville: Kinshasa, Lubumbashi...">
+<input type="url" id="photo" name="Photo" placeholder="Lien de la photo">
+<input type="hidden" id="date" name="Date">
   <button type="submit">Publier maintenant</button>
 </form>
 <p id="msg"></p>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyX0YAYltxAbUenbG_ewY-f2KwYfDrpNPezc_88ZOi4oiLB208xchIW9v4qxG8bPpBY/exec";
-document.getElementById('date').value = new Date().toLocaleString('fr-CD');
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJVJ41h-P4Cog0jwwSIN-iZCD8UzLMVFASWcl2kOzMZD6Fgly5614C7eECZpb6cHRw/exec";
 
-document.getElementById('annonceForm').addEventListener('submit', e => {
-  e.preventDefault();
-  const msg = document.getElementById('msg');
-  msg.innerText = "Envoi en cours...";
-  fetch(SCRIPT_URL, {
-  method: 'POST',
-  mode: 'no-cors',
-  cache: 'no-cache',
-  headers: {
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(Object.fromEntries(new FormData(form)))
-})
-.then(() => {
-  msg.innerText = "Annonce publiée avec succès !";
-  form.reset();
-})
-.catch((err) => {
-  msg.innerText = "Erreur: " + err;
-});
+    document.getElementById('date').value = new Date().toLocaleString("fr-CD");
+
+    document.getElementById('annonceForm').addEventListener('submit', e => {
+      e.preventDefault();
+      const msg = document.getElementById('msg');
+      msg.innerText = "Envoi en cours...";
+
+      const data = {
+        titre: document.getElementById("titre").value,
+        prix: document.getElementById("prix").value,
+        ville: document.getElementById("ville").value,
+        tel: "", // tu n'as pas de champ tel, je laisse vide pour l'instant
+        description: document.getElementById("description").value + " | Cat: " + document.getElementById("categorie").value
+      };
+
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(data)
+      })
+      .then(() => {
+        msg.innerText = "Annonce publiée avec succès !";
+        document.getElementById('annonceForm').reset();
+      })
+      .catch((err) => {
+        msg.innerText = "Erreur: " + err;
+      });
+    });
+  </script>
 </script>
 </body>
 </html>
