@@ -38,39 +38,47 @@
   <p id="msg"></p>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNlngka1t_sI9cDmMVGuLfzcPgdiqMTdu_vwPusR4eKpF85F79mH2fxRAfSy-iTGxfqQ/exec";
-const form = document.getElementById("annonce-form");
+const form = document.getElementById("formAnnonce");
 const msg = document.getElementById("message");
 
-form.addEventListener("submit", e => {
+// COLLE TON URL ICI
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzUuLzvzAnUJdKg0Cs6FaApKn579sy73xcZB_M2stYfL4_j-CNLF9amTf5OMZSS7ASBJg/exec";
+
+// Met la date d'aujourd'hui
+document.getElementById("date").value = new Date().toISOString().split('T')[0];
+
+form.addEventListener("submit", (e) => {
   e.preventDefault();
-  
+  msg.textContent = "Envoi en cours...";
+  msg.className = "";
+
   const data = {
-    date: document.getElementById("date").value,
-    titre: document.getElementById("titre").value,
-    prix: document.getElementById("prix").value,
-    ville: document.getElementById("ville").value,
-    tel: document.getElementById("tel").value, // AJOUTE CE CHAMP DANS LE FORM
-    description: document.getElementById("description").value,
-    photo: document.getElementById("photo").value
+    date: form.date.value,
+    titre: form.titre.value,
+    prix: form.prix.value,
+    ville: form.ville.value,
+    tel: form.tel.value,
+    description: form.description.value,
+    photo: form.photo.value
   };
 
-  fetch(SCRIPT_URL, {
-    method: "POST",
-    mode: "no-cors", // <- ÇA C'EST LA CLÉ
-    body: JSON.stringify(data)
-  })
- .then(() => {
-    msg.textContent = "Annonce publiée avec succès! Vérifie ton Sheet.";
+  // Technique pour contourner CORS
+  const script = document.createElement('script');
+  script.src = SCRIPT_URL + '?data=' + encodeURIComponent(JSON.stringify(data));
+  document.body.appendChild(script);
+});
+
+function onSuccess(response) {
+  if(response.result == "success"){
+    msg.textContent = "Annonce publiée avec succès! ✅";
     msg.className = "success";
     form.reset();
     document.getElementById("date").value = new Date().toISOString().split('T')[0];
-  })
- .catch(error => {
-    msg.textContent = "Erreur: " + error.message;
+  } else {
+    msg.textContent = "Erreur: " + response.msg;
     msg.className = "error";
-  });
-});
-  </script>
+  }
+}
+</script>
 </body>
 </html>
