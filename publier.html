@@ -30,6 +30,7 @@
     </select>
     
     <input type="text" id="ville" name="ville" placeholder="Ville: Kinshasa, Lubumbashi..." required>
+    <input type="tel" id="tel" placeholder="Téléphone WhatsApp" required>
     <input type="url" id="photo" name="photo" placeholder="Lien de la photo">
     <button type="submit">Publier l'annonce</button>
   </form>
@@ -38,39 +39,38 @@
 
 <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwNlngka1t_sI9cDmMVGuLfzcPgdiqMTdu_vwPusR4eKpF85F79mH2fxRAfSy-iTGxfqQ/exec";
+const form = document.getElementById("annonce-form");
+const msg = document.getElementById("message");
 
-    document.getElementById('date').value = new Date().toLocaleString("fr-CD");
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  
+  const data = {
+    date: document.getElementById("date").value,
+    titre: document.getElementById("titre").value,
+    prix: document.getElementById("prix").value,
+    ville: document.getElementById("ville").value,
+    tel: document.getElementById("tel").value, // AJOUTE CE CHAMP DANS LE FORM
+    description: document.getElementById("description").value,
+    photo: document.getElementById("photo").value
+  };
 
-    document.getElementById('annonceForm').addEventListener('submit', e => {
-      e.preventDefault();
-      const msg = document.getElementById('msg');
-      document.getElementById("date").value = new Date().toISOString().split('T')[0];
-      msg.innerText = "Envoi en cours...";
-
-      const data = {
-  date: document.getElementById("date").value,
-  titre: document.getElementById("titre").value,
-  prix: document.getElementById("prix").value,
-  ville: document.getElementById("ville").value,
-  photo: document.getElementById("photo").value, // AJOUTE ÇA
-  tel: "", 
-  description: document.getElementById("description").value + " | Cat: " + document.getElementById("categorie").value
-};
-
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify(data)
-      })
-      .then(res => res.json())
-      .then(result => {
-        msg.innerText = "Annonce publiée avec succès ! " + result.message;
-        document.getElementById('annonceForm').reset();
-        document.getElementById('date').value = new Date().toLocaleString("fr-CD");
-      })
-      .catch((err) => {
-        msg.innerText = "Erreur: " + err;
-      });
-    });
+  fetch(SCRIPT_URL, {
+    method: "POST",
+    mode: "no-cors", // <- ÇA C'EST LA CLÉ
+    body: JSON.stringify(data)
+  })
+ .then(() => {
+    msg.textContent = "Annonce publiée avec succès! Vérifie ton Sheet.";
+    msg.className = "success";
+    form.reset();
+    document.getElementById("date").value = new Date().toISOString().split('T')[0];
+  })
+ .catch(error => {
+    msg.textContent = "Erreur: " + error.message;
+    msg.className = "error";
+  });
+});
   </script>
 </body>
 </html>
