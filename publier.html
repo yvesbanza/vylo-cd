@@ -1,50 +1,48 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Publier une annonce - VYLO</title>
-  <style>
-    body { font-family: Arial; background:#111; color:white; padding:20px; max-width:600px; margin:auto; }
-    input, textarea, select { width:100%; padding:10px; margin:10px 0; border:none; border-radius:5px; }
-    button { background:#00FF7F; color:black; padding:15px; border:none; border-radius:5px; font-weight:bold; width:100%; cursor:pointer; }
-    h1 { text-align:center; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Publier une annonce - VYLO</title>
+<style>
+body{font-family:Arial;background:#fff;color:#333;padding:20px;max-width:600px;margin:auto;}
+input,textarea,select{width:100%;padding:10px;margin:10px 0;border:1px solid #ccc;border-radius:5px;}
+button{background:#FF6F00;color:white;padding:12px;border:none;border-radius:5px;font-weight:bold;width:100%;cursor:pointer;}
+.success{color:green;font-weight:bold;}
+.error{color:red;font-weight:bold;}
+</style>
 </head>
 <body>
-  <h1>Publier une annonce</h1>
+
+<h1>Publier une annonce</h1>
+
+<form id="formAnnonce">
+  <input type="date" id="date" name="date" required>
+  <input type="text" name="titre" placeholder="Titre de l'annonce" required>
+  <input type="number" name="prix" placeholder="Prix en $" required>
   
-  <form id="annonceForm">
-    <input type="hidden" id="date" name="date">
-    <input type="text" id="titre" name="titre" placeholder="Titre de l'annonce" required>
-    <input type="number" id="prix" name="prix" placeholder="Prix en $" required>
-    <textarea id="description" name="description" placeholder="Description" rows="4" required></textarea>
-    
-    <select id="categorie" name="categorie" required>
-      <option value="">Choisir catégorie</option>
-      <option>Telephones</option>
-      <option>Vehicules</option>
-      <option>Immobilier</option>
-      <option>Mode</option>
-      <option>Electronique</option>
-    </select>
-    
-    <input type="text" id="ville" name="ville" placeholder="Ville: Kinshasa, Lubumbashi..." required>
-    <input type="tel" id="tel" placeholder="Téléphone WhatsApp" required>
-    <input type="url" id="photo" name="photo" placeholder="Lien de la photo">
-    <button type="submit">Publier l'annonce</button>
-  </form>
-  
-  <p id="msg"></p>
+  <select name="categorie" required>
+    <option value="">Choisir catégorie</option>
+    <option value="Telephone">Téléphone</option>
+    <option value="Vehicule">Véhicule</option>
+    <option value="Immobilier">Immobilier</option>
+    <option value="Electronique">Électronique</option>
+  </select>
+
+  <input type="text" name="ville" placeholder="Ville: Kinshasa, Lubumbashi..." required>
+  <input type="tel" name="tel" placeholder="Téléphone WhatsApp" required>
+  <input type="url" name="photo" placeholder="Lien de la photo">
+  <textarea name="description" placeholder="Description" required></textarea>
+  <button type="submit">Publier l'annonce</button>
+</form>
+
+<p id="msg"></p>
 
 <script>
 const form = document.getElementById("formAnnonce");
-const msg = document.getElementById("message");
-
-// COLLE TON URL ICI
+const msg = document.getElementById("msg");
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzUuLzvzAnUJdKg0Cs6FaApKn579sy73xcZB_M2stYfL4_j-CNLF9amTf5OMZSS7ASBJg/exec";
 
-// Met la date d'aujourd'hui
 document.getElementById("date").value = new Date().toISOString().split('T')[0];
 
 form.addEventListener("submit", (e) => {
@@ -62,7 +60,6 @@ form.addEventListener("submit", (e) => {
     photo: form.photo.value
   };
 
-  // Technique pour contourner CORS
   const script = document.createElement('script');
   script.src = SCRIPT_URL + '?data=' + encodeURIComponent(JSON.stringify(data));
   document.body.appendChild(script);
