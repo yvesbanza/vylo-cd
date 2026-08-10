@@ -54,7 +54,7 @@ h1 { text-align:center; }
         titre: document.getElementById("titre").value,
         prix: document.getElementById("prix").value,
         ville: document.getElementById("ville").value,
-        tel: "", // tu n'as pas de champ tel, je laisse vide pour l'instant
+        tel: "", // on ajoutera ça après si tu veux
         description: document.getElementById("description").value + " | Cat: " + document.getElementById("categorie").value
       };
 
@@ -62,15 +62,15 @@ h1 { text-align:center; }
         method: 'POST',
         body: JSON.stringify(data)
       })
-      .then(() => {
-        msg.innerText = "Annonce publiée avec succès !";
+      .then(res => res.json())
+      .then(result => {
+        msg.innerText = "Annonce publiée avec succès ! " + result.message;
         document.getElementById('annonceForm').reset();
       })
       .catch((err) => {
         msg.innerText = "Erreur: " + err;
       });
     });
-  </script>
 </script>
 </body>
 </html>
