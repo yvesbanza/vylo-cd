@@ -1,38 +1,40 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Publier une annonce - VYLO</title>
-<style>
-body { font-family: Arial; background:#111; color:white; padding:20px; max-width:600px; margin:auto; }
-input, textarea, select { width:100%; padding:10px; margin:8px 0; border:none; border-radius:5px; }
-button { background:#00ff88; color:black; padding:12px; border:none; border-radius:5px; font-weight:bold; width:100%; cursor:pointer; }
-button:hover { background:#00cc6a; }
-h1 { text-align:center; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publier une annonce - VYLO</title>
+  <style>
+    body { font-family: Arial; background:#111; color:white; padding:20px; max-width:600px; margin:auto; }
+    input, textarea, select { width:100%; padding:10px; margin:10px 0; border:none; border-radius:5px; }
+    button { background:#00FF7F; color:black; padding:15px; border:none; border-radius:5px; font-weight:bold; width:100%; cursor:pointer; }
+    h1 { text-align:center; }
+  </style>
 </head>
 <body>
-<h1>Publier une annonce</h1>
+  <h1>Publier une annonce</h1>
+  
+  <form id="annonceForm">
     <input type="hidden" id="date" name="date">
-<form id="annonceForm">
-<input type="text" id="titre" name="Titre" placeholder="Titre de l'annonce" required>
-<input type="number" id="prix" name="Prix" placeholder="Prix en $ required">
-<textarea id="description" name="Description" placeholder="Description" rows="4" required></textarea>
-<select id="categorie" name="Categorie" required>
-<input type="text" id="ville" name="Ville" placeholder="Ville: Kinshasa, Lubumbashi...">
-<input type="url" id="photo" name="Photo" placeholder="Lien de la photo">
-<input type="hidden" id="date" name="Date">
-    <option value="">Choisir catégorie</option>
-    <option>Telephones</option>
-    <option>Vehicules</option>
-    <option>Immobilier</option>
-    <option>Mode</option>
-    <option>Electronique</option>
-  </select>
-  <input type="text" id="titre" name="Titre" placeholder="Titre de l'annonce" required>
-</form>
-<p id="msg"></p>
+    <input type="text" id="titre" name="titre" placeholder="Titre de l'annonce" required>
+    <input type="number" id="prix" name="prix" placeholder="Prix en $" required>
+    <textarea id="description" name="description" placeholder="Description" rows="4" required></textarea>
+    
+    <select id="categorie" name="categorie" required>
+      <option value="">Choisir catégorie</option>
+      <option>Telephones</option>
+      <option>Vehicules</option>
+      <option>Immobilier</option>
+      <option>Mode</option>
+      <option>Electronique</option>
+    </select>
+    
+    <input type="text" id="ville" name="ville" placeholder="Ville: Kinshasa, Lubumbashi..." required>
+    <input type="url" id="photo" name="photo" placeholder="Lien de la photo">
+    <button type="submit">Publier l'annonce</button>
+  </form>
+  
+  <p id="msg"></p>
 
 <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJVJ41h-P4Cog0jwwSIN-iZCD8UzLMVFASWcl2kOzMZD6Fgly5614C7eECZpb6cHRw/exec";
@@ -48,7 +50,7 @@ h1 { text-align:center; }
         titre: document.getElementById("titre").value,
         prix: document.getElementById("prix").value,
         ville: document.getElementById("ville").value,
-        tel: "", // on ajoutera ça après si tu veux
+        tel: "", 
         description: document.getElementById("description").value + " | Cat: " + document.getElementById("categorie").value
       };
 
@@ -60,11 +62,12 @@ h1 { text-align:center; }
       .then(result => {
         msg.innerText = "Annonce publiée avec succès ! " + result.message;
         document.getElementById('annonceForm').reset();
+        document.getElementById('date').value = new Date().toLocaleString("fr-CD");
       })
       .catch((err) => {
         msg.innerText = "Erreur: " + err;
       });
     });
-</script>
+  </script>
 </body>
 </html>
