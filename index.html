@@ -36,6 +36,19 @@
         font-weight:bold;
         font-size:16px; /* ICI: texte plus gros */
     }
+    #search{
+    width:100%;
+    padding:14px;
+    margin-bottom:20px;
+    border:2px solid #eee;
+    border-radius:12px;
+    font-size:16px;
+    box-sizing:border-box;
+}
+#search:focus{
+    border-color:#FF6B00;
+    outline:none;
+        }
     .card{
     background:white;
     border-radius:15px;
@@ -95,7 +108,8 @@
 <header>VYLO-Cd</header>
 <div class="container">
   <a href="publier.html" class="btn-publier">+ Publier une annonce</a>
-  <div id="annonces">Chargement des annonces...</div>
+<input type="text" id="search" placeholder="Rechercher un produit, une ville..." onkeyup="filtrer()">
+<div id="annonces">Chargement des annonces...</div>
 </div>
 
 <script>
