@@ -38,44 +38,43 @@ button{background:#FF6F00;color:white;padding:12px;border:none;border-radius:5px
 <p id="msg"></p>
 
 <script>
-const form = document.getElementById("formAnnonce");
-const msg = document.getElementById("msg");
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzBthA4iNsWIlE-9F_CGLaFpTt2Vmv8bgRUoviTSJDG13AjndrO19vNhgULP8rdrNUS/exec";
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzBthA4iNsWIlE-9F_CGLaFpTt2Vmv8bgRUoviTSJDG13AjndrO19vNhgULP8rdrNUS/exec';
 
-document.getElementById("date").value = new Date().toISOString().split('T')[0];
-
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  msg.textContent = "Envoi en cours...";
-  msg.className = "";
-
-  const data = {
-    date: form.date.value,
-    titre: form.titre.value,
-    prix: form.prix.value,
-    categorie: form.categorie.value,
-    ville: form.ville.value,
-    tel: form.tel.value,
-    description: form.description.value,
-    images: form.images.value.split(','),
-  };
-
-  const script = document.createElement('script');
-  script.src = SCRIPT_URL + '?data=' + encodeURIComponent(JSON.stringify(data));
-  document.body.appendChild(script);
+document.getElementById('adForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    document.getElementById('status').innerText = 'Envoi en cours...';
+    
+    const data = {
+        date: document.getElementById('date').value,
+        titre: document.getElementById('titre').value,
+        prix: document.getElementById('prix').value,
+        categorie: document.getElementById('categorie').value,
+        ville: document.getElementById('ville').value,
+        telephone: document.getElementById('telephone').value,
+        photos: document.getElementById('photos').value,
+        description: document.getElementById('description').value
+    };
+    
+    const params = new URLSearchParams(data).toString();
+    const callbackName = 'callback_' + Date.now();
+    
+    window[callbackName] = function(response) {
+        document.getElementById('status').innerText = 'Annonce publiée avec succès! ✅';
+        document.getElementById('adForm').reset();
+        delete window[callbackName];
+        script.remove();
+    };
+    
+    const script = document.createElement('script');
+    script.src = SCRIPT_URL + '?' + params + '&callback=' + callbackName;
+    document.body.appendChild(script);
+    
+    setTimeout(() => {
+        if(document.getElementById('status').innerText === 'Envoi en cours...') {
+            document.getElementById('status').innerText = 'Erreur: Vérifiez le déploiement du Script';
+        }
+    }, 10000);
 });
-
-function onSuccess(response) {
-  if(response.result == "success"){
-    msg.textContent = "Annonce publiée avec succès! ✅";
-    msg.className = "success";
-    form.reset();
-    document.getElementById("date").value = new Date().toISOString().split('T')[0];
-  } else {
-    msg.textContent = "Erreur: " + response.msg;
-    msg.className = "error";
-  }
-}
-</script>
+          </script>
 </body>
 </html>
