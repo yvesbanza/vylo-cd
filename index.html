@@ -128,7 +128,7 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKvoYDFswXNVhlVUHP5
         
         data.forEach(a => {
             const card = document.createElement('div');
-            card.className = 'annonce-card';
+            card.className = 'card';
             card.innerHTML = `
                 <img src="${a.Photo || 'https://via.placeholder.com/400x250'}" alt="${a.Titre}">
                 <div class="card-content">
@@ -149,6 +149,19 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKvoYDFswXNVhlVUHP5
     }
 // Charger les annonces au démarrage
 loadAnnonces();
+    function filtrer(){
+    const search = document.getElementById('search').value.toLowerCase();
+    const cards = document.querySelectorAll('.card');
+    
+    cards.forEach(card => {
+        const texte = card.innerText.toLowerCase();
+        if(texte.includes(search)){
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+    }
 </script>
 </body>
 </html>
