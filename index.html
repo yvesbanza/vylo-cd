@@ -109,7 +109,7 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKvoYDFswXNVhlVUHP5
                     <p class="prix">${a.Prix}$</p>
                     <p class="meta">${a.Ville} • ${a['Catégorie']}</p>
                     <p>${a.Description}</p>
-                    <a href="tel:${a['Téléphone']}" class="btn-appeler">Appeler</a>
+                    <a href="https://wa.me/243${a['Téléphone'].replace(/^0/, '')}" target="_blank" class="btn-whatsapp">WhatsApp</a>
                 </div>
             `;
             container.appendChild(card);
