@@ -86,9 +86,9 @@
 </div>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKvoYDFswXNVhlVUHP5XgGgg4j8h0tVzzOQkeK_JXlL1MM45ve5PwwP86OwtjhPAQ_/exec'; // METS TA VRAIE URL ICI
-
-function loadAnnonces() {
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKvoYDFswXNVhlVUHP5XgGgg4j8h0tVzzOQkeK_JXlL1MM45ve5PwwP86OwtjhPAQ_/exec';
+    
+    function loadAnnonces() {
     const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
     window[callbackName] = function(data) {
         document.getElementById('annonces').innerHTML = '';
