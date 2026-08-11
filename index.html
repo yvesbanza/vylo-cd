@@ -89,48 +89,37 @@
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKvoYDFswXNVhlVUHP5XgGgg4j8h0tVzzOQkeK_JXlL1MM45ve5PwwP86OwtjhPAQ_/exec';
     
     function loadAnnonces() {
-    const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+    const callbackName = 'json_callback_' + Math.round(100000 * Math.random());
     window[callbackName] = function(data) {
-        document.getElementById('annonces').innerHTML = '';
-        if(data.length === 0){
-            document.getElementById('annonces').innerHTML = '<p>Aucune annonce pour le moment</p>';
+        const container = document.getElementById('annonces');
+        container.innerHTML = '';
+        
+        if(!data || data.length === 0){
+            container.innerHTML = '<p>Aucune annonce pour le moment.</p>';
             return;
         }
-        afficherAnnonces(data);
-    };
-    const script = document.createElement('script');
-    script.src = SCRIPT_URL + '?action=get&callback=' + callbackName;
-    document.head.appendChild(script);
-}
-
-function afficherAnnonces(annonces){
-    const container = document.getElementById('annonces');
-    container.innerHTML = '';
-    
-    if(annonces.length === 0){
-        container.innerHTML = '<p>Aucune annonce pour le moment</p>';
-        return;
-    }
-    
-    annonces.forEach(a => {
-        let tel = a.Téléphone || a.telephone || '';
-        tel = tel.replace(/[^0-9]/g, '');
-        const telWhatsApp = tel.startsWith('0')? '243' + tel.substring(1) : tel;
         
-        const card = `
-        <div class="card">
-            <img src="${a.Photo || a.photo}" onerror="this.src='https://via.placeholder.com/400x200'" alt="${a.Titre || a.titre}">
-            <div class="prix">${a.Prix || a.prix}$</div>
-            <div class="titre">${a.Titre || a.titre}</div>
-            <div class="info">${a.Ville || a.ville} • ${a.Catégorie || a.categorie || a.Categorie}</div>
-            <div class="info">${a.Description || a.description}</div>
-            <a href="https://wa.me/${telWhatsApp}" class="whatsapp" target="_blank">Contacter sur WhatsApp</a>
-        </div>
-        `;
-        container.innerHTML += card;
-    });
-}
-
+        data.forEach(a => {
+            const card = document.createElement('div');
+            card.className = 'annonce-card';
+            card.innerHTML = `
+                <img src="${a.Photo || 'https://via.placeholder.com/400x250'}" alt="${a.Titre}">
+                <div class="card-content">
+                    <h3>${a.Titre}</h3>
+                    <p class="prix">${a.Prix}$</p>
+                    <p class="meta">${a.Ville} • ${a['Catégorie']}</p>
+                    <p>${a.Description}</p>
+                    <a href="tel:${a['Téléphone']}" class="btn-appeler">Appeler</a>
+                </div>
+            `;
+            container.appendChild(card);
+        });
+    };
+    
+    const script = document.createElement('script');
+    script.src = `${SCRIPT_URL}?action=get&callback=${callbackName}`;
+    document.body.appendChild(script);
+    }
 // Charger les annonces au démarrage
 loadAnnonces();
 </script>
