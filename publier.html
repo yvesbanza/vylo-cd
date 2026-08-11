@@ -50,15 +50,15 @@ document.getElementById('adForm').addEventListener('submit', function(e){
     status.className = '';
     
     const data = {
-        date: document.getElementById('date').value,
-        titre: document.getElementById('titre').value,
-        prix: document.getElementById('prix').value,
-        categorie: document.getElementById('categorie').value,
-        ville: document.getElementById('ville').value,
-        telephone: document.getElementById('telephone').value,
-        photos: document.getElementById('photos').value,
-        description: document.getElementById('description').value
-    };
+    date: document.getElementById('date').value,
+    Titre: document.getElementById('titre').value,
+    Prix: document.getElementById('prix').value,
+    'Catégorie': document.getElementById('categorie').value,
+    Ville: document.getElementById('ville').value,
+    'Téléphone': document.getElementById('telephone').value,
+    Photo: document.getElementById('photos').value,
+    Description: document.getElementById('description').value
+};
     
     const callbackName = 'cb_' + Date.now();
     const url = SCRIPT_URL + '?' + new URLSearchParams(data) + '&callback=' + callbackName;
