@@ -113,22 +113,22 @@ function afficherAnnonces(annonces){
     }
     
     annonces.forEach(a => {
-        let tel = a.Telephone || a.telephone || '';
+        let tel = a.Téléphone || a.telephone || '';
         tel = tel.replace(/[^0-9]/g, '');
         const telWhatsApp = tel.startsWith('0')? '243' + tel.substring(1) : tel;
         
         const card = `
         <div class="card">
-            <img src="${a.Photo || a.photos}" onerror="this.src='https://via.placeholder.com/400x200'" alt="${a.Titre || a.titre}">
+            <img src="${a.Photo || a.photo}" onerror="this.src='https://via.placeholder.com/400x200'" alt="${a.Titre || a.titre}">
             <div class="prix">${a.Prix || a.prix}$</div>
             <div class="titre">${a.Titre || a.titre}</div>
-            <div class="info">${a.Ville || a.ville} • ${a.Categorie || a.categorie}</div>
+            <div class="info">${a.Ville || a.ville} • ${a.Catégorie || a.categorie || a.Categorie}</div>
             <div class="info">${a.Description || a.description}</div>
             <a href="https://wa.me/${telWhatsApp}" class="whatsapp" target="_blank">Contacter sur WhatsApp</a>
         </div>
         `;
         container.innerHTML += card;
-        });
+    });
 }
 
 // Charger les annonces au démarrage
