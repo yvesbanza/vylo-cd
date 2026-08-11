@@ -89,27 +89,44 @@
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwKvoYDFswXNVhlVUHP5XgGgg4j8h0tVzzOQkeK_JXlL1MM45ve5PwwP86OwtjhPAQ_/exec'; // METS TA VRAIE URL ICI
 
 function loadAnnonces() {
-  const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
-  window[callbackName] = function(data) {
-    document.getElementById('annonces').innerHTML = '';
-    if(data.length === 0){
-      document.getElementById('annonces').innerHTML = '<p>Aucune annonce pour le moment.</p>';
-      return;
+    const callbackName = 'jsonp_callback_' + Math.round(100000 * Math.random());
+    window[callbackName] = function(data) {
+        document.getElementById('annonces').innerHTML = '';
+        if(data.length === 0){
+            document.getElementById('annonces').innerHTML = '<p>Aucune annonce pour le moment</p>';
+            return;
+        }
+        afficherAnnonces(data);
+    };
+    const script = document.createElement('script');
+    script.src = SCRIPT_URL + '?action=get&callback=' + callbackName;
+    document.head.appendChild(script);
+}
+
+function afficherAnnonces(annonces){
+    const container = document.getElementById('annonces');
+    container.innerHTML = '';
+    
+    if(annonces.length === 0){
+        container.innerHTML = '<p>Aucune annonce pour le moment</p>';
+        return;
     }
     
-    data.reverse().forEach(annonce => {
-      const tel = annonce.Téléphone? annonce.Téléphone.replace(/[^0-9]/g, '') : '';
-      const telWhatsApp = tel.startsWith('0') ? '243' + tel.substring(1) : tel;
-      
-      const card = `
+    annonces.forEach(a => {
+        let tel = a.Telephone || a.telephone || '';
+        tel = tel.replace(/[^0-9]/g, '');
+        const telWhatsApp = tel.startsWith('0')? '243' + tel.substring(1) : tel;
+        
+        const card = `
         <div class="card">
-          <img src="${annonce.Photo}" onerror="this.src='https://via.placeholder.com/400x200?text=Pas+d+image'">
-          <div class="titre">${annonce.Titre}</div>
-          <div class="prix">${annonce.Prix} $</div>
-          <div class="info">${annonce.Catégorie} • ${annonce.Ville}</div>
-          <div class="info">${annonce.Description}</div>
-          <a href="https://wa.me/${telWhatsApp}" class="whatsapp" target="_blank">Contacter sur WhatsApp</a>
+            <img src="${a.Photo || a.photos}" onerror="this.src='https://via.placeholder.com/400x200'" alt="${a.Titre || a.titre}">
+            <div class="prix">${a.Prix || a.prix}$</div>
+            <div class="titre">${a.Titre || a.titre}</div>
+            <div class="info">${a.Ville || a.ville} • ${a.Categorie || a.categorie}</div>
+            <div class="info">${a.Description || a.description}</div>
+            <a href="https://wa.me/${telWhatsApp}" class="whatsapp" target="_blank">Contacter sur WhatsApp</a>
         </div>
-      `;
-      document.getElementById('annonces').innerHTML += card;
+        `;
+        container.innerHTML += card;
     });
+}
