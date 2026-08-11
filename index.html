@@ -37,6 +37,9 @@ function loadAnnonces() {
     }
     
     data.reverse().forEach(annonce => {
+      const tel = annonce.Téléphone? annonce.Téléphone.replace(/[^0-9]/g, '') : '';
+      const telWhatsApp = tel.startsWith('0') ? '243' + tel.substring(1) : tel;
+      
       const card = `
         <div class="card">
           <img src="${annonce.Photo}" onerror="this.src='https://via.placeholder.com/400x200?text=Pas+d+image'">
@@ -44,5 +47,8 @@ function loadAnnonces() {
           <div class="prix">${annonce.Prix} $</div>
           <div class="info">${annonce.Catégorie} • ${annonce.Ville}</div>
           <div class="info">${annonce.Description}</div>
-          <a href="https://wa.me/${annonce.Téléphone}" class="whatsapp" target="_blank">Contacter sur WhatsApp</a>
-        </
+          <a href="https://wa.me/${telWhatsApp}" class="whatsapp" target="_blank">Contacter sur WhatsApp</a>
+        </div>
+      `;
+      document.getElementById('annonces').innerHTML += card;
+    });
