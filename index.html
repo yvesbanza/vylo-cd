@@ -133,9 +133,9 @@ data.forEach(a => {
         <div class="card-content">
             <h3>${a.Titre}</h3>
             <p class="prix">${a.Prix}$</p>
-            <p class="meta">${a.Ville} . ${a['Catégorie']}</p>
+            <p class="meta">${a.Ville} . ${a.Categorie}</p>
             <p>${a.Description}</p>
-            <a href="https://wa.me/243${a.Téléphone.replace(/\D/g,'')}" class="btn-whatsapp" target="_blank">Contacter sur WhatsApp</a>
+            <a href="https://wa.me/243${a.Telephone.replace(/\D/g,'')}" class="btn-whatsapp" target="_blank">Contacter sur WhatsApp</a>
         </div>
     `;
     container.appendChild(card);
