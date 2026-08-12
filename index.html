@@ -135,7 +135,7 @@ function afficherAnnonces(data) {
     let toutesLesAnnonces = []; // pour garder les données en mémoire
 
 function chargerAnnonces() {
-    const scriptURL = 'COLLE_ICI_TON_URL_DU_SCRIPT_GOOGLE';
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbyKRXCpTbtB4PXeqmgomeYr4xv-xe4DXBIgme-HxtdhoA-usqsQ13rJPRyQ06-bMkAa/exec';
     fetch(`${scriptURL}?callback=afficherAnnonces`)
    .then(res => res.text())
    .then(txt => {
