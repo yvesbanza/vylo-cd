@@ -128,7 +128,12 @@ function afficherAnnonces(data) {
             <img src="${a.Photo}" alt="${a.Titre}">
             <h3>${a.Titre}</h3>
             <p class="prix">${a.Prix} FC</p>
-            <p class="ville">${a.Ville}</p>
+            <span class="categorie">${a.Categorie}</span>
+            <p class="ville">📍 ${a.Ville}</p>
+            <p class="description">${a.Description}</p>
+            <a href="https://wa.me/${a.Telephone}" target="_blank" class="btn-whatsapp">
+                Contacter sur WhatsApp
+            </a>
         </div>`;
     });
     container.innerHTML = html;
