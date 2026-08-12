@@ -124,7 +124,8 @@
 </div>
 
 <script>
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKRXCpTbtB4PXeqmgomeYr4xv-xe4DXBIgme-HxtdhoA-usqsQ13rJPRyQ06-bMkAa/exec";
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKRXcPtbB4PXeqmgomeYr4xv-xe4DXBIgme-HxtdhoA-usqsQ13rJPRyQ/exec';
+let toutesLesAnnonces = []; // pour garder les données en mémoire
 
 function afficherAnnonces(data) {
     const container = document.getElementById('annonces');
@@ -132,34 +133,9 @@ function afficherAnnonces(data) {
         container.innerHTML = '<p>Aucune annonce pour le moment</p>';
         return;
     }
-    let toutesLesAnnonces = []; // pour garder les données en mémoire
-
-function chargerAnnonces() {
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbyKRXCpTbtB4PXeqmgomeYr4xv-xe4DXBIgme-HxtdhoA-usqsQ13rJPRyQ06-bMkAa/exec';
-    fetch(`${scriptURL}?callback=afficherAnnonces`)
-   .then(res => res.text())
-   .then(txt => {
-        const data = JSON.parse(txt.match(/afficherAnnonces\((.*)\)/)[1]);
-        toutesLesAnnonces = data; // on sauvegarde
-        afficherAnnonces(data);
-    });
-}
-
-// Fonction de recherche
-document.querySelector('input[placeholder*="Rechercher"]').addEventListener('input', function(e) {
-    const recherche = e.target.value.toLowerCase();
-    const filtre = toutesLesAnnonces.filter(a => 
-        a.Titre.toLowerCase().includes(recherche) ||
-        a.Ville.toLowerCase().includes(recherche) ||
-        a.Categorie.toLowerCase().includes(recherche)
-    );
-    afficherAnnonces(filtre);
-});
-
-// Au chargement
-chargerAnnonces();
+    
     let html = '';
-    data.forEach(a => {
+    data.forEach(a => { // LA BOUCLE DOIT ÊTRE ICI DEDANS
         html += `<div class="annonce-card">
             <img src="${a.Photo}" alt="${a.Titre}">
             <h3>${a.Titre}</h3>
@@ -175,14 +151,29 @@ chargerAnnonces();
     container.innerHTML = html;
 }
 
-window.onload = function() {
-    const script = document.createElement('script');
-    script.src = SCRIPT_URL + '?callback=afficherAnnonces';
-    script.onerror = function() { 
-        document.getElementById('annonces').innerHTML = '<p style="color:red">Erreur: Impossible de charger les annonces</p>';
-    }
-    document.head.appendChild(script);
-};
-                </script>
+function chargerAnnonces() {
+    fetch(`${SCRIPT_URL}?callback=afficherAnnonces`)
+  .then(res => res.text())
+  .then(txt => {
+        const data = JSON.parse(txt.match(/afficherAnnonces\((.*)\)/)[1]);
+        toutesLesAnnonces = data; // on sauvegarde pour le filtre
+        afficherAnnonces(data);
+    });
+}
+
+// Fonction de recherche
+document.getElementById('search').addEventListener('input', function(e) {
+    const recherche = e.target.value.toLowerCase();
+    const filtre = toutesLesAnnonces.filter(a => 
+        a.Titre.toLowerCase().includes(recherche) ||
+        a.Ville.toLowerCase().includes(recherche) ||
+        a.Categorie.toLowerCase().includes(recherche)
+    );
+    afficherAnnonces(filtre);
+});
+
+// Au chargement
+chargerAnnonces();
+</script>
 </body>
 </html>
