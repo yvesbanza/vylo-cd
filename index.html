@@ -117,6 +117,8 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKRXCpTbtB4PXeqmgom
     
     function afficherAnnonces(data) {
     const container = document.getElementById('annonces');
+    if(!container) return; // sécurité : si la div n'existe pas on arrête
+
     container.innerHTML = '';
     annonces = data;
 
@@ -144,7 +146,6 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKRXCpTbtB4PXeqmgom
     const script = document.createElement('script');
     script.src = `${SCRIPT_URL}?callback=afficherAnnonces`;
     document.head.appendChild(script);
-};
     function filtrer(){
     const search = document.getElementById('search').value.toLowerCase();
     const cards = document.querySelectorAll('.card');
