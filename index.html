@@ -132,7 +132,32 @@ function afficherAnnonces(data) {
         container.innerHTML = '<p>Aucune annonce pour le moment</p>';
         return;
     }
-    
+    let toutesLesAnnonces = []; // pour garder les données en mémoire
+
+function chargerAnnonces() {
+    const scriptURL = 'COLLE_ICI_TON_URL_DU_SCRIPT_GOOGLE';
+    fetch(`${scriptURL}?callback=afficherAnnonces`)
+   .then(res => res.text())
+   .then(txt => {
+        const data = JSON.parse(txt.match(/afficherAnnonces\((.*)\)/)[1]);
+        toutesLesAnnonces = data; // on sauvegarde
+        afficherAnnonces(data);
+    });
+}
+
+// Fonction de recherche
+document.querySelector('input[placeholder*="Rechercher"]').addEventListener('input', function(e) {
+    const recherche = e.target.value.toLowerCase();
+    const filtre = toutesLesAnnonces.filter(a => 
+        a.Titre.toLowerCase().includes(recherche) ||
+        a.Ville.toLowerCase().includes(recherche) ||
+        a.Categorie.toLowerCase().includes(recherche)
+    );
+    afficherAnnonces(filtre);
+});
+
+// Au chargement
+chargerAnnonces();
     let html = '';
     data.forEach(a => {
         html += `<div class="annonce-card">
