@@ -116,39 +116,29 @@
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKRXCpTbtB4PXeqmgomeYr4xv-xe4DXBIgme-HxtdhoA-usqsQ13rJPRyQ06-bMkAa/exec';
     
     function afficherAnnonces(data) {
+    alert("1: Fonction appelée !");
     const container = document.getElementById('annonces');
-    if(!container) return; // sécurité : si la div n'existe pas on arrête
-
-    container.innerHTML = '';
-    annonces = data;
-
-    if(!data || data.length === 0){
-        container.innerHTML = '<p>Aucune annonce pour le moment.</p>';
-        return;
-    }
-
+    if(!container) return alert("2: Container pas trouvé");
+    if(!data || data.length === 0) return container.innerHTML = '<p>Aucune annonce</p>';
+    
+    let html = '';
     data.forEach(a => {
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.innerHTML = `
-            <img src="${a.Photo || 'https://via.placeholder.com/400'}" alt="${a.Titre}">
-            <div class="card-content">
-                <h3>${a.Titre}</h3>
-                <p class="prix">${a.Prix}$</p>
-                <p class="meta">${a.Ville} . ${a.Categorie}</p>
-                <p>${a.Description}</p>
-                <a href="https://wa.me/243${a.Telephone.replace(/\D/g,'')}" class="btn-whatsapp" target="_blank">Contacter sur WhatsApp</a>
-            </div>
-        `;
-        container.appendChild(card);
+        html += `<div class="annonce-card">
+            <h3>${a.Titre}</h3>
+            <p>${a.Prix} FC</p>
+        </div>`;
     });
-    }
+    container.innerHTML = html;
+    alert("3: Annonces affichées !");
+}
+
+window.onload = function() {
+    alert("4: Page chargée, j'appelle Google");
     const script = document.createElement('script');
-    script.src = `${SCRIPT_URL}?callback=afficherAnnonces`;
+    script.src = SCRIPT_URL + '?callback=afficherAnnonces';
+    script.onerror = function() { alert("ERREUR: Google Script ne répond pas"); }
     document.head.appendChild(script);
-    function filtrer(){
-    const search = document.getElementById('search').value.toLowerCase();
-    const cards = document.querySelectorAll('.card');
+};
     
     cards.forEach(card => {
         const texte = card.innerText.toLowerCase();
