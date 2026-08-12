@@ -187,6 +187,35 @@ document.getElementById('search').addEventListener('input', function(e) {
 
 // Au chargement
 chargerAnnonces();
+    // Ouvrir/Fermer le formulaire
+document.querySelector('.btn-publier').addEventListener('click', () => {
+    document.getElementById('formulaire').style.display = 'block';
+});
+
+function fermerForm() {
+    document.getElementById('formulaire').style.display = 'none';
+}
+
+function envoyerAnnonce() {
+    const data = {
+        titre: document.getElementById('titre').value,
+        prix: document.getElementById('prix').value,
+        categorie: document.getElementById('categorie').value,
+        ville: document.getElementById('ville').value,
+        telephone: document.getElementById('telephone').value,
+        photo: document.getElementById('photo').value,
+        description: document.getElementById('description').value
+    };
+    
+    fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify(data)
+    }).then(() => {
+        alert('Annonce publiée!');
+        fermerForm();
+        chargerAnnonces(); // recharge
+    });
+    }
 </script>
 </body>
 </html>
