@@ -137,42 +137,46 @@
 </div>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKRXcPtbB4PXeqmgomeYr4xv-xe4DXBIgme-HxtdhoA-usqsQ13rJPRyQ/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKRXcPtB4PXeqmgomeYr4xv-xe4DXBIgme-HxtdhoA-usqsQ13rJPRyQ/exec';
 let toutesLesAnnonces = []; // pour garder les données en mémoire
+
+async function chargerAnnonces() {
+    document.getElementById('annonces').innerHTML = 'Chargement des annonces...';
+    try {
+        const res = await fetch(SCRIPT_URL);
+        const data = await res.json();
+        toutesLesAnnonces = data; // on sauvegarde pour le filtre
+        afficherAnnonces(data);
+    } catch(err) {
+        document.getElementById('annonces').innerHTML = 'Erreur: Impossible de charger les annonces.';
+        console.error(err);
+    }
+}
 
 function afficherAnnonces(data) {
     const container = document.getElementById('annonces');
     if(!data || data.length === 0) {
-        container.innerHTML = '<p>Aucune annonce pour le moment</p>';
+        container.innerHTML = '<p>Aucune annonce pour le moment.</p>';
         return;
     }
-    
+
     let html = '';
-    data.forEach(a => { // LA BOUCLE DOIT ÊTRE ICI DEDANS
+    data.forEach(a => {
+        let tel = a.Telephone.startsWith('243') ? a.Telephone : '243' + a.Telephone;
         html += `<div class="annonce-card">
-            <img src="${a.Photo}" alt="${a.Titre}">
+            <img src="${a.Photo}" alt="${a.Titre}" onerror="this.src='https://via.placeholder.com/300x200'">
             <h3>${a.Titre}</h3>
             <p class="prix">${a.Prix} FC</p>
             <span class="categorie">${a.Categorie}</span>
             <p class="ville">📍 ${a.Ville}</p>
             <p class="description">${a.Description}</p>
-            <a href="https://wa.me/${a.Telephone}" target="_blank" class="btn-whatsapp">
+            <a href="https://wa.me/${tel}" target="_blank" class="btn-whatsapp">
                 Contacter sur WhatsApp
             </a>
         </div>`;
     });
     container.innerHTML = html;
-}
-
-function chargerAnnonces() {
-    fetch(`${SCRIPT_URL}?callback=afficherAnnonces`)
-  .then(res => res.text())
-  .then(txt => {
-        const data = JSON.parse(txt.match(/afficherAnnonces\((.*)\)/)[1]);
-        toutesLesAnnonces = data; // on sauvegarde pour le filtre
-        afficherAnnonces(data);
-    });
-}
+                 }
 
 // Fonction de recherche
 document.getElementById('search').addEventListener('input', function(e) {
