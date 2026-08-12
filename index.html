@@ -140,7 +140,32 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKRXCpTbtB4PXeqmgom
             container.appendChild(card);
         });
     };
-    
+    function afficherAnnonces(data) {
+    const container = document.getElementById('annonces');
+    container.innerHTML = '';
+    annonces = data;
+
+    if(!data || data.length === 0){
+        container.innerHTML = `<p>Aucune annonce pour le moment.</p>`;
+        return;
+    }
+
+    data.forEach(a => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+            <img src="${a.Photo || 'https://via.placeholder.com/400'}" alt="${a.Titre}">
+            <div class="card-content">
+                <h3>${a.Titre}</h3>
+                <p class="prix">${a.Prix}$</p>
+                <p class="meta">${a.Ville}. ${a['Catégorie']}</p>
+                <p>${a.Description}</p>
+                <a href="https://wa.me/243${a.Téléphone.replace(/\D/g,'')}" class="btn-whatsapp" target="_blank">Contacter sur WhatsApp</a>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+           }
     const script = document.createElement('script');
 script.src = `${SCRIPT_URL}?callback=afficherAnnonces`;
 document.body.appendChild(script);
