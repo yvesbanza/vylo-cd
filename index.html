@@ -113,16 +113,35 @@
 </div>
 
 <script>
-const SCRIPT_URL = "TEST";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyKRXCpTbtB4PXeqmgomeYr4xv-xe4DXBIgme-HxtdhoA-usqsQ13rJPRyQ06-bMkAa/exec";
 
 function afficherAnnonces(data) {
     const container = document.getElementById('annonces');
-    container.innerHTML = '<p style="color:green">SI TU VOIS ÇA = LE JS MARCHE</p>';
+    if(!data || data.length === 0) {
+        container.innerHTML = '<p>Aucune annonce pour le moment</p>';
+        return;
+    }
+    
+    let html = '';
+    data.forEach(a => {
+        html += `<div class="annonce-card">
+            <img src="${a.Photo}" alt="${a.Titre}">
+            <h3>${a.Titre}</h3>
+            <p class="prix">${a.Prix} FC</p>
+            <p class="ville">${a.Ville}</p>
+        </div>`;
+    });
+    container.innerHTML = html;
 }
 
 window.onload = function() {
-    afficherAnnonces([{Titre:"Test", Prix:"100"}]);
+    const script = document.createElement('script');
+    script.src = SCRIPT_URL + '?callback=afficherAnnonces';
+    script.onerror = function() { 
+        document.getElementById('annonces').innerHTML = '<p style="color:red">Erreur: Impossible de charger les annonces</p>';
+    }
+    document.head.appendChild(script);
 };
-</script>
+                </script>
 </body>
 </html>
