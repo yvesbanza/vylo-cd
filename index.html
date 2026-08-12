@@ -116,9 +116,7 @@
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKRXCpTbtB4PXeqmgomeYr4xv-xe4DXBIgme-HxtdhoA-usqsQ13rJPRyQ06-bMkAa/exec';
     
     function loadAnnonces() {
-    const callbackName = 'json_callback_' + Math.round(100000 * Math.random());
-    window[callbackName] = function(data) {
-        const container = document.getElementById('annonces');
+    
         container.innerHTML = '';
         
         if(!data || data.length === 0){
