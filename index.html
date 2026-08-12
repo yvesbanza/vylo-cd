@@ -144,7 +144,7 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyKRXCpTbtB4PXeqmgom
     window.onload = function() {
     const script = document.createElement('script');
     script.src = `${SCRIPT_URL}?callback=afficherAnnonces`;
-    document.body.appendChild(script);
+    document.head.appendChild(script);
 };
     function filtrer(){
     const search = document.getElementById('search').value.toLowerCase();
