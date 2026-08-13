@@ -49,38 +49,43 @@ button{background:#FF6600;color:white;padding:12px;border:none;border-radius:5px
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby7lxEq_QYTmg4E4Rxz94wfr0Xw-_z54UyR-N0mlp1fI_n-C5grX67ypvEDFrozuUZ1/exec';
 document.getElementById('date').value = new Date().toISOString().split('T')[0];
-
-document.getElementById('adForm').addEventListener('submit', function(e){
-    e.preventDefault();
-    const status = document.getElementById('status');
-    status.innerText = 'Envoi en cours...';
-    status.className = '';
     
-    const data = {
+document.getElementById('adForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const status = document.getElementById('status');
+  status.innerText = 'Envoi en cours...';
+  status.className = '';
+
+  const data = {
     date: document.getElementById('date').value,
     titre: document.getElementById('titre').value,
     prix: document.getElementById('prix').value,
     devise: document.getElementById('devise').value,
-    'categorie': document.getElementById('categorie').value,
+    categorie: document.getElementById('categorie').value,
     ville: document.getElementById('ville').value,
-    'telephone': document.getElementById('telephone').value,
-    photo: document.getElementById('photos').value,
+    telephone: document.getElementById('telephone').value,
+    photo: document.getElementById('photo').value,
     description: document.getElementById('description').value
-};
-    
-    const callbackName = 'cb_' + Date.now();
-    const url = SCRIPT_URL + '?' + new URLSearchParams(data) + '&callback=' + callbackName;
-    
-    window[callbackName] = function(res) {
-        status.innerText = 'Annonce publiée avec succès! ✅';
-        status.className = 'success';
-        document.getElementById('adForm').reset();
-        document.getElementById('date').value = new Date().toISOString().split('T')[0];
-        delete window[callbackName];
-        s.remove();
-    };
-    
-    const s = document.createElement('script');
+  };
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'cors',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(data)
+  })
+ .then(res => res.text())
+ .then(txt => {
+    status.innerText = 'Annonce publiée avec succès ✅';
+    status.className = 'success';
+    document.getElementById('adForm').reset();
+    document.getElementById('date').value = new Date().toISOString().split('T')[0];
+  })
+ .catch(err => {
+    status.innerText = 'Erreur: ' + err.message;
+    status.className = 'error';
+  });
+});
     s.src = url;
     document.head.appendChild(s);
     
