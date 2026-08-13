@@ -48,44 +48,44 @@
     let toutesLesAnnonces = [];
 
     async function chargerAnnonces() {
-    document.getElementById('annonces').innerHTML = 'Chargement des annonces...';
-    
-    try {
-        const res = await fetch(`${SCRIPT_URL}?callback=cb&v=${Date.now()}`);
-        const text = await res.text();
-        
-        if(text.startsWith('<')) { // Si Google renvoie du HTML
-            throw new Error('Le script Google n\'est pas public. Remettez "Tout le monde"');
-        }
-        
-        const json = text.replace(/^cb\(/, '').replace(/\);$/, '');
-        const data = JSON.parse(json);
-        afficherAnnonces(data);
-    } catch(err) {
+  document.getElementById('annonces').innerHTML = 'Chargement...';
+  
+  const script = document.createElement('script');
+  script.src = SCRIPT_URL + '?action=get&callback=afficherAnnonces';
+  script.onerror = () => {
+    document.getElementById('annonces').innerHTML = 'Erreur de chargement';
+  }
+  document.body.appendChild(script);
+}
+
+function afficherAnnonces(data) {
+  toutesLesAnnonces = data;
+  const container = document.getElementById('annonces');
+  
+  if(!data || data.length === 0) { 
+    container.innerHTML = '<p>Aucune annonce</p>'; 
+    return; 
+  }
+  
+  let html = '';
+  data.forEach(a => {
+    let tel = String(a.Telephone || '');
+    tel = tel.startsWith('243')? tel : '243' + tel;
+    html += `<div class="annonce-card">
+      <h3>${a.Titre}</h3>
+      <p><b>${a.Prix} ${a.Devise}</b> - ${a.Ville}</p>
+      <p>${a.Description}</p>
+      <a href="tel:${tel}" class="btn-appel">Appeler</a>
+    </div>`;
+  });
+  container.innerHTML = html;
+    }
         document.getElementById('annonces').innerHTML = 'Erreur: ' + err.message;
     }
     }
 
     function afficherAnnonces(data) {
-        toutesLesAnnonces = data;
-        const container = document.getElementById('annonces');
-        if(!data || data.length === 0) { container.innerHTML = '<p>Aucune annonce pour le moment.</p>'; return; }
-        let html = '';
-        data.forEach(a => {
-            let tel = String(a.Telephone || '');
-tel = tel.startsWith('243') ? tel : '243' + tel;
-            html += `<div class="annonce-card">
-                <img src="${a.photo}" alt="${a.titre}" onerror="this.style.display='none'">
-<h3>${a.titre}</h3>
-<p class="prix">${a.prix} ${a.devise}</p>
-<span class="badge">${a.devise}</span>
-<p class="ville">📍 ${a.categorie} - ${a.ville}</p>
-                <p class="description">${a.Description}</p>
-                <a href="https://wa.me/${tel}" target="_blank" class="btn-whatsapp">Contacter sur WhatsApp</a>
-            </div>`;
-        });
-        container.innerHTML = html;
-    }
+        toutes
 
     document.getElementById('search').addEventListener('input', function(e) {
         const recherche = e.target.value.toLowerCase();
