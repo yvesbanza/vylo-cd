@@ -77,7 +77,7 @@ tel = tel.startsWith('243') ? tel : '243' + tel;
             html += `<div class="annonce-card">
                 <img src="${a.Photo}" alt="${a.Titre}" onerror="this.src='https://via.placeholder.com/300x200/FF6600/FFFFFF?text=No+Image'">
                 <h3>${a.Titre}</h3>
-                <p class="prix">${a.Prix} FC</p>
+                <p class="prix">${a.Prix} ${a.Devise}</p>
                 <span class="categorie">${a.Categorie}</span>
                 <p class="ville">📍 ${a.Ville}</p>
                 <p class="description">${a.Description}</p>
