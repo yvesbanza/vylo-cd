@@ -140,22 +140,11 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxObpj239sqiYFdP1qGB_xnOzCVYVGfme9VNYnJa_QOMgSKSG1q8VfzKgNOAYh8sSxp/exec';
 let toutesLesAnnonces = []; // pour garder les données en mémoire
 
-async function chargerAnnonces() {
+function chargerAnnonces() {
     document.getElementById('annonces').innerHTML = 'Chargement des annonces...';
-    try {
-        const res = await fetch(SCRIPT_URL, {mode: 'no-cors'});
-        // Si no-cors bloque, on passe par un proxy
-        const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(SCRIPT_URL);
-        const proxyRes = await fetch(proxyUrl);
-        const proxyData = await proxyRes.json();
-        const data = JSON.parse(proxyData.contents);
-        
-        toutesLesAnnonces = data;
-        afficherAnnonces(data);
-    } catch(err) {
-        document.getElementById('annonces').innerHTML = 'Erreur de chargement. Recharge la page.';
-        console.error(err);
-    }
+    const script = document.createElement('script');
+    script.src = `${SCRIPT_URL}?callback=afficherAnnonces&v=${Date.now()}`;
+    document.head.appendChild(script);
 }
 
 function afficherAnnonces(data) {
@@ -164,6 +153,23 @@ function afficherAnnonces(data) {
         container.innerHTML = '<p>Aucune annonce pour le moment.</p>';
         return;
     }
+    let html = '';
+    data.forEach(a => {
+        let tel = a.Telephone.startsWith('243')? a.Telephone : '243' + a.Telephone;
+        html += `<div class="annonce-card">
+            <img src="${a.Photo}" alt="${a.Titre}" onerror="this.src='https://via.placeholder.com/300x200'">
+            <h3>${a.Titre}</h3>
+            <p class="prix">${a.Prix} FC</p>
+            <span class="categorie">${a.Categorie}</span>
+            <p class="ville">📍 ${a.Ville}</p>
+            <p class="description">${a.Description}</p>
+            <a href="https://wa.me/${tel}" target="_blank" class="btn-whatsapp">
+                Contacter sur WhatsApp
+            </a>
+        </div>`;
+    });
+    container.innerHTML = html;
+}
 
     let html = '';
     data.forEach(a => {
