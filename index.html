@@ -44,20 +44,22 @@
 
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxObpj239sqiYFdP1qGB_xnOzCVYVGfme9VNYnJa_QOMgSKSG1q8VfzKgNOAYh8sSxp/exec';
+
     let toutesLesAnnonces = [];
 
-    function chargerAnnonces() {
+    async function chargerAnnonces() {
         document.getElementById('annonces').innerHTML = 'Chargement des annonces...';
-        const callbackName = 'jsonp_callback_' + Date.now();
-        const script = document.createElement('script');
-        window[callbackName] = function(data) {
+        
+        try {
+            const res = await fetch(`${SCRIPT_URL}?callback=cb&v=${Date.now()}`);
+            const text = await res.text();
+            // On enlève "cb(" et ");" pour avoir du JSON propre
+            const json = text.replace(/^cb\(/, '').replace(/\);$/, '');
+            const data = JSON.parse(json);
             afficherAnnonces(data);
-            document.head.removeChild(script);
-            delete window[callbackName];
-        };
-        script.src = `${SCRIPT_URL}?callback=${callbackName}&v=${Date.now()}`;
-        script.onerror = () => { document.getElementById('annonces').innerHTML = 'Erreur de connexion. Vérifiez internet.'; }
-        document.head.appendChild(script);
+        } catch(err) {
+            document.getElementById('annonces').innerHTML = 'Erreur: ' + err;
+        }
     }
 
     function afficherAnnonces(data) {
@@ -104,6 +106,6 @@
             alert('Annonce publiée!'); fermerForm(); setTimeout(chargerAnnonces, 2000);
         });
     }
-</script>
+        </script>
 </body>
 </html>
