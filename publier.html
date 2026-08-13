@@ -19,7 +19,13 @@ button{background:#FF6600;color:white;padding:12px;border:none;border-radius:5px
 <form id="adForm">
     <input type="date" name="date" id="date" required>
     <input type="text" name="titre" id="titre" placeholder="Titre de l'annonce" required>
-    <input type="number" name="prix" id="prix" placeholder="Prix en $" required>
+    <div style="display:flex; gap:10px; margin-bottom:15px;">
+  <input type="number" name="prix" id="prix" placeholder="Prix" required style="flex:1; padding:10px; border-radius:8px; border:1px solid #ccc;">
+  <select name="devise" id="devise" required style="width:90px; padding:10px; border-radius:8px; border:1px solid #ccc;">
+    <option value="FC">FC</option>
+    <option value="$">$</option>
+  </select>
+    </div>
     
     <select name="categorie" id="categorie" required>
         <option value="">Choisir catégorie</option>
