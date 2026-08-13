@@ -48,18 +48,22 @@
     let toutesLesAnnonces = [];
 
     async function chargerAnnonces() {
-        document.getElementById('annonces').innerHTML = 'Chargement des annonces...';
+    document.getElementById('annonces').innerHTML = 'Chargement des annonces...';
+    
+    try {
+        const res = await fetch(`${SCRIPT_URL}?callback=cb&v=${Date.now()}`);
+        const text = await res.text();
         
-        try {
-            const res = await fetch(`${SCRIPT_URL}?callback=cb&v=${Date.now()}`);
-            const text = await res.text();
-            // On enlève "cb(" et ");" pour avoir du JSON propre
-            const json = text.replace(/^cb\(/, '').replace(/\);$/, '');
-            const data = JSON.parse(json);
-            afficherAnnonces(data);
-        } catch(err) {
-            document.getElementById('annonces').innerHTML = 'Erreur: ' + err;
+        if(text.startsWith('<')) { // Si Google renvoie du HTML
+            throw new Error('Le script Google n\'est pas public. Remettez "Tout le monde"');
         }
+        
+        const json = text.replace(/^cb\(/, '').replace(/\);$/, '');
+        const data = JSON.parse(json);
+        afficherAnnonces(data);
+    } catch(err) {
+        document.getElementById('annonces').innerHTML = 'Erreur: ' + err.message;
+    }
     }
 
     function afficherAnnonces(data) {
