@@ -131,18 +131,7 @@ tel = tel.startsWith('243') ? tel : '243' + tel;
   fermerForm(); 
   setTimeout(chargerAnnonces, 3000);
                            }
-        fetch(SCRIPT_URL, { 
-  method: 'POST', 
-  mode: 'no-cors', 
-  headers: {'Content-Type': 'text/plain'},
-  body: JSON.stringify(data) 
-})
-.then(() => {
-  alert('Annonce publiée ! Elle va apparaître dans 2 min'); 
-  fermerForm(); 
-  setTimeout(chargerAnnonces, 2000);
-})
-.catch(error => alert('Erreur: ' + error));
+        
     }
         </script>
 </body>
