@@ -83,9 +83,6 @@
     }
     }
 
-    function afficherAnnonces(data) {
-        toutes
-
     document.getElementById('search').addEventListener('input', function(e) {
         const recherche = e.target.value.toLowerCase();
         const filtre = toutesLesAnnonces.filter(a => a.Titre.toLowerCase().includes(recherche) || a.Ville.toLowerCase().includes(recherche) || a.Categorie.toLowerCase().includes(recherche));
