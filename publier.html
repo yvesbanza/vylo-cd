@@ -48,8 +48,9 @@ button{background:#FF6600;color:white;padding:12px;border:none;border-radius:5px
 
 <script>
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycby7lxEq_QYTmg4E4Rxz94wfr0Xw-_z54UyR-N0mlp1fI_n-C5grX67ypvEDFrozuUZ1/exec';
+
 document.getElementById('date').value = new Date().toISOString().split('T')[0];
-    
+
 document.getElementById('adForm').addEventListener('submit', function(e){
   e.preventDefault();
   const status = document.getElementById('status');
@@ -74,27 +75,17 @@ document.getElementById('adForm').addEventListener('submit', function(e){
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify(data)
   })
- .then(res => res.text())
- .then(txt => {
+.then(res => res.text())
+.then(txt => {
     status.innerText = 'Annonce publiée avec succès ✅';
     status.className = 'success';
     document.getElementById('adForm').reset();
     document.getElementById('date').value = new Date().toISOString().split('T')[0];
   })
- .catch(err => {
+.catch(err => {
     status.innerText = 'Erreur: ' + err.message;
     status.className = 'error';
   });
-});
-    s.src = url;
-    document.head.appendChild(s);
-    
-    setTimeout(() => {
-        if(status.innerText === 'Envoi en cours...') {
-            status.innerText = 'Erreur: Vérifiez le déploiement de VYLO-BACKEND';
-            status.className = 'error';
-        }
-    }, 10000);
 });
 </script>
 
