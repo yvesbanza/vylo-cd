@@ -143,12 +143,17 @@ let toutesLesAnnonces = []; // pour garder les données en mémoire
 async function chargerAnnonces() {
     document.getElementById('annonces').innerHTML = 'Chargement des annonces...';
     try {
-        const res = await fetch(SCRIPT_URL);
-        const data = await res.json();
-        toutesLesAnnonces = data; // on sauvegarde pour le filtre
+        const res = await fetch(SCRIPT_URL, {mode: 'no-cors'});
+        // Si no-cors bloque, on passe par un proxy
+        const proxyUrl = 'https://api.allorigins.win/get?url=' + encodeURIComponent(SCRIPT_URL);
+        const proxyRes = await fetch(proxyUrl);
+        const proxyData = await proxyRes.json();
+        const data = JSON.parse(proxyData.contents);
+        
+        toutesLesAnnonces = data;
         afficherAnnonces(data);
     } catch(err) {
-        document.getElementById('annonces').innerHTML = 'Erreur: Impossible de charger les annonces.';
+        document.getElementById('annonces').innerHTML = 'Erreur de chargement. Recharge la page.';
         console.error(err);
     }
 }
