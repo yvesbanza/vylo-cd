@@ -75,11 +75,11 @@
             let tel = String(a.Telephone || '');
 tel = tel.startsWith('243') ? tel : '243' + tel;
             html += `<div class="annonce-card">
-                <img src="${a.Photo}" alt="${a.Titre}" onerror="this.src='https://via.placeholder.com/300x200/FF6600/FFFFFF?text=No+Image'">
-                <h3>${a.Titre}</h3>
-                <p class="prix">${a.Prix} ${a.Devise || a.devise}</p>
-                <span class="categorie">${a.Categorie}</span>
-                <p class="ville">📍 ${a.Ville}</p>
+                <img src="${a.photo}" alt="${a.titre}" onerror="this.style.display='none'">
+<h3>${a.titre}</h3>
+<p class="prix">${a.prix} ${a.devise}</p>
+<span class="badge">${a.devise}</span>
+<p class="ville">📍 ${a.categorie} - ${a.ville}</p>
                 <p class="description">${a.Description}</p>
                 <a href="https://wa.me/${tel}" target="_blank" class="btn-whatsapp">Contacter sur WhatsApp</a>
             </div>`;
