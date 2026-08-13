@@ -98,16 +98,39 @@ tel = tel.startsWith('243') ? tel : '243' + tel;
     function fermerForm() { document.getElementById('formulaire').style.display = 'none'; }
 
     function envoyerAnnonce() {
-        const data = {
-            titre: document.getElementById('titre').value,
-            prix: document.getElementById('prix').value,
-            devise: document.getElementById('devise').value,
-            categorie: document.getElementById('categorie').value,
-            ville: document.getElementById('ville').value,
-            telephone: document.getElementById('telephone').value,
-            photo: document.getElementById('photo').value,
-            description: document.getElementById('description').value
-        };
+  const data = {
+    date: document.getElementById('date').value,
+    titre: document.getElementById('titre').value,
+    prix: document.getElementById('prix').value,
+    devise: document.getElementById('devise').value,
+    categorie: document.getElementById('categorie').value,
+    ville: document.getElementById('ville').value,
+    telephone: document.getElementById('telephone').value,
+    photo: document.getElementById('photo').value,
+    description: document.getElementById('description').value
+  };
+
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = SCRIPT_URL;
+  form.target = '_blank'; // s'ouvre dans un nouvel onglet 1 sec
+  
+  for (const key in data) {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = key;
+    input.value = data[key];
+    form.appendChild(input);
+  }
+  
+  document.body.appendChild(form);
+  form.submit();
+  document.body.removeChild(form);
+
+  alert('Annonce envoyée! Elle va apparaître dans 2 min'); 
+  fermerForm(); 
+  setTimeout(chargerAnnonces, 3000);
+                           }
         fetch(SCRIPT_URL, { 
   method: 'POST', 
   mode: 'no-cors', 
