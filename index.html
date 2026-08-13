@@ -138,89 +138,93 @@
 <script>
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxObpj239sqiYFdP1qGB_xnOzCVYVGfme9VNYnJa_QOMgSKSG1q8VfzKgNOAYh8sSxp/exec';
 
-// 1. CETTE FONCTION CHARGE LES DONNEES
-    {
-    document.getElementById('annonces').innerHTML = 'Chargement des annonces...';
-    const script = document.createElement('script');
-    script.src = `${SCRIPT_URL}?callback=afficherAnnonces&v=${Date.now()}`;
-    script.onerror = () => {
-        document.getElementById('annonces').innerHTML = 'Erreur de connexion. Vérifiez internet.';
-    }
-    document.head.appendChild(script);
-}
+    let toutesLesAnnonces = [];
 
-// 2. CETTE FONCTION AFFICHE. UNE SEULE FOIS
-function afficherAnnonces(data) {
-    toutesLesAnnonces = data; // pour la recherche
-    const container = document.getElementById('annonces');
-    if(!data || data.length === 0) {
-        container.innerHTML = '<p>Aucune annonce pour le moment.</p>';
-        return;
+    function chargerAnnonces() {
+        document.getElementById('annonces').innerHTML = 'Chargement des annonces...';
+        
+        // Méthode JSONP qui marche
+        const callbackName = 'jsonp_callback_' + Date.now();
+        window[callbackName] = function(data) {
+            afficherAnnonces(data);
+            document.head.removeChild(script);
+            delete window[callbackName];
+        };
+        
+        const script = document.createElement('script');
+        script.src = `${SCRIPT_URL}?callback=${callbackName}&v=${Date.now()}`;
+        script.onerror = () => {
+            document.getElementById('annonces').innerHTML = 'Erreur de connexion. Vérifiez internet.';
+        }
+        document.head.appendChild(script);
     }
-    let html = '';
-    data.forEach(a => {
-        let tel = a.Telephone && a.Telephone.startsWith('243') ? a.Telephone : '243' + a.Telephone;
-        html += `<div class="annonce-card">
-            <img src="${a.Photo}" alt="${a.Titre}" onerror="this.src='https://via.placeholder.com/300x200/FF6600/FFFFFF?text=No+Image'">
-            <h3>${a.Titre}</h3>
-            <p class="prix">${a.Prix} FC</p>
-            <span class="categorie">${a.Categorie}</span>
-            <p class="ville">📍 ${a.Ville}</p>
-            <p class="description">${a.Description}</p>
-            <a href="https://wa.me/${tel}" target="_blank" class="btn-whatsapp">
-                Contacter sur WhatsApp
-            </a>
-        </div>`;
+
+    function afficherAnnonces(data) {
+        toutesLesAnnonces = data;
+        const container = document.getElementById('annonces');
+        if(!data || data.length === 0) {
+            container.innerHTML = '<p>Aucune annonce pour le moment.</p>';
+            return;
+        }
+        let html = '';
+        data.forEach(a => {
+            let tel = a.Telephone && a.Telephone.startsWith('243')? a.Telephone : '243' + a.Telephone;
+            html += `<div class="annonce-card">
+                <img src="${a.Photo}" alt="${a.Titre}" onerror="this.src='https://via.placeholder.com/300x200/FF6600/FFFFFF?text=No+Image'">
+                <h3>${a.Titre}</h3>
+                <p class="prix">${a.Prix} FC</p>
+                <span class="categorie">${a.Categorie}</span>
+                <p class="ville">📍 ${a.Ville}</p>
+                <p class="description">${a.Description}</p>
+                <a href="https://wa.me/${tel}" target="_blank" class="btn-whatsapp">
+                    Contacter sur WhatsApp
+                </a>
+            </div>`;
+        });
+        container.innerHTML = html;
+    }
+
+    document.getElementById('search').addEventListener('input', function(e) {
+        const recherche = e.target.value.toLowerCase();
+        const filtre = toutesLesAnnonces.filter(a => 
+            a.Titre.toLowerCase().includes(recherche) || 
+            a.Ville.toLowerCase().includes(recherche) || 
+            a.Categorie.toLowerCase().includes(recherche)
+        );
+        afficherAnnonces(filtre);
     });
-    container.innerHTML = html;
-}
 
-// 3. LANCE AU CHARGEMENT DE LA PAGE
-document.addEventListener('DOMContentLoaded', chargerAnnonces);
+    document.addEventListener('DOMContentLoaded', chargerAnnonces);
 
-// 4. FONCTION DE RECHERCHE
-let toutesLesAnnonces = [];
-document.getElementById('search').addEventListener('input', function(e) {
-    const recherche = e.target.value.toLowerCase();
-    const filtre = toutesLesAnnonces.filter(a => 
-        a.Titre.toLowerCase().includes(recherche) || 
-        a.Ville.toLowerCase().includes(recherche) || 
-        a.Categorie.toLowerCase().includes(recherche)
-    );
-    afficherAnnonces(filtre);
-});
-
-// Au chargement
-chargerAnnonces();
-    // Ouvrir/Fermer le formulaire
-document.querySelector('.btn-publier').addEventListener('click', () => {
-    document.getElementById('formulaire').style.display = 'block';
-});
-
-function fermerForm() {
-    document.getElementById('formulaire').style.display = 'none';
-}
-
-function envoyerAnnonce() {
-    const data = {
-        titre: document.getElementById('titre').value,
-        prix: document.getElementById('prix').value,
-        categorie: document.getElementById('categorie').value,
-        ville: document.getElementById('ville').value,
-        telephone: document.getElementById('telephone').value,
-        photo: document.getElementById('photo').value,
-        description: document.getElementById('description').value
-    };
-    
-    fetch(SCRIPT_URL, {
-        method: 'POST',
-        body: JSON.stringify(data)
-    }).then(() => {
-        alert('Annonce publiée!');
-        fermerForm();
-        chargerAnnonces(); // recharge
+    document.querySelector('.btn-publier').addEventListener('click', () => {
+        document.getElementById('formulaire').style.display = 'block';
     });
+
+    function fermerForm() {
+        document.getElementById('formulaire').style.display = 'none';
     }
-</script>
+
+    function envoyerAnnonce() {
+        const data = {
+            titre: document.getElementById('titre').value,
+            prix: document.getElementById('prix').value,
+            categorie: document.getElementById('categorie').value,
+            ville: document.getElementById('ville').value,
+            telephone: document.getElementById('telephone').value,
+            photo: document.getElementById('photo').value,
+            description: document.getElementById('description').value
+        };
+        
+        fetch(SCRIPT_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            body: JSON.stringify(data)
+        }).then(() => {
+            alert('Annonce publiée!');
+            fermerForm();
+            setTimeout(chargerAnnonces, 2000);
+        });
+    }
+            </script>
 </body>
 </html>
