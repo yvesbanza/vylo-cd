@@ -46,8 +46,7 @@
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbylEuRJbGLIyCTBK9C1PlePNQkzt4UcKYsz6icdF1jQVDp5Qnaq9a7VKrURYXWDYhIA/exec';
 
     let toutesLesAnnonces = [];
-
-    async function chargerAnnonces() {
+    function chargerAnnonces() {
   document.getElementById('annonces').innerHTML = 'Chargement...';
   
   const script = document.createElement('script');
