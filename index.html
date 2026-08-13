@@ -68,7 +68,8 @@
         if(!data || data.length === 0) { container.innerHTML = '<p>Aucune annonce pour le moment.</p>'; return; }
         let html = '';
         data.forEach(a => {
-            let tel = a.Telephone && a.Telephone.startsWith('243')? a.Telephone : '243' + a.Telephone;
+            let tel = String(a.Telephone || '');
+tel = tel.startsWith('243') ? tel : '243' + tel;
             html += `<div class="annonce-card">
                 <img src="${a.Photo}" alt="${a.Titre}" onerror="this.src='https://via.placeholder.com/300x200/FF6600/FFFFFF?text=No+Image'">
                 <h3>${a.Titre}</h3>
