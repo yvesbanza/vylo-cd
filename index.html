@@ -191,17 +191,6 @@ document.getElementById('search').addEventListener('input', function(e) {
     afficherAnnonces(filtre);
 });
 
-// Fonction de recherche
-document.getElementById('search').addEventListener('input', function(e) {
-    const recherche = e.target.value.toLowerCase();
-    const filtre = toutesLesAnnonces.filter(a => 
-        a.Titre.toLowerCase().includes(recherche) ||
-        a.Ville.toLowerCase().includes(recherche) ||
-        a.Categorie.toLowerCase().includes(recherche)
-    );
-    afficherAnnonces(filtre);
-});
-
 // Au chargement
 chargerAnnonces();
     // Ouvrir/Fermer le formulaire
