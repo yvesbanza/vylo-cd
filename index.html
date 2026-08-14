@@ -43,89 +43,16 @@
 </div>
 
 <script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbylEuRJbGLIyCTBK9C1PlePNQkzt4UcKYsz6icdF1jQVDp5Qnaq9a7VKrURYXWDYhIA/exec';
+const SCRIPT_URL = "TEST";
 
-    let toutesLesAnnonces = [];
-    function chargerAnnonces() {
-  document.getElementById('annonces').innerHTML = 'Chargement...';
-  
-  const script = document.createElement('script');
-  script.src = SCRIPT_URL + '?action=get&callback=afficherAnnonces';
-  script.onerror = () => {
-    document.getElementById('annonces').innerHTML = 'Erreur de chargement';
-  }
-  document.body.appendChild(script);
+function afficherAnnonces(data) {
+    const container = document.getElementById('annonces');
+    container.innerHTML = '<p style="color:green; font-size:20px; text-align:center">SI TU VOIS ÇA = LE JS MARCHE</p>';
 }
 
-   function afficherAnnonces(data) {
-  toutesLesAnnonces = data;
-  const container = document.getElementById('annonces');
-  
-  if(!data || data.length === 0) { 
-    container.innerHTML = '<p>Aucune annonce</p>'; 
-    return; 
-  }
-  
-  let html = '';
-  data.forEach(a => {
-    let tel = String(a.Telephone || '');
-    tel = tel.startsWith('243')? tel : '243' + tel;
-    html += `<div class="annonce-card">
-      <h3>${a.Titre}</h3>
-      <p><b>${a.Prix} ${a.Devise}</b> - ${a.Ville}</p>
-      <p>${a.Description}</p>
-      <a href="tel:${tel}" class="btn-appel">Appeler</a>
-    </div>`;
-  });
-  container.innerHTML = html;
-    }
-        document.getElementById('annonces').innerHTML = 'Erreur: ' + err.message;
-    }
-
-    document.getElementById('search').addEventListener('input', function(e) {
-        const recherche = e.target.value.toLowerCase();
-        const filtre = toutesLesAnnonces.filter(a => a.Titre.toLowerCase().includes(recherche) || a.Ville.toLowerCase().includes(recherche) || a.Categorie.toLowerCase().includes(recherche));
-        afficherAnnonces(filtre);
-    });
-
-    document.addEventListener('DOMContentLoaded', chargerAnnonces);
-document.querySelector('.btn-publier').addEventListener('click', ouvrirForm);;
-    function fermerForm() { document.getElementById('formulaire').style.display = 'none'; }
-
-    function envoyerAnnonce() {
-  const data = {
-    date: document.getElementById('date').value,
-    titre: document.getElementById('titre').value,
-    prix: document.getElementById('prix').value,
-    devise: document.getElementById('devise').value,
-    categorie: document.getElementById('categorie').value,
-    ville: document.getElementById('ville').value,
-    telephone: document.getElementById('telephone').value,
-    photo: document.getElementById('photo').value,
-    description: document.getElementById('description').value
-  };
-
-  const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = SCRIPT_URL;
-  form.target = '_blank'; // s'ouvre dans un nouvel onglet 1 sec
-  
-  for (const key in data) {
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = key;
-    input.value = data[key];
-    form.appendChild(input);
-  }
-  
-  document.body.appendChild(form);
-  form.submit();
-  document.body.removeChild(form);
-
-  alert('Annonce envoyée! Elle va apparaître dans 2 min'); 
-  fermerForm(); 
-  setTimeout(chargerAnnonces, 3000);
-                           }
-        </script>
+window.onload = function() {
+    afficherAnnonces([{Titre:"Test", Prix:"100"}]);
+};
+</script>
 </body>
 </html>
