@@ -83,6 +83,34 @@ function chargerAnnonces() {
     const script = document.createElement('script');
     script.src = `${SCRIPT_URL}?callback=afficherAnnonces`;
     document.body.appendChild(script);
+function publierAnnonce() {
+  const titre = prompt("Titre de l'annonce ? Ex: Samsung S23");
+  if(!titre) return;
+  const prix = prompt("Prix en USD ? Ex: 400");
+  const ville = prompt("Ville ? Ex: Kinshasa");
+  const whatsapp = prompt("Ton WhatsApp ? Ex: 0898123456");
+  const photo = prompt("Lien de la photo ? Colle le lien PostImages");
+  
+  const nouvelleAnnonce = {
+    titre, prix, description: "Voir description",
+    categorie: "Divers", ville, whatsapp, photo
+  };
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    body: JSON.stringify(nouvelleAnnonce)
+  })
+  .then(res => res.json())
+  .then(data => {
+    if(data.result === "success"){
+      alert("Annonce publiée !");
+      chargerAnnonces(); // recharge la page
+    } else {
+      alert("Erreur: " + data.error);
+    }
+  })
+  .catch(err => alert("Erreur de connexion"));
+}
 }
 
 window.onload = chargerAnnonces;
