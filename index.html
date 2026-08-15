@@ -74,7 +74,7 @@ function filtrerAnnonces() {
   filtrees.forEach(annonce => {
     const card = document.createElement('div');
     card.className = 'annonce-card';
-    card.innerHTML = `
+card.innerHTML = `
       <img src="${annonce.photo}" alt="${annonce.titre}" onerror="this.src='https://via.placeholder.com/400x220?text=Pas+dimage'">
       <div class="annonce-info">
         <h3>${annonce.titre}</h3>
@@ -84,7 +84,7 @@ function filtrerAnnonces() {
       </div>
       <a href="https://wa.me/${annonce.whatsapp.replace(/\D/g,'')}" target="_blank" class="btn-whatsapp">Contacter sur WhatsApp</a>
     `;
-    container.appendChild(card);
+container.appendChild(card);
   });
 }
 
