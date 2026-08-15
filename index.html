@@ -99,7 +99,7 @@ function publierAnnonce() {
   const description = prompt("Description ?");
     
   const nouvelleAnnonce = {
-    titre, prix, description: "description",
+    titre, prix, description: description,
     categorie: "Divers", ville, whatsapp, photo
   };
 
@@ -113,15 +113,7 @@ alert("Annonce publiée !");
 fermerForm();
 chargerAnnonces(); // <- recharge la page direct
     {
-    if(data.result === "success"){
-      alert("Annonce publiée !");
-      chargerAnnonces(); // recharge la page
-    } else {
-      alert("Erreur: " + data.error);
-    }
-  })
   .catch(err => alert("Erreur de connexion"));
-}
 }
 
 window.onload = chargerAnnonces;
