@@ -1,93 +1,86 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Publier une annonce - VYLO</title>
-<style>
-body{font-family:Arial;background:#f7f7f7;color:#333;padding:20px;max-width:500px;margin:auto;}
-input,select,textarea{width:100%;padding:10px;margin:8px 0;border:1px solid #ddd;border-radius:5px;}
-button{background:#FF6600;color:white;padding:12px;border:none;border-radius:5px;font-weight:bold;width:100%;cursor:pointer;}
-#status{margin-top:10px;font-weight:bold;}
-.success{color:green;}.error{color:red;}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Publier - VYLO-CD</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#F5F5F5; margin:0; padding:0; }
+    header { background:#FF6B00; color:white; padding:10px 15px; display:flex; align-items:center; gap:10px; }
+    header img { height:40px; border-radius:5px; }
+    header h1 { margin:0; font-size:22px; }
+   .container { max-width:600px; margin:20px auto; padding:20px; background:white; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1); }
+   .form-group { margin-bottom:15px; }
+    label { display:block; margin-bottom:5px; font-weight:bold; }
+    input, select, textarea { width:100%; padding:10px; border:1px solid #ddd; border-radius:5px; box-sizing:border-box; font-size:14px; }
+   .btn-submit { width:100%; background:#FF6B00; color:white; padding:15px; border:none; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer; }
+   .btn-submit:hover { background:#e55f00; }
+   .devise-group { display:flex; gap:20px; }
+   .devise-group label { font-weight:normal; }
+   .back-link { display:block; text-align:center; margin-top:15px; color:#FF6B00; text-decoration:none; }
+  </style>
 </head>
 <body>
-
-<h1>Publier une annonce</h1>
-
-<form id="adForm">
-    <input type="date" name="date" id="date" required>
-    <input type="text" name="titre" id="titre" placeholder="Titre de l'annonce" required>
-    <div style="display:flex; gap:10px; margin-bottom:15px;">
-  <input type="number" name="prix" id="prix" placeholder="Prix" required style="flex:1; padding:10px; border-radius:8px; border:1px solid #ccc;">
-  <select name="devise" id="devise" required style="width:90px; padding:10px; border-radius:8px; border:1px solid #ccc;">
-    <option value="FC">FC</option>
-    <option value="$">$</option>
-  </select>
-    </div>
-    
-    <select name="categorie" id="categorie" required>
-        <option value="">Choisir catégorie</option>
-        <option value="Téléphone">Téléphone</option>
-        <option value="Véhicule">Véhicule</option>
-        <option value="Immobilier">Immobilier</option>
-        <option value="Électronique">Électronique</option>
-        <option value="Mode">Mode</option>
-        <option value="Autre">Autre</option>
-    </select>
-    
-    <input type="text" name="ville" id="ville" placeholder="Ville: Kinshasa, Lubumbashi..." required>
-    <input type="tel" name="telephone" id="telephone" placeholder="Téléphone WhatsApp" required>
-    <input type="url" name="photos" id="photos" placeholder="Lien d'une photo">
-    <textarea name="description" id="description" placeholder="Description" required></textarea>
-    <button type="submit">Publier l'annonce</button>
-</form>
-
-<p id="status"></p>
+  <header>
+    <img src="https://i.postimg.cc/Kvm4Z7ng/logo.jpg" alt="Logo VYLO">
+    <h1>Publier une annonce</h1>
+  </header>
+  <div class="container">
+    <form id="formAnnonce">
+      <div class="form-group"><label>Titre *</label><input type="text" id="titre" placeholder="Ex: Samsung Galaxy S23" required></div>
+      <div class="form-group"><label>Description *</label><textarea id="description" rows="4" placeholder="Décris ton produit" required></textarea></div>
+      <div class="form-group"><label>Prix *</label><input type="number" id="prix" placeholder="Ex: 400" required></div>
+      <div class="form-group">
+        <label>Devise *</label>
+        <div class="devise-group">
+          <label><input type="radio" name="devise" value="$" checked> $ USD</label>
+          <label><input type="radio" name="devise" value="FC"> FC Franc</label>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Catégorie *</label>
+        <select id="categorie" required>
+          <option value="">Choisir...</option>
+          <option>Téléphone</option><option>Immobilier</option><option>Véhicule</option>
+          <option>Mode</option><option>Divers</option><option>Autre</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Ville *</label><input type="text" id="ville" placeholder="Ex: Kinshasa" required></div>
+      <div class="form-group"><label>Téléphone *</label><input type="tel" id="telephone" placeholder="0812345678" required></div>
+      <div class="form-group"><label>WhatsApp *</label><input type="tel" id="whatsapp" placeholder="0812345678" required></div>
+      <div class="form-group"><label>Lien Photo *</label><input type="url" id="photo" placeholder="Lien PostImage.com" required></div>
+      <button type="submit" class="btn-submit">Publier l'annonce</button>
+      <a href="index.html" class="back-link">← Retour aux annonces</a>
+    </form>
+  </div>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzMVpP8Ce6iUiiZHskqu2WhKNQx08MM2eYMlMhJss_5QnKAv2q_2UleOPa_cwJq3Vk/exec';
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzvbtelK53TcbL0AMBs1BHYdImzkw2le4oWbnEf2XnoPK7LQoUxW2-bhJ4EL-prTfE/exec';
 
-document.getElementById('date').value = new Date().toISOString().split('T')[0];
-
-document.getElementById('adForm').addEventListener('submit', function(e){
+document.getElementById('formAnnonce').addEventListener('submit', function(e) {
   e.preventDefault();
-  const status = document.getElementById('status');
-  status.innerText = 'Envoi en cours...';
-  status.className = '';
-
-  const data = {
-    date: document.getElementById('date').value,
+  const nouvelleAnnonce = {
     titre: document.getElementById('titre').value,
+    description: document.getElementById('description').value,
     prix: document.getElementById('prix').value,
-    devise: document.getElementById('devise').value,
+    devise: document.querySelector('input[name="devise"]:checked').value,
     categorie: document.getElementById('categorie').value,
     ville: document.getElementById('ville').value,
     telephone: document.getElementById('telephone').value,
-    photo: document.getElementById('photos').value,
-    description: document.getElementById('description').value
+    whatsapp: document.getElementById('whatsapp').value,
+    photo: document.getElementById('photo').value
   };
 
-  fetch(SCRIPT_URL, {
+  fetch(SCRIPT_URL + '?action=post', {
     method: 'POST',
-    mode: 'cors',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(data)
+    body: new URLSearchParams(nouvelleAnnonce)
   })
-.then(res => res.text())
-.then(txt => {
-    status.innerText = 'Annonce publiée avec succès ✅';
-    status.className = 'success';
-    document.getElementById('adForm').reset();
-    document.getElementById('date').value = new Date().toISOString().split('T')[0];
+ .then(() => { 
+    alert("Annonce publiée avec succès!"); 
+    window.location.href = 'index.html';
   })
-.catch(err => {
-    status.innerText = 'Erreur: ' + err.message;
-    status.className = 'error';
-  });
+ .catch(err => alert("Erreur de connexion"));
 });
-                   </script>
-
+</script>
 </body>
 </html>
