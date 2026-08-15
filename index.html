@@ -92,6 +92,7 @@ function chargerAnnonces() {
 function publierAnnonce() {
   const titre = prompt("Titre de l'annonce ? Ex: Samsung S23");
   if(!titre) return;
+  const devise = prompt("Devise ? Tape $ ou FC");
   const prix = prompt("Prix en USD ? Ex: 400");
   const ville = prompt("Ville ? Ex: Kinshasa");
   const whatsapp = prompt("Ton WhatsApp ? Ex: 0898123456");
