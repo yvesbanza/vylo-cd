@@ -68,36 +68,14 @@ function afficherAnnonces(data) {
     });
 }
 
+const SCRIPT_URL = 'COLLE_TA_NOUVELLE_URL_SCRIPT_ICI'; // Ligne 44
+
 function chargerAnnonces() {
-  // FAKE DATA pour tester si l'affichage marche
-  const data = [
-    {
-      "timestamp": "2026-08-15",
-      "titre": "iPhone 14 Pro Max",
-      "description": "512GB, Batterie 100%, Neuf scellé",
-      "prix": "1200",
-      "devise": "$",
-      "categorie": "Téléphones",
-      "ville": "Kinshasa",
-      "telephone": "0812345678",
-      "photo": "https://images.unsplash.com/photo-1592750475338-74b7b21085f9?w=400",
-      "whatsapp": "0812345678"
-    },
-    {
-      "timestamp": "2026-08-14", 
-      "titre": "Terrain 20x20 à Limete",
-      "description": "Titre parcellaire, Quartier calme",
-      "prix": "25000",
-      "devise": "$",
-      "categorie": "Immobilier",
-      "ville": "Kinshasa",
-      "telephone": "0898765432",
-      "photo": "https://images.unsplash.com/photo-1502005229762-cf1b2da7c5d6?w=400",
-      "whatsapp": "0898765432"
-    }
-  ];
-  
-  afficherAnnonces(data); // on affiche direct
+  document.getElementById('annonces-container').innerHTML = '<p>Chargement des annonces...</p>';
+  fetch(SCRIPT_URL)
+   .then(res => res.json())
+   .then(data => afficherAnnonces(data))
+   .catch(err => document.getElementById('annonces-container').innerHTML = '<p>Erreur de chargement</p>');
 }
 function publierAnnonce() {
   const titre = prompt("Titre de l'annonce ? Ex: Samsung S23");
