@@ -109,11 +109,11 @@ function publierAnnonce() {
     mode: 'no-cors',
     body: JSON.stringify(nouvelleAnnonce)
 });
+  .catch(err => alert("Erreur de connexion"));
   
 alert("Annonce publiée !");
 fermerForm();
 chargerAnnonces(); // <- recharge la page direct
-  .catch(err => alert("Erreur de connexion"));
 
 window.onload = chargerAnnonces;
     
