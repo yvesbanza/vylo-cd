@@ -100,9 +100,9 @@ function publierAnnonce() {
   const description = prompt("Description ?");
     
   const nouvelleAnnonce = {
-    titre, prix, description: description,
+    titre, prix, devise, description, // <- ajoute devise ici
     categorie: "Divers", ville, whatsapp, photo
-  };
+};
 
   fetch(SCRIPT_URL, {
     method: 'POST',
