@@ -72,7 +72,7 @@ function afficherAnnonces(data) {
             <img src="${annonce.photo}" alt="${annonce.titre}">
             <div class="annonce-info">
                 <h3>${annonce.titre}</h3>
-                <p class="prix">${annonce.prix} ${annonce.devise}</p>
+                <p class="prix">${annonce.prix} ${annonce.devise || 'FC'}</p>
                 <p>${annonce.description}</p>
                 <p><small>${annonce.ville} - ${annonce.categorie}</small></p>
                 <a href="https://wa.me/243${annonce.whatsapp}" class="btn-whatsapp">Contacter sur WhatsApp</a>
