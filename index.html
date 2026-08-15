@@ -48,6 +48,7 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzvbtelK53TcbL0AMBs1
 let toutesLesAnnonces = [];
 
 function afficherAnnonces(data) {
+  console.log("DONNEES REÇUES:", data);
   document.getElementById('loading').style.display = 'none'; // Cache le chargement
   toutesLesAnnonces = data;
   filtrerAnnonces();
