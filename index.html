@@ -85,15 +85,27 @@ function publierAnnonce() {
   const description = prompt("Description ?");
     
   const nouvelleAnnonce = {
-    titre, prix, devise, description, // <- ajoute devise ici
-    categorie: "Divers", ville, whatsapp, photo
+  titre: document.getElementById('titre').value,
+  description: document.getElementById('description').value,
+  prix: document.getElementById('prix').value,
+  devise: document.getElementById('devise').value,
+  categorie: document.getElementById('categorie').value,
+  ville: document.getElementById('ville').value,
+  telephone: document.getElementById('telephone').value,
+  photo: document.getElementById('photo').value,
+  whatsapp: document.getElementById('whatsapp').value
 };
 
-  fetch(SCRIPT_URL + '?action=post', {
+fetch(SCRIPT_URL + '?action=post', {
   method: 'POST',
   body: new URLSearchParams(nouvelleAnnonce)
-});
-  .catch(err => alert("Erreur de connexion"));
+})
+.then(() => {
+  alert("Annonce publiée !");
+  fermerForm();
+  chargerAnnonces();
+})
+.catch(err => alert("Erreur de connexion"));
   
 alert("Annonce publiée !");
 fermerForm();
