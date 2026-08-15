@@ -77,39 +77,29 @@ function chargerAnnonces() {
 function publierAnnonce() {
   const titre = prompt("Titre de l'annonce ? Ex: Samsung S23");
   if(!titre) return;
-  const devise = prompt("Devise ? Tape $ ou FC");
-  const prix = prompt("Prix en USD ? Ex: 400");
-  const ville = prompt("Ville ? Ex: Kinshasa");
-  const whatsapp = prompt("Ton WhatsApp ? Ex: 0898123456");
-  const photo = prompt("Lien de la photo ? Colle le lien PostImages");
   const description = prompt("Description ?");
-    
-  const nouvelleAnnonce = {
-  titre: document.getElementById('titre').value,
-  description: document.getElementById('description').value,
-  prix: document.getElementById('prix').value,
-  devise: document.getElementById('devise').value,
-  categorie: document.getElementById('categorie').value,
-  ville: document.getElementById('ville').value,
-  telephone: document.getElementById('telephone').value,
-  photo: document.getElementById('photo').value,
-  whatsapp: document.getElementById('whatsapp').value
-};
+  const prix = prompt("Prix en USD ? Ex: 400");
+  const devise = prompt("Devise ? Tape $ ou FC");
+  const categorie = prompt("Catégorie ? Ex: Téléphone");
+  const ville = prompt("Ville ? Ex: Kinshasa");
+  const telephone = prompt("Ton téléphone ? Ex: 0812345678");
+  const whatsapp = prompt("Ton WhatsApp ? Ex: 0898123456");
+  const photo = prompt("Lien de la photo ? Colle le lien PostImage");
 
-fetch(SCRIPT_URL + '?action=post', {
-  method: 'POST',
-  body: new URLSearchParams(nouvelleAnnonce)
-})
-.then(() => {
-  alert("Annonce publiée !");
-  fermerForm();
-  chargerAnnonces();
-})
-.catch(err => alert("Erreur de connexion"));
-  
-alert("Annonce publiée !");
-fermerForm();
-chargerAnnonces(); // <- recharge la page direct
+  const nouvelleAnnonce = {
+    titre, description, prix, devise, categorie, ville, telephone, photo, whatsapp
+  };
+
+  fetch(SCRIPT_URL + '?action=post', {
+    method: 'POST',
+    body: new URLSearchParams(nouvelleAnnonce)
+  })
+  .then(() => {
+    alert("Annonce publiée !");
+    chargerAnnonces();
+  })
+  .catch(err => alert("Erreur de connexion"));
+}
 
 window.onload = chargerAnnonces;
     
