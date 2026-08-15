@@ -1,111 +1,97 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VYLO-Cd - Annonces RDC</title>
-    <style>
-.annonce-card { background:white; border:1px solid #ddd; border-radius:8px; margin:15px 0; padding:10px; }
-.annonce-card img { width:100%; height:200px; object-fit:cover; border-radius:8px; }
-.annonce-info h3 { margin:10px 0 5px 0; color:#FF6B00; }
-.prix { font-size:20px; font-weight:bold; color:#000; }
-.btn-whatsapp { display:inline-block; background:#25D366; color:white; padding:10px; border-radius:5px; text-decoration:none; margin-top:10px; }
-    </style>
-<style>
-    body{ font-family:Arial,sans-serif; background:#f5f5f5; margin:0; padding:0; }
-    header{ background:#FF6B00; color:white; padding:15px; text-align:center; font-size:22px; font-weight:bold; }
-   .container{ max-width:600px; margin:0 auto; padding:15px; }
-   .btn-publier{ display:block; background:#FF6B00; color:white; text-align:center; padding:12px; margin:15px auto; border-radius:5px; width:90%; max-width:350px; font-weight:bold; border:none; }
-    #search{ width:100%; padding:14px; margin-bottom:20px; border:2px solid #eee; border-radius:12px; font-size:16px; box-sizing:border-box; }
-    #search:focus{ border-color:#FF6B00; outline:none; }
-   .annonce-card { border: 1px solid #ddd; padding: 15px; margin: 15px 0; border-radius: 8px; background:white; box-shadow:0 4px 15px rgba(0,0,0,0.1); }
-   .annonce-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 5px; }
-   .categorie { background: #FF6B00; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; display:inline-block; margin:5px 0; }
-   .prix { color: #FF6B00; font-weight: bold; font-size: 20px; margin:5px 0; }
-   .ville { color: #666; margin:5px 0; }
-   .description { font-size: 14px; color: #555; margin: 8px 0; }
-   .btn-whatsapp { display: block; background: #25D366; color: white; padding: 12px; text-align: center; border-radius: 10px; text-decoration: none; font-weight: bold; margin-top: 10px; width:100%; }
-   .btn-whatsapp:hover{ background:#1DA851; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VYLO-CD - Marketplace RDC</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#F5F5F5; margin:0; padding:0; }
+    header { background:#FF6B00; color:white; padding:10px 15px; display:flex; align-items:center; gap:10px; }
+    header img { height:40px; border-radius:5px; }
+    header h1 { margin:0; font-size:22px; }
+   .container { max-width:700px; margin:0 auto; padding:10px; }
+   .top-bar { display:flex; gap:10px; margin:10px 0; }
+   .btn-publier { flex:1; background:#FF6B00; color:white; text-align:center; padding:12px; border:none; border-radius:8px; font-size:16px; font-weight:bold; text-decoration:none; }
+    #search, #filterCat { flex:1; padding:12px; border:2px solid #eee; border-radius:8px; box-sizing:border-box; font-size:14px; }
+   .annonce-card { background:white; border-radius:8px; margin:15px 0; box-shadow:0 2px 5px rgba(0,0,0,0.1); overflow:hidden; }
+   .annonce-card img { width:100%; height:220px; object-fit:cover; }
+   .annonce-info { padding:12px; }
+   .annonce-info h3 { margin:0 0 5px 0; font-size:18px; }
+   .prix { color:#FF6B00; font-weight:bold; font-size:20px; margin:5px 0; }
+   .meta { color:#666; font-size:13px; margin:0 0 8px 0; }
+   .description { font-size:14px; color:#444; margin:8px 0; }
+   .btn-whatsapp { display:block; background:#25D366; color:white; text-align:center; padding:12px; text-decoration:none; font-weight:bold; }
+   .btn-whatsapp:hover { background:#128C7E; }
+    #loading { text-align:center; padding:30px; color:#666; }
+  </style>
 </head>
 <body>
-<header>VYLO-Cd</header>
-<div class="container">
-      <button onclick="publierAnnonce()" class="btn-publier">
-+ Publier une annonce
-      </button>
-  <input type="text" id="search" placeholder="Recher un produit, une ville...">
-  <div id="annonces">Chargement des annonces...</div>
-</div>
-    
-<script>
+  <header>
+    <img src="https://i.postimg.cc/Kvm4Z7ng/logo.jpg" alt="Logo VYLO">
+    <h1>VYLO-CD</h1>
+  </header>
+  <div class="container">
+    <div class="top-bar">
+      <a href="publier.html" class="btn-publier">+ Publier</a>
+      <select id="filterCat">
+        <option value="">Toutes catégories</option>
+        <option>Téléphone</option><option>Immobilier</option><option>Véhicule</option>
+        <option>Mode</option><option>Divers</option><option>Autre</option>
+      </select>
+    </div>
+    <input type="text" id="search" placeholder="Recher un produit, une ville...">
+    <div id="annonces"><div id="loading">Chargement des annonces...</div></div>
+  </div>
 
+<script>
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzvbtelK53TcbL0AMBs1BHYdImzkw2le4oWbnEf2XnoPK7LQoUxW2-bhJ4EL-prTfE/exec';
 let toutesLesAnnonces = [];
 
 function afficherAnnonces(data) {
-    toutesLesAnnonces = data;
-    const container = document.getElementById('annonces');
-    container.innerHTML = '';
-    if (data.length === 0) {
-        container.innerHTML = '<p>Aucune annonce pour le moment.</p>';
-        return;
-    }
-    data.forEach(annonce => {
-        const card = document.createElement('div');
-        card.className = 'annonce-card';
-        card.innerHTML = `
-            <img src="${annonce.photo}" alt="${annonce.titre}">
-            <div class="annonce-info">
-                <h3>${annonce.titre}</h3>
-                <p class="prix">${annonce.prix} ${annonce.devise || 'FC'}</p>
-                <p>${annonce.description}</p>
-                <p><small>${annonce.ville} - ${annonce.categorie}</small></p>
-                <a href="https://wa.me/243${annonce.whatsapp}" class="btn-whatsapp">Contacter sur WhatsApp</a>
-            </div>
-        `;
-        container.appendChild(card);
-    });
+  toutesLesAnnonces = data;
+  filtrerAnnonces();
 }
 
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzMVpP8Ce6iUiiZHskqu2WhKNQx08MM2eYMlMhJss_5QnKAv2q_2UleOPa_cwJq3Vk/exec'; // Ligne 44
+function filtrerAnnonces() {
+  const terme = document.getElementById('search').value.toLowerCase();
+  const cat = document.getElementById('filterCat').value;
+  const filtrees = toutesLesAnnonces.filter(a => 
+    (a.titre.toLowerCase().includes(terme) || a.ville.toLowerCase().includes(terme)) &&
+    (cat === "" || a.categorie === cat)
+  );
+  
+  const container = document.getElementById('annonces');
+  container.innerHTML = '';
+  if (filtrees.length == 0) {
+    container.innerHTML = "<p style='text-align:center;'>Aucune annonce trouvée.</p>";
+    return;
+  }
+  filtrees.forEach(annonce => {
+    const card = document.createElement('div');
+    card.className = 'annonce-card';
+    card.innerHTML = `
+      <img src="${annonce.photo}" alt="${annonce.titre}" onerror="this.src='https://via.placeholder.com/400x220?text=Pas+dimage'">
+      <div class="annonce-info">
+        <h3>${annonce.titre}</h3>
+        <p class="prix">${annonce.prix} ${annonce.devise}</p>
+        <p class="description">${annonce.description}</p>
+        <p class="meta">${annonce.ville} - ${annonce.categorie}</p>
+      </div>
+      <a href="https://wa.me/243${annonce.whatsapp.replace(/\D/g,'')}" target="_blank" class="btn-whatsapp">Contacter sur WhatsApp</a>
+    `;
+    container.appendChild(card);
+  });
+}
 
 function chargerAnnonces() {
-  document.getElementById('annonces-container').innerHTML = '<p>Chargement des annonces...</p>';
-  
-  // METHODE JSONP POUR BYPASS CORS
   const script = document.createElement('script');
-  script.src = SCRIPT_URL + '?callback=afficherAnnonces';
+  script.src = SCRIPT_URL + '?callback=afficherAnnonces&t=' + new Date().getTime();
   document.body.appendChild(script);
 }
-function publierAnnonce() {
-  const titre = prompt("Titre de l'annonce ? Ex: Samsung S23");
-  if(!titre) return;
-  const description = prompt("Description ?");
-  const prix = prompt("Prix en USD ? Ex: 400");
-  const devise = prompt("Devise ? Tape $ ou FC");
-  const categorie = prompt("Catégorie ? Ex: Téléphone");
-  const ville = prompt("Ville ? Ex: Kinshasa");
-  const telephone = prompt("Ton téléphone ? Ex: 0812345678");
-  const whatsapp = prompt("Ton WhatsApp ? Ex: 0898123456");
-  const photo = prompt("Lien de la photo ? Colle le lien PostImage");
 
-  const nouvelleAnnonce = {
-    titre, description, prix, devise, categorie, ville, telephone, photo, whatsapp
-  };
-
-  fetch(SCRIPT_URL + '?action=post', {
-    method: 'POST',
-    body: new URLSearchParams(nouvelleAnnonce)
-  })
-  .then(() => {
-    alert("Annonce publiée !");
-    chargerAnnonces();
-  })
-  .catch(err => alert("Erreur de connexion"));
-}
-
+document.getElementById('search').addEventListener('input', filtrerAnnonces);
+document.getElementById('filterCat').addEventListener('change', filtrerAnnonces);
 window.onload = chargerAnnonces;
-    
 </script>
 </body>
-</html>
+    </html>
