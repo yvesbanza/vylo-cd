@@ -96,9 +96,10 @@ function publierAnnonce() {
   const ville = prompt("Ville ? Ex: Kinshasa");
   const whatsapp = prompt("Ton WhatsApp ? Ex: 0898123456");
   const photo = prompt("Lien de la photo ? Colle le lien PostImages");
-  
+  const description = prompt("Description ?");
+    
   const nouvelleAnnonce = {
-    titre, prix, description: "Voir description",
+    titre, prix, description: "description",
     categorie: "Divers", ville, whatsapp, photo
   };
 
