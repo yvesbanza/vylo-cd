@@ -75,17 +75,22 @@ function filtrerAnnonces() {
   filtrees.forEach(annonce => {
     const card = document.createElement('div');
     card.className = 'annonce-card';
-card.innerHTML = `
+    
+    // On prend whatsapp si existe, sinon telephone
+    const numeroWA = annonce.whatsapp || annonce.telephone || '';
+    
+    card.innerHTML = `
       <img src="${annonce.photo}" alt="${annonce.titre}" onerror="this.src='https://via.placeholder.com/400x220?text=Pas+dimage'">
       <div class="annonce-info">
         <h3>${annonce.titre}</h3>
         <p class="prix">${annonce.prix} ${annonce.devise}</p>
         <p class="description">${annonce.description}</p>
         <p class="meta">${annonce.ville} - ${annonce.categorie}</p>
+        <p class="date" style="font-size:12px; color:#888;">${annonce.date}</p>
       </div>
-      <a href="https://wa.me/${annonce.whatsapp.replace(/\D/g,'')}" target="_blank" class="btn-whatsapp">Contacter sur WhatsApp</a>
+      <a href="https://wa.me/${numeroWA.replace(/\D/g,'')}" target="_blank" class="btn-whatsapp">Contacter sur WhatsApp</a>
     `;
-container.appendChild(card);
+    container.appendChild(card);
   });
 }
 
