@@ -44,73 +44,61 @@
   </div>
 
 <script>
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzvbtelK53TcbL0AMBs1BHYdImzkw2le4oWbnEf2XnoPK7LQoUxW2-bhJ4EL-prTfE/exec';
-let toutesLesAnnonces = [];
+const SHEET_ID = '1h0kKoCdJ59-yvYurhA0A3gGkRT8T4Z76LeRXTyqrNqs';
+const SHEET_NAME = 'ANNONCES';
+const container = document.getElementById('annonces-list'); // vérifie que ton div a id="annonces-list"
 
-function afficherAnnonces(data) {
-  console.log("DONNEES REÇUES:", data);
-  document.getElementById('loading').style.display = 'none'; // Cache le chargement
-  toutesLesAnnonces = data;
-  filtrerAnnonces();
-}
-
-function erreurChargement() {
-    document.getElementById('loading').innerHTML = "Erreur de chargement. Vérifie le déploiement Google Script en 'Toute personne'";
-}
-
-function filtrerAnnonces() {
-  const terme = document.getElementById('search').value.toLowerCase();
-  const cat = document.getElementById('filterCat').value;
-  const filtrees = toutesLesAnnonces.filter(a => 
-    (a.titre && a.titre.toLowerCase().includes(terme) || a.ville && a.ville.toLowerCase().includes(terme)) &&
-    (cat === "" || a.categorie === cat)
-  );
-  
-  const container = document.getElementById('annonces');
-  container.innerHTML = '';
-  if (filtrees.length == 0) {
-    container.innerHTML = "<p style='text-align:center;'>Aucune annonce trouvée.</p>";
-    return;
-  }
-  filtrees.forEach(annonce => {
-    const card = document.createElement('div');
-    card.className = 'annonce-card';
+async function chargerAnnonces() {
+  try {
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+    const res = await fetch(url);
+    const text = await res.text();
+    const json = JSON.parse(text.substr(47).slice(0, -2));
+    const rows = json.table.rows;
     
-    // On prend whatsapp si existe, sinon telephone
-    const numeroWA = annonce.whatsapp || annonce.telephone || '';
+    const annonces = rows.slice(1).map(row => ({
+      date: row.c[0]?.v || '',
+      titre: row.c[1]?.v || '',
+      description: row.c[2]?.v || '',
+      prix: row.c[3]?.v || '0',
+      devise: row.c[4]?.v || '$',
+      categorie: row.c[5]?.v || '',
+      ville: row.c[6]?.v || '',
+      telephone: row.c[7]?.v || '',
+      photo: row.c[8]?.v || 'https://via.placeholder.com/300',
+      whatsapp: row.c[9]?.v || ''
+    })).filter(a => a.titre);
     
-    card.innerHTML = `
-      <img src="${annonce.photo}" alt="${annonce.titre}" onerror="this.src='https://via.placeholder.com/400x220?text=Pas+dimage'">
-      <div class="annonce-info">
-        <h3>${annonce.titre}</h3>
-        <p class="prix">${annonce.prix} ${annonce.devise}</p>
-        <p class="description">${annonce.description}</p>
-        <p class="meta">${annonce.ville} - ${annonce.categorie}</p>
-        <p class="date" style="font-size:12px; color:#888;">${annonce.date}</p>
-      </div>
-      <a href="https://wa.me/${numeroWA.replace(/\D/g,'')}" target="_blank" class="btn-whatsapp">Contacter sur WhatsApp</a>
-    `;
-    container.appendChild(card);
-  });
-}
-
-function chargerAnnonces() {
-  const script = document.createElement('script');
-  script.src = SCRIPT_URL + '?callback=afficherAnnonces&t=' + new Date().getTime();
-  script.onerror = erreurChargement; // Si ça bug on le saura
-  document.body.appendChild(script);
-
-  // Si après 5s rien ne vient
-  setTimeout(() => {
-    if(document.getElementById('loading').style.display !== 'none'){
-        erreurChargement();
+    if(annonces.length === 0){
+      container.innerHTML = '<p>Aucune annonce pour le moment</p>';
+      return;
     }
-  }, 5000);
+
+    annonces.forEach(annonce => {
+      const card = document.createElement('div');
+      card.className = 'annonce-card';
+      const numeroWA = annonce.whatsapp || annonce.telephone;
+
+      card.innerHTML = `
+        <img src="${annonce.photo}" alt="${annonce.titre}" onerror="this.src='https://via.placeholder.com/300'">
+        <div class="annonce-info">
+          <h3>${annonce.titre}</h3>
+          <p class="prix">${annonce.prix} ${annonce.devise}</p>
+          <p class="description">${annonce.description}</p>
+          <p class="meta">${annonce.ville} - ${annonce.categorie}</p>
+          <p class="date" style="font-size:12px; color:gray;">${annonce.date}</p>
+        </div>
+        <a href="https://wa.me/${numeroWA.replace(/\D/g,'')}" target="_blank">Contacter sur WhatsApp</a>
+      `;
+      container.appendChild(card);
+    });
+
+  } catch(err) {
+    container.innerHTML = '<p>Erreur: Impossible de charger les annonces</p>';
+    console.error(err);
+  }
 }
 
-document.getElementById('search').addEventListener('input', filtrerAnnonces);
-document.getElementById('filterCat').addEventListener('change', filtrerAnnonces);
 window.onload = chargerAnnonces;
-                   </script>
 </body>
     </html>
