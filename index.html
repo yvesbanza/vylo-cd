@@ -48,15 +48,20 @@ const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzvbtelK53TcbL0AMBs1
 let toutesLesAnnonces = [];
 
 function afficherAnnonces(data) {
+  document.getElementById('loading').style.display = 'none'; // Cache le chargement
   toutesLesAnnonces = data;
   filtrerAnnonces();
+}
+
+function erreurChargement() {
+    document.getElementById('loading').innerHTML = "Erreur de chargement. Vérifie le déploiement Google Script en 'Toute personne'";
 }
 
 function filtrerAnnonces() {
   const terme = document.getElementById('search').value.toLowerCase();
   const cat = document.getElementById('filterCat').value;
   const filtrees = toutesLesAnnonces.filter(a => 
-    (a.titre.toLowerCase().includes(terme) || a.ville.toLowerCase().includes(terme)) &&
+    (a.titre && a.titre.toLowerCase().includes(terme) || a.ville && a.ville.toLowerCase().includes(terme)) &&
     (cat === "" || a.categorie === cat)
   );
   
@@ -77,9 +82,7 @@ function filtrerAnnonces() {
         <p class="description">${annonce.description}</p>
         <p class="meta">${annonce.ville} - ${annonce.categorie}</p>
       </div>
-      <a href="https://wa.me/243${annonce.whatsapp.replace(/\D/g,'')}" target="_blank" class="btn-whatsapp">Contacter sur WhatsApp</a>
-    `;
-      <a href="https://wa.me/243${annonce.whatsapp.replace(/\D/g,'')}" target="_blank" class="btn-whatsapp">Contacter sur WhatsApp</a>
+      <a href="https://wa.me/${annonce.whatsapp.replace(/\D/g,'')}" target="_blank" class="btn-whatsapp">Contacter sur WhatsApp</a>
     `;
     container.appendChild(card);
   });
@@ -88,12 +91,20 @@ function filtrerAnnonces() {
 function chargerAnnonces() {
   const script = document.createElement('script');
   script.src = SCRIPT_URL + '?callback=afficherAnnonces&t=' + new Date().getTime();
+  script.onerror = erreurChargement; // Si ça bug on le saura
   document.body.appendChild(script);
+
+  // Si après 5s rien ne vient
+  setTimeout(() => {
+    if(document.getElementById('loading').style.display !== 'none'){
+        erreurChargement();
+    }
+  }, 5000);
 }
 
 document.getElementById('search').addEventListener('input', filtrerAnnonces);
 document.getElementById('filterCat').addEventListener('change', filtrerAnnonces);
 window.onload = chargerAnnonces;
-</script>
+                   </script>
 </body>
     </html>
