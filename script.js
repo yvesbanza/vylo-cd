@@ -8,13 +8,16 @@ document.addEventListener('DOMContentLoaded', () => {
 async function fetchAnnonces() {
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
   const container = document.getElementById('annonces');
-  container.innerHTML = '<p>Chargement des annonces...</p>';
+  container.innerHTML = '<p>Chargement...</p>';
   
   try {
     const res = await fetch(url);
     const text = await res.text();
-    const json = JSON.parse(text.substring(47).slice(0, -2));
     
+    // Affiche le texte brut pour debug
+    console.log("Texte brut:", text);
+    
+    const json = JSON.parse(text.substring(47).slice(0, -2));
     const rows = json.table.rows;
     
     const data = rows.map(row => {
@@ -30,16 +33,16 @@ async function fetchAnnonces() {
         photo: c[8]?.v || '',
         whatsapp: c[9]?.v || ''
       }
-    }).filter(item => item.titre);
+    }).filter(item => item.titre && item.titre!== 'titre'); // enleve la ligne d'entete
 
     if(data.length === 0) {
-        container.innerHTML = '<p>Aucune annonce pour l\'instant</p>';
+        container.innerHTML = '<p>0 annonce trouvée dans le Sheet</p>';
     } else {
         displayAnnonces(data);
     }
   } catch (e) {
-    container.innerHTML = `<p style="color:red">Erreur de connexion au Sheet</p>`;
-    console.error(e);
+    container.innerHTML = `<p style="color:red">ERREUR: ${e.message}</p>`;
+    console.error("Erreur complete:", e);
   }
 }
 
