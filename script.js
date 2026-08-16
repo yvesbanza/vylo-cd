@@ -6,24 +6,22 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function fetchAnnonces() {
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+  // VERSION POUR SHEET PUBLIÉ
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=0&tqx=out:json`;
   const container = document.getElementById('annonces');
   container.innerHTML = '<p>Chargement des annonces...</p>';
   
   try {
     const res = await fetch(url);
     const text = await res.text();
-    
-    // On extrait le JSON entre les parenthèses
-    const jsonText = text.substring(47).slice(0, -2);
-const json = JSON.parse(jsonText);
+    const json = JSON.parse(text.substr(47).slice(0, -2));
     
     const rows = json.table.rows;
     
     const data = rows.map(row => {
       const c = row.c;
       return {
-        date: c[0]?.f || c[0]?.v || '', //.f pour formater la date
+        date: c[0]?.f || '',
         titre: c[1]?.v || '',
         description: c[2]?.v || '',
         prix: `${c[3]?.v || ''} ${c[4]?.v || 'FC'}`,
@@ -33,7 +31,7 @@ const json = JSON.parse(jsonText);
         photo: c[8]?.v || '',
         whatsapp: c[9]?.v || ''
       }
-    }).filter(item => item.titre && item.titre.toLowerCase()!== 'titre');
+    }).filter(item => item.titre && item.titre.toLowerCase() !== 'titre');
 
     if(data.length === 0) {
         container.innerHTML = '<p>Aucune annonce pour l\'instant</p>';
