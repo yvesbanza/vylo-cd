@@ -1,42 +1,25 @@
 const SHEET_ID = '1h0kKoCdJ59-yvYurhA0A3gGkRT8T4Z76LeRXTyqrNqs';
-const SHEET_NAME = 'ANNONCES';
 
 document.addEventListener('DOMContentLoaded', () => {
   fetchAnnonces();
 });
 
 async function fetchAnnonces() {
-  // VERSION POUR SHEET PUBLIÉ
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?gid=0&tqx=out:json`;
+  const url = `https://opensheet.elk.sh/${SHEET_ID}/ANNONCES`;
   const container = document.getElementById('annonces');
   container.innerHTML = '<p>Chargement des annonces...</p>';
   
   try {
     const res = await fetch(url);
-    const text = await res.text();
-    const json = JSON.parse(text.substr(47).slice(0, -2));
+    const data = await res.json();
     
-    const rows = json.table.rows;
-    
-    const data = rows.map(row => {
-      const c = row.c;
-      return {
-        date: c[0]?.f || '',
-        titre: c[1]?.v || '',
-        description: c[2]?.v || '',
-        prix: `${c[3]?.v || ''} ${c[4]?.v || 'FC'}`,
-        categorie: c[5]?.v || '',
-        ville: c[6]?.v || '',
-        telephone: c[7]?.v || '',
-        photo: c[8]?.v || '',
-        whatsapp: c[9]?.v || ''
-      }
-    }).filter(item => item.titre && item.titre.toLowerCase() !== 'titre');
+    // On filtre pour enlever l'entête
+    const annonces = data.filter(item => item.titre && item.titre.toLowerCase() !== 'titre');
 
-    if(data.length === 0) {
+    if(annonces.length === 0) {
         container.innerHTML = '<p>Aucune annonce pour l\'instant</p>';
     } else {
-        displayAnnonces(data);
+        displayAnnonces(annonces);
     }
   } catch (e) {
     container.innerHTML = `<p style="color:red">Erreur: ${e.message}</p>`;
@@ -53,7 +36,7 @@ function displayAnnonces(annonces) {
       ${item.photo? `<img src="${item.photo}" alt="${item.titre}">` : ''}
       <div class="annonce-content">
         <h3>${item.titre}</h3>
-        <p class="prix">${item.prix}</p>
+        <p class="prix">${item.prix} ${item.devise || 'FC'}</p>
         <p>${item.description}</p>
         <p><b>Ville:</b> ${item.ville} | <b>Cat:</b> ${item.categorie}</p>
         <a href="tel:${item.telephone}" class="btn-call">Appeler</a>
