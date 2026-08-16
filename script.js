@@ -15,8 +15,8 @@ async function fetchAnnonces() {
     const text = await res.text();
     
     // On extrait le JSON entre les parenthèses
-    const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\)/)[1];
-    const json = JSON.parse(jsonText);
+    const jsonText = text.substring(47).slice(0, -2);
+const json = JSON.parse(jsonText);
     
     const rows = json.table.rows;
     
