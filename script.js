@@ -6,24 +6,24 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function fetchAnnonces() {
-  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+  const url = `https://corsproxy.io/?https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
   const container = document.getElementById('annonces');
-  container.innerHTML = '<p>Chargement...</p>';
+  container.innerHTML = '<p>Chargement des annonces...</p>';
   
   try {
     const res = await fetch(url);
     const text = await res.text();
     
-    // Affiche le texte brut pour debug
-    console.log("Texte brut:", text);
+    // On extrait le JSON entre les parenthèses
+    const jsonText = text.match(/google\.visualization\.Query\.setResponse\((.*)\)/)[1];
+    const json = JSON.parse(jsonText);
     
-    const json = JSON.parse(text.substring(47).slice(0, -2));
     const rows = json.table.rows;
     
     const data = rows.map(row => {
       const c = row.c;
       return {
-        date: c[0]?.v || '',
+        date: c[0]?.f || c[0]?.v || '', //.f pour formater la date
         titre: c[1]?.v || '',
         description: c[2]?.v || '',
         prix: `${c[3]?.v || ''} ${c[4]?.v || 'FC'}`,
@@ -33,16 +33,15 @@ async function fetchAnnonces() {
         photo: c[8]?.v || '',
         whatsapp: c[9]?.v || ''
       }
-    }).filter(item => item.titre && item.titre!== 'titre'); // enleve la ligne d'entete
+    }).filter(item => item.titre && item.titre.toLowerCase()!== 'titre');
 
     if(data.length === 0) {
-        container.innerHTML = '<p>0 annonce trouvée dans le Sheet</p>';
+        container.innerHTML = '<p>Aucune annonce pour l\'instant</p>';
     } else {
         displayAnnonces(data);
     }
   } catch (e) {
-    container.innerHTML = `<p style="color:red">ERREUR: ${e.message}</p>`;
-    console.error("Erreur complete:", e);
+    container.innerHTML = `<p style="color:red">Erreur: ${e.message}</p>`;
   }
 }
 
