@@ -1,57 +1,65 @@
 const SHEET_ID = '1h0kKoCdJ59-yvYurhA0A3gGkRT8T4Z76LeRXTyqrNqs';
 const SHEET_NAME = 'ANNONCES';
 
+document.addEventListener('DOMContentLoaded', () => {
+  fetchAnnonces();
+});
+
 async function fetchAnnonces() {
   const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${SHEET_NAME}`;
+  const container = document.getElementById('annonces');
+  container.innerHTML = '<p>Chargement des annonces...</p>';
+  
   try {
     const res = await fetch(url);
     const text = await res.text();
     const json = JSON.parse(text.substring(47).slice(0, -2));
     
     const rows = json.table.rows;
-    const cols = json.table.cols;
-    
-    const getColIndex = (name) => cols.findIndex(c => c.label && c.label.toLowerCase().trim() === name.toLowerCase());
     
     const data = rows.map(row => {
-      const prix = row.c[getColIndex('prix')]?.v || '';
-      const devise = row.c[getColIndex('devise')]?.v || 'FC';
+      const c = row.c;
       return {
-        date: row.c[getColIndex('date')]?.v || '',
-        titre: row.c[getColIndex('titre')]?.v || '',
-        description: row.c[getColIndex('description')]?.v || '',
-        prix: `${prix} ${devise}`,
-        ville: row.c[getColIndex('ville')]?.v || '',
-        categorie: row.c[getColIndex('categorie')]?.v || '',
-        telephone: row.c[getColIndex('telephone')]?.v || '',
-        photo: row.c[getColIndex('photo')]?.v || '',
-        whatsapp: row.c[getColIndex('whatsapp')]?.v || ''
+        date: c[0]?.v || '',
+        titre: c[1]?.v || '',
+        description: c[2]?.v || '',
+        prix: `${c[3]?.v || ''} ${c[4]?.v || 'FC'}`,
+        categorie: c[5]?.v || '',
+        ville: c[6]?.v || '',
+        telephone: c[7]?.v || '',
+        photo: c[8]?.v || '',
+        whatsapp: c[9]?.v || ''
       }
     }).filter(item => item.titre);
 
-    displayAnnonces(data);
+    if(data.length === 0) {
+        container.innerHTML = '<p>Aucune annonce pour l\'instant</p>';
+    } else {
+        displayAnnonces(data);
+    }
   } catch (e) {
-    document.getElementById('annonces').innerHTML = '<p>Erreur de chargement: ' + e.message + '</p>';
+    container.innerHTML = `<p style="color:red">Erreur de connexion au Sheet</p>`;
     console.error(e);
   }
 }
 
-function displayAnnonces(data) {
+function displayAnnonces(annonces) {
   const container = document.getElementById('annonces');
-  if (data.length === 0) {
-    container.innerHTML = '<p>Aucune annonce pour le moment</p>';
-    return;
-  }
-  container.innerHTML = data.map(item => `
-    <div class="card">
-      <img src="${item.photo}" onerror="this.src='https://placehold.co/300x200'">
-      <h3>${item.titre}</h3>
-      <p class="prix">${item.prix}</p>
-      <p>${item.ville} - ${item.categorie}</p>
-      <p>${item.description}</p>
-      <a href="https://wa.me/243${item.whatsapp}" target="_blank">Contacter sur WhatsApp</a>
-    </div>
-  `).join('');
+  container.innerHTML = '';
+  annonces.forEach(item => {
+    const card = document.createElement('div');
+    card.className = 'annonce-card';
+    card.innerHTML = `
+      ${item.photo? `<img src="${item.photo}" alt="${item.titre}">` : ''}
+      <div class="annonce-content">
+        <h3>${item.titre}</h3>
+        <p class="prix">${item.prix}</p>
+        <p>${item.description}</p>
+        <p><b>Ville:</b> ${item.ville} | <b>Cat:</b> ${item.categorie}</p>
+        <a href="tel:${item.telephone}" class="btn-call">Appeler</a>
+        ${item.whatsapp? `<a href="https://wa.me/243${item.whatsapp}" target="_blank" class="btn-whatsapp">WhatsApp</a>` : ''}
+      </div>
+    `;
+    container.appendChild(card);
+  });
 }
-
-document.addEventListener('DOMContentLoaded', fetchAnnonces);
