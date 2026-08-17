@@ -29,7 +29,12 @@
   </header>
   
   <button class="btn-publier" onclick="openModal()">+ Publier une annonce</button>
-  <div id="annonces"><p style="text-align:center">Chargement...</p></div>
+
+<input type="text" id="searchBar" placeholder="🔍 Rechercher: iPhone, Voiture, Kinshasa..." 
+style="width:calc(100% - 30px); margin:0 15px 15px 15px; padding:12px; border:1px solid #ddd; border-radius:8px; font-size:16px" 
+onkeyup="searchAnnonces()">
+
+<div id="annonces"><p style="text-align:center">Chargement...</p></div>
 
   <!-- POPUP FORMULAIRE -->
   <div id="formModal" class="modal">
