@@ -177,8 +177,11 @@ async function fetchAnnonces() {
        photo: item.photo,
        whatsapp: item.whatsapp
      }));
-180     afficherAnnonces(toutesLesAnnonces);
-}
+afficherAnnonces(toutesLesAnnonces);
+   } catch(e) {
+     container.innerHTML = `<p style="color:red;text-align:center;">Erreur: ${e.message}</p>`;
+   }
+ }
 
 // NOUVELLE FONCTION POUR AFFICHER
 function afficherAnnonces(annonces) {
