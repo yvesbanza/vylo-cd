@@ -112,16 +112,28 @@ async function fetchAnnonces() {
     container.innerHTML = '';
     annonces.reverse().forEach(item => {
       container.innerHTML += `
-        <div class="annonce-card">
-          ${item.photo? `<img src="${item.photo}">` : ''}
-          <h3>${item.titre}</h3>
-          <p class="prix">${item.prix} ${item.devise}</p>
-          <p>${item.description}</p>
-          <p><b>Ville:</b> ${item.ville} | <b>Cat:</b> ${item.categorie}</p>
-          <p><small>${item.date}</small></p>
-          <a href="tel:${item.telephone}" class="btn-call">📞 Appeler</a>
-          ${item.whatsapp? `<a href="https://wa.me/${item.whatsapp}" target="_blank" class="btn-whatsapp">💬 WhatsApp</a>` : ''}
-        </div>`;
+  <div class="annonce-card">
+    ${item.photo? `<img src="${item.photo}" alt="">` : ''}
+    <h3>${item.titre}</h3>
+    <div class="prix">${item.prix} $</div>
+    <p>${item.description}</p>
+    <p><b>Ville:</b> ${item.ville} | <b>Cat:</b> ${item.categorie}</p>
+    <p><small>${item.date}</small></p>
+
+    <div class="boutons">
+      <a class="btn btn-call" href="tel:${item.telephone}">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        Appeler
+      </a>
+
+      ${item.whatsapp? `<a class="btn btn-whatsapp" href="https://wa.me/243${item.telephone.replace('0','')}" target="_blank">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M20.52 3.449C18.238 1.245 15.24 0.008 12.042 0h-.044C5.402.008.013 5.398.006 12.041c0 2.143.557 4.237 1.617 6.078L0 24l6.022-1.585a12.098 12.098 0 0 0 5.982 1.522h.044c6.638 0 12.027-5.39 12.034-12.032.004-3.217-1.246-6.24-3.519-8.516zM12.042 22.34h-.035a9.994 9.994 0 0 1-5.07-1.377l-.363-.216-3.572.94.956-3.482-.237-.377a9.566 9.566 0 0 1-1.459-5.102c0-5.517 4.49-10.006 10.017-10.006a9.87 9.87 0 0 1 7.09 2.942 9.952 9.952 0 0 1 2.93 7.07c-.01 5.52-4.5 10.01-10.02 10.01zm5.827-7.512c-.319-.16-1.888-.931-2.18-1.037-.29-.106-.502-.16-.714.16-.212.319-.823 1.037-1.01 1.25-.186.212-.373.238-.692.08-.319-.16-1.346-.495-2.562-1.581-.946-.843-1.587-1.886-1.772-2.205-.185-.319-.02-.49.14-.65.14-.14.319-.373.478-.559.16-.186.213-.319.32-.531.106-.212.053-.397-.027-.557-.08-.16-.714-1.72-.978-2.355-.258-.619-.52-.533-.714-.543-.185-.01-.397-.01-.608-.01a1.17 1.17 0 0 0-.843.397c-.29.319-1.109 1.087-1.109 2.651s1.137 3.078 1.295 3.29c.16.212 2.236 3.415 5.416 4.79.757.327 1.347.522 1.809.668.76.242 1.453.207 2.003.126.612-.092 1.888-.772 2.155-1.518.267-.747.267-1.387.186-1.518-.08-.132-.29-.211-.609-.371z"/></svg>
+        WhatsApp
+      </a>` : ''}
+    </div>
+
+  </div>
+`;
     });
   } catch(e) {container.innerHTML = `<p style="color:red; text-align:center">ERREUR: ${e.message}</p>`;}
 }
