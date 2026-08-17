@@ -162,10 +162,22 @@ let toutesLesAnnonces = []; // on garde toutes les annonces en mémoire
 async function fetchAnnonces() {
   const container = document.getElementById('annonces');
   try {
-    const res = await fetch(SHEETDB_READ);
-    toutesLesAnnonces = await res.json(); // on sauvegarde
-    afficherAnnonces(toutesLesAnnonces);
-  } catch(e) {container.innerHTML = `<p style="color:red; text-align:center">ERREUR: ${e.message}</p>`;}
+         const res = await fetch(SHEETDB_READ);
+     let rawData = await res.json();
+     // On nettoie les noms de colonnes pour être sûr
+     toutesLesAnnonces = rawData.map(item => ({
+       date: item.date,
+       titre: item.titre,
+       description: item.description,
+       prix: item.prix,
+       devise: item.devise,
+       categorie: item.categorie,
+       ville: item.ville,
+       telephone: item.telephone,
+       photo: item.photo,
+       whatsapp: item.whatsapp
+     }));
+180     afficherAnnonces(toutesLesAnnonces);
 }
 
 // NOUVELLE FONCTION POUR AFFICHER
