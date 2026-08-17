@@ -8,40 +8,72 @@
     body{font-family:Arial; margin:0; background:#f5f5f5}
     header{background:orange; color:white; padding:15px; display:flex; gap:10px; align-items:center}
     header img{height:40px; background:white; padding:5px; border-radius:8px}
-    .btn-publier{background:orange; color:white; border:none; padding:12px 20px; border-radius:8px; font-weight:bold; margin:15px}
+    .btn-publier{background:orange; color:white; border:none; padding:12px 20px; border-radius:8px; font-weight:bold; margin:15px; cursor:pointer}
     .annonce-card{background:white; margin:10px; padding:10px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1)}
     .annonce-card img{width:100%; height:200px; object-fit:cover; border-radius:5px}
     .prix{color:orange; font-weight:bold; font-size:18px}
     .btn-call, .btn-whatsapp{display:inline-block; padding:8px 12px; margin:5px; border-radius:5px; text-decoration:none; color:white}
     .btn-call{background:green} .btn-whatsapp{background:#25D366}
+    /* FORMULAIRE */
+    .modal{display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000}
+    .modal-content{background:white; margin:10% auto; padding:20px; width:90%; max-width:500px; border-radius:10px}
+    .modal-content input, .modal-content textarea, .modal-content select{width:100%; padding:10px; margin:8px 0; border:1px solid #ddd; border-radius:5px; box-sizing:border-box}
+    .modal-content button{background:orange; color:white; border:none; padding:12px; width:100%; border-radius:5px; font-weight:bold; cursor:pointer}
+    .close{float:right; font-size:28px; cursor:pointer}
   </style>
 </head>
 <body>
   <header>
-    <img src="https://i.postimg.cc/nL9cKQrP/logo.jpg" alt="VYLO" style="height:40px; background:white; padding:5px; border-radius:8px">
+    <img src="https://i.postimg.cc/nL9cKQrP/logo.jpg" alt="VYLO">
     <h1>VYLO-CD</h1>
   </header>
   
-  <button class="btn-publier">+ Publier</button>
+  <button class="btn-publier" onclick="openModal()">+ Publier</button>
   <div id="annonces"><p>Chargement...</p></div>
+
+  <!-- POPUP FORMULAIRE -->
+  <div id="formModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>Publier une annonce</h2>
+      <form id="annonceForm">
+        <input type="text" name="titre" placeholder="Titre de l'annonce" required>
+        <textarea name="description" placeholder="Description" rows="3" required></textarea>
+        <input type="number" name="prix" placeholder="Prix" required>
+        <select name="devise"><option>FC</option><option>$</option></select>
+        <input type="text" name="ville" placeholder="Ville: Kinshasa, Lubumbashi..." required>
+        <select name="categorie">
+          <option>Téléphone</option><option>Voiture</option><option>Maison</option><option>Vêtements</option><option>Autre</option>
+        </select>
+        <input type="text" name="telephone" placeholder="Téléphone 099XXXXXXX" required>
+        <input type="text" name="whatsapp" placeholder="WhatsApp sans +243">
+        <input type="url" name="photo" placeholder="Lien de la photo">
+        <button type="submit">Publier maintenant</button>
+      </form>
+      <p id="formMsg"></p>
+    </div>
+  </div>
 
 <script>
 const SHEET_ID = '1h0kKoCdJ59-yvYurhA0A3gGkRT8T4Z76LeRXTyqrNqs';
+const SHEET_URL = `https://opensheet.elk.sh/${SHEET_ID}/ANNONCES`;
+
+// OUVRIR / FERMER POPUP
+function openModal(){document.getElementById('formModal').style.display='block'}
+function closeModal(){document.getElementById('formModal').style.display='none'}
+
+// AFFICHER LES ANNONCES
 async function fetchAnnonces() {
-  const url = `https://opensheet.elk.sh/${SHEET_ID}/ANNONCES`;
   const container = document.getElementById('annonces');
   try {
-    const res = await fetch(url);
+    const res = await fetch(SHEET_URL);
     const data = await res.json();
     const annonces = data.filter(item => item.titre && item.titre.toLowerCase() !== 'titre');
     
-    if(annonces.length === 0) {
-      container.innerHTML = '<p>Aucune annonce</p>';
-      return;
-    }
+    if(annonces.length === 0) {container.innerHTML = '<p>Aucune annonce</p>'; return;}
     
     container.innerHTML = '';
-    annonces.forEach(item => {
+    annonces.reverse().forEach(item => { // reverse = les plus récentes en premier
       container.innerHTML += `
         <div class="annonce-card">
           ${item.photo? `<img src="${item.photo}">` : ''}
@@ -53,10 +85,128 @@ async function fetchAnnonces() {
           ${item.whatsapp? `<a href="https://wa.me/243${item.whatsapp}" target="_blank" class="btn-whatsapp">WhatsApp</a>` : ''}
         </div>`;
     });
-  } catch(e) {
-    container.innerHTML = `<p style="color:red">ERREUR: ${e.message}</p>`;
-  }
+  } catch(e) {container.innerHTML = `<p style="color:red">ERREUR: ${e.message}</p>`;}
 }
+
+// ENVOYER LE FORMULAIRE
+document.getElementById('annonceForm').addEventListener('submit', async(e)=>{
+  e.preventDefault();
+  document.getElementById('formMsg').innerText = 'Publication...';
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData.entries());
+  
+  // IMPORTANT: Google Sheet ne peut pas écrire direct. Il faut un service comme SheetDB ou Apps Script
+  alert('Formulaire prêt ! Pour publier il faut connecter à SheetDB. Je te donne le lien maintenant.');
+  document.getElementById('formMsg').innerText = 'Bientôt disponible';
+  closeModal();
+});
+
+fetchAnnonces();
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VYLO-CD</title>
+  <style>
+    body{font-family:Arial; margin:0; background:#f5f5f5}
+    header{background:orange; color:white; padding:15px; display:flex; gap:10px; align-items:center}
+    header img{height:40px; background:white; padding:5px; border-radius:8px}
+    .btn-publier{background:orange; color:white; border:none; padding:12px 20px; border-radius:8px; font-weight:bold; margin:15px; cursor:pointer}
+    .annonce-card{background:white; margin:10px; padding:10px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1)}
+    .annonce-card img{width:100%; height:200px; object-fit:cover; border-radius:5px}
+    .prix{color:orange; font-weight:bold; font-size:18px}
+    .btn-call, .btn-whatsapp{display:inline-block; padding:8px 12px; margin:5px; border-radius:5px; text-decoration:none; color:white}
+    .btn-call{background:green} .btn-whatsapp{background:#25D366}
+    /* FORMULAIRE */
+    .modal{display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000}
+    .modal-content{background:white; margin:10% auto; padding:20px; width:90%; max-width:500px; border-radius:10px}
+    .modal-content input, .modal-content textarea, .modal-content select{width:100%; padding:10px; margin:8px 0; border:1px solid #ddd; border-radius:5px; box-sizing:border-box}
+    .modal-content button{background:orange; color:white; border:none; padding:12px; width:100%; border-radius:5px; font-weight:bold; cursor:pointer}
+    .close{float:right; font-size:28px; cursor:pointer}
+  </style>
+</head>
+<body>
+  <header>
+    <img src="https://i.postimg.cc/nL9cKQrP/logo.jpg" alt="VYLO">
+    <h1>VYLO-CD</h1>
+  </header>
+  
+  <button class="btn-publier" onclick="openModal()">+ Publier</button>
+  <div id="annonces"><p>Chargement...</p></div>
+
+  <!-- POPUP FORMULAIRE -->
+  <div id="formModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2>Publier une annonce</h2>
+      <form id="annonceForm">
+        <input type="text" name="titre" placeholder="Titre de l'annonce" required>
+        <textarea name="description" placeholder="Description" rows="3" required></textarea>
+        <input type="number" name="prix" placeholder="Prix" required>
+        <select name="devise"><option>FC</option><option>$</option></select>
+        <input type="text" name="ville" placeholder="Ville: Kinshasa, Lubumbashi..." required>
+        <select name="categorie">
+          <option>Téléphone</option><option>Voiture</option><option>Maison</option><option>Vêtements</option><option>Autre</option>
+        </select>
+        <input type="text" name="telephone" placeholder="Téléphone 099XXXXXXX" required>
+        <input type="text" name="whatsapp" placeholder="WhatsApp sans +243">
+        <input type="url" name="photo" placeholder="Lien de la photo">
+        <button type="submit">Publier maintenant</button>
+      </form>
+      <p id="formMsg"></p>
+    </div>
+  </div>
+
+<script>
+const SHEET_ID = '1h0kKoCdJ59-yvYurhA0A3gGkRT8T4Z76LeRXTyqrNqs';
+const SHEET_URL = `https://opensheet.elk.sh/${SHEET_ID}/ANNONCES`;
+
+// OUVRIR / FERMER POPUP
+function openModal(){document.getElementById('formModal').style.display='block'}
+function closeModal(){document.getElementById('formModal').style.display='none'}
+
+// AFFICHER LES ANNONCES
+async function fetchAnnonces() {
+  const container = document.getElementById('annonces');
+  try {
+    const res = await fetch(SHEET_URL);
+    const data = await res.json();
+    const annonces = data.filter(item => item.titre && item.titre.toLowerCase() !== 'titre');
+    
+    if(annonces.length === 0) {container.innerHTML = '<p>Aucune annonce</p>'; return;}
+    
+    container.innerHTML = '';
+    annonces.reverse().forEach(item => { // reverse = les plus récentes en premier
+      container.innerHTML += `
+        <div class="annonce-card">
+          ${item.photo? `<img src="${item.photo}">` : ''}
+          <h3>${item.titre}</h3>
+          <p class="prix">${item.prix} ${item.devise || 'FC'}</p>
+          <p>${item.description}</p>
+          <p><b>Ville:</b> ${item.ville} | <b>Cat:</b> ${item.categorie}</p>
+          <a href="tel:${item.telephone}" class="btn-call">Appeler</a>
+          ${item.whatsapp? `<a href="https://wa.me/243${item.whatsapp}" target="_blank" class="btn-whatsapp">WhatsApp</a>` : ''}
+        </div>`;
+    });
+  } catch(e) {container.innerHTML = `<p style="color:red">ERREUR: ${e.message}</p>`;}
+}
+
+// ENVOYER LE FORMULAIRE
+document.getElementById('annonceForm').addEventListener('submit', async(e)=>{
+  e.preventDefault();
+  document.getElementById('formMsg').innerText = 'Publication...';
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData.entries());
+  
+  // IMPORTANT: Google Sheet ne peut pas écrire direct. Il faut un service comme SheetDB ou Apps Script
+  alert('Formulaire prêt ! Pour publier il faut connecter à SheetDB. Je te donne le lien maintenant.');
+  document.getElementById('formMsg').innerText = 'Bientôt disponible';
+  closeModal();
+});
+
 fetchAnnonces();
 </script>
 </body>
