@@ -85,12 +85,14 @@ function afficherAnnonces(data) {
     <div class="annonce-card">
       ${item.photo? `<img src="${item.photo}">` : ''}
       <h3>${item.titre}</h3>
-      <p class="prix">${item.prix} ${item.devise}</p>
       <p>${item.description}</p>
-      <p><b>Ville:</b> ${item.ville} | <b>Cat:</b> ${item.categorie}</p>
-      <p><small>${item.date}</small></p>
-      <a href="tel:${item.telephone}" class="btn-call">📞 Appeler</a>
-      ${item.whatsapp? `<a href="https://wa.me/243${item.telephone.replace(/^0/,'')}" target="_blank" class="btn-whatsapp">💬 WhatsApp</a>` : ''}
+      <p class="prix">${item.prix} ${item.devise}</p>
+      <p><b>Catégorie:</b> ${item.categorie}</p>
+      <p><b>Ville:</b> ${item.ville}</p>
+      <p><b>Tel:</b> 0${item.telephone}</p>
+      <p><small>Publié le: ${item.date}</small></p>
+      <a href="tel:0${item.telephone}" class="btn-call">📞 Appeler</a>
+      ${item.whatsapp? `<a href="https://wa.me/${item.whatsapp}" target="_blank" class="btn-whatsapp">💬 WhatsApp</a>` : ''}
     </div>`;
   });
   }
