@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>VYLO-CD</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{font-family:Arial;background:#f5f5f5;margin:0}
+.header{background:#FFA500;color:white;padding:15px;display:flex;align-items:center;gap:10px}
+.header img{width:40px;height:40px;border-radius:8px}
+.btn-publier{background:#FFA500;color:white;border:none;padding:10px 20px;border-radius:8px;margin:15px}
+.annonce{background:white;margin:15px;padding:15px;border-radius:10px}
+.annonce img{width:100%;border-radius:8px}
+.prix{color:#FF8C00;font-weight:bold;font-size:18px}
+.btn{padding:8px 15px;border:none;border-radius:5px;color:white;margin-right:5px}
+.btn-appeler{background:green}
+.btn-whatsapp{background:#25D366}
+</style>
+</head>
+<body>
+<div class="header">
+  <img src="https://i.imgur.com/8Km9tLL.png" alt="logo">
+  <h2>VYLO-CD</h2>
+</div>
+<button class="btn-publier" onclick="alert('Formulaire bientôt disponible')">+ Publier</button>
+<input id="search" placeholder="🔍 Rechercher: iPhone, Kinshasa..." style="width:90%;margin:0 15px 15px 15px;padding:10px;border-radius:8px;border:1px solid #ccc">
+<div id="annonces">Chargement...</div>
+
+<script>
+const SHEETDB_URL = 'https://api.allorigins.win/raw?url=https://sheetdb.io/api/v1/ulpea3mizvmlt';
+
+async function chargerAnnonces() {
+  try {
+    const res = await fetch(SHEETDB_URL);
+    const text = await res.text(); // allorigins renvoie du texte
+    const data = JSON.parse(text).contents ? JSON.parse(JSON.parse(text).contents) : JSON.parse(text);
+    
+    if(data.length === 0) throw new Error("Aucune annonce");
+    
+    let html = '';
+    data.forEach(a => {
+      html += `
+      <div class="annonce">
+        <img src="${a.image || 'https://via.placeholder.com/300x200'}" alt="">
+        <h3>${a.titre}</h3>
+        <div class="prix">${a.prix} $</div>
+        <p>${a.description}</p>
+        <p><b>Ville:</b> ${a.ville} | <b>Cat:</b> ${a.categorie}</p>
+        <button class="btn btn-appeler">Appeler</button>
+        <button class="btn btn-whatsapp">WhatsApp</button>
+      </div>`;
+    });
+    document.getElementById('annonces').innerHTML = html;
+  } catch(e) {
+    document.getElementById('annonces').innerHTML = `<p style="color:red;text-align:center">ERREUR: ${e.message}</p>`;
+  }
+}
+chargerAnnonces();
+</script>
+</body>
+</html>
