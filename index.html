@@ -65,11 +65,10 @@ onkeyup="searchAnnonces()">
     </div>
   </div>
 
-  let toutesLesAnnonces = []; // variable globale
 <script>
 const SHEETDB_READ = 'https://sheetdb.io/api/v1/ulpea3mizvmlt?sheet=ANNONCES';
 const SHEETDB_WRITE = 'https://sheetdb.io/api/v1/ulpea3mizvmlt';
-
+let toutesLesAnnonces = []; // variable globale
 // OUVRIR / FERMER POPUP
 function openModal(){document.getElementById('formModal').style.display='block'}
 function closeModal(){document.getElementById('formModal').style.display='none'}
