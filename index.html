@@ -105,7 +105,6 @@ async function fetchAnnonces() {
     const res = await fetch(SHEETDB_READ);
     const data = await res.json();
     toutesLesAnnonces = data; // on garde toutes les annonces en mémoire
-    const annonces = data.filter(item => item.titre);
     
     if(annonces.length === 0) {container.innerHTML = '<p style="text-align:center">Aucune annonce pour le moment</p>'; return;}
     
