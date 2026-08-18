@@ -1,84 +1,134 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<title>VYLO-CD</title>
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VYLO-CD - Achetez et Vendez en RDC</title>
 <style>
-body{font-family:Arial;background:#f5f5f5;margin:0}
-.header{background:#FFA500;color:white;padding:12px 15px;display:flex;align-items:center;gap:10px}
-.header img{width:45px;height:45px;border-radius:10px;background:white;padding:2px}
-.btn-publier{background:#FFA500;color:white;border:none;padding:12px 20px;border-radius:8px;margin:15px;font-weight:bold;cursor:pointer}
-#formulaire{display:none;background:white;margin:15px;padding:15px;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
-input,select,textarea{width:95%;padding:10px;margin:5px 0;border:1px solid #ccc;border-radius:5px}
-.annonce{background:white;margin:15px;padding:15px;border-radius:10px;box-shadow:0 2px 5px rgba(0,0,0,0.1)}
-.annonce img{width:100%;height:200px;object-fit:cover;border-radius:8px}
-.prix{color:#FF8C00;font-weight:bold;font-size:20px}
-.btn{padding:10px 15px;border:none;border-radius:5px;color:white;margin-right:8px;cursor:pointer}
-.btn-appeler{background:green} .btn-whatsapp{background:#25D366}
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+    body { background: #f5f5f5; }
+    
+    header { 
+        background: linear-gradient(180deg, #FF8C00 0%, #FFA500 100%); 
+        color: white; 
+        padding: 15px; 
+        display: flex; 
+        align-items: center; 
+        gap: 15px;
+    }
+    header img { 
+        height: 60px; 
+        background: white; 
+        padding: 5px; 
+        border-radius: 10px; 
+    }
+    header h1 { font-size: 32px; font-weight: bold; }
+    
+    .btn-publier { 
+        background: #FFA500; 
+        color: white; 
+        border: none; 
+        padding: 15px; 
+        border-radius: 10px; 
+        font-weight: bold; 
+        margin: 15px; 
+        width: calc(100% - 30px);
+        font-size: 16px;
+        cursor: pointer;
+    }
+    
+    .recherche { 
+        margin: 0 15px 15px 15px; 
+        padding: 12px; 
+        width: calc(100% - 30px); 
+        border-radius: 10px; 
+        border: 1px solid #ddd;
+        font-size: 15px;
+    }
+    
+    .annonce { 
+        background: white; 
+        margin: 15px; 
+        padding: 15px; 
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .annonce img { width: 100%; border-radius: 10px; margin-bottom: 10px; }
+    .annonce h3 { font-size: 18px; margin-bottom: 8px; }
+    .prix { color: #FF8C00; font-size: 24px; font-weight: bold; margin-bottom: 8px; }
+    .ville-cat { font-weight: bold; margin: 8px 0; }
+    .date { color: #666; font-size: 13px; margin-bottom: 10px; }
+    
+    .btns { display: flex; gap: 10px; }
+    .btn-appeler { 
+        flex: 1; 
+        background: #006400; 
+        color: white; 
+        padding: 12px; 
+        border-radius: 8px; 
+        text-decoration: none; 
+        text-align: center;
+        font-weight: bold;
+    }
+    .btn-whatsapp { 
+        flex: 1; 
+        background: #25D366; 
+        color: white; 
+        padding: 12px; 
+        border-radius: 8px; 
+        text-decoration: none; 
+        text-align: center;
+        font-weight: bold;
+    }
+    
+    .erreur { color: red; text-align: center; margin: 10px; }
 </style>
 </head>
 <body>
-<div class="header">
-  <img src="https://i.postimg.cc/d3mG4Th1/logo.jpg" alt="VYLO-CD Logo">
-  <h2>VYLO-CD</h2>
-</div>
+    <header>
+        <img src="https://i.postimg.cc/wxL0QgQz/logo-vylo.jpg" alt="Logo VYLO-CD">
+        <h1>VYLO-CD</h1>
+    </header>
 
-<button class="btn-publier" onclick="document.getElementById('formulaire').style.display='block'">+ Publier</button>
+    <button class="btn-publier">+ Publier une annonce</button>
+    <input type="text" class="recherche" placeholder="🔍 Rechercher: iPhone, Voiture, Kinshasa...">
 
-<div id="formulaire">
-  <h3>Publier une annonce</h3>
-  <input id="titre" placeholder="Titre: iPhone 13 Pro Max">
-  <input id="prix" type="number" placeholder="Prix en $">
-  <textarea id="description" placeholder="Description détaillée"></textarea>
-  <input id="ville" placeholder="Ville: Kinshasa, Lubumbashi...">
-  <input id="whatsapp" placeholder="Numéro WhatsApp: 081...">
-  <button onclick="alert('Bientôt: Sauvegarde directe dans Google Sheet')">Envoyer</button>
-</div>
-
-<input id="search" placeholder="🔍 Rechercher: iPhone, Voiture, Kinshasa..." onkeyup="filtrer()" style="width:90%;margin:0 15px 15px 15px;padding:12px;border-radius:8px;border:1px solid #ccc">
-<div id="annonces">Chargement des annonces...</div>
+    <div id="annonces"></div>
+    <p id="erreur" class="erreur"></p>
 
 <script>
-const SHEETDB_URL = 'https://api.allorigins.win/raw?url=https://sheetdb.io/api/v1/ulpea3mizvmlt';
-let toutesAnnonces = [];
+const API_URL = 'https://sheetdb.io/api/v1/ton-lien-ici'; // METS TON LIEN ICI
 
-async function chargerAnnonces() {
-  try {
-    const res = await fetch(SHEETDB_URL);
-    const text = await res.text();
-    const data = JSON.parse(text).contents ? JSON.parse(JSON.parse(text).contents) : JSON.parse(text);
-    toutesAnnonces = data;
-    afficherAnnonces(data);
-  } catch(e) {
-    document.getElementById('annonces').innerHTML = `<p style="color:red;text-align:center">ERREUR: ${e.message}</p>`;
-  }
+async function charger() {
+    try {
+        let res = await fetch(API_URL);
+        let data = await res.json();
+        afficher(data);
+    } catch(e) {
+        document.getElementById('erreur').innerText = 'ERREUR: Failed to fetch';
+    }
 }
 
-function afficherAnnonces(data){
-  let html = '';
-  data.forEach(a => {
-    html += `<div class="annonce">
-      <img src="${a.image || 'https://via.placeholder.com/300x200/FFA500/FFFFFF?text=VYLO-CD'}" alt="${a.titre}">
-      <h3>${a.titre}</h3>
-      <div class="prix">${Number(a.prix).toLocaleString()} $</div>
-      <p>${a.description}</p>
-      <p><b>📍 ${a.ville}</b> | <b>Cat:</b> ${a.categorie}</p>
-      <button class="btn btn-appeler" onclick="alert('Appel: ${a.whatsapp}')">Appeler</button>
-      <button class="btn btn-whatsapp" onclick="window.open('https://wa.me/243${a.whatsapp}')">WhatsApp</button>
-    </div>`;
-  });
-  document.getElementById('annonces').innerHTML = html || "Aucune annonce trouvée";
+function afficher(data) {
+    let html = '';
+    data.forEach(item => {
+        html += `<div class="annonce">
+            <img src="${item.Image || 'https://via.placeholder.com/400x250'}" alt="${item.Titre}">
+            <h3>${item.Titre}</h3>
+            <p class="prix">${item.Prix} $</p>
+            <p>${item.Description}</p>
+            <p class="ville-cat">Ville: ${item.Ville} | Cat: ${item.Categorie || 'Téléphone'}</p>
+            <p class="date">${item.Date || 'Aujourd\'hui'}</p>
+            <div class="btns">
+                <a href="tel:+243${item.Whatsapp}" class="btn-appeler">📞 Appeler</a>
+                <a href="https://wa.me/243${item.Whatsapp}" class="btn-whatsapp">💬 WhatsApp</a>
+            </div>
+        </div>`;
+    });
+    document.getElementById('annonces').innerHTML = html;
 }
 
-function filtrer(){
-  const term = document.getElementById('search').value.toLowerCase();
-  const filtrees = toutesAnnonces.filter(a => 
-    a.titre.toLowerCase().includes(term) || a.ville.toLowerCase().includes(term) || a.categorie.toLowerCase().includes(term)
-  );
-  afficherAnnonces(filtrees);
-}
-
-chargerAnnonces();
+charger();
 </script>
 </body>
 </html>
