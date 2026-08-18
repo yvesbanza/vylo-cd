@@ -100,7 +100,8 @@ async function fetchAnnonces() {
  try {
    const res = await fetch(SHEETDB_READ);
    const data = await res.json();
-   const annonces = Array.isArray(data) ? data : data.data; // <-- AJOUTE ÇA
+   console.log("DATA SHEETDB:", data); // <-- AJOUTE ÇA
+   toutesLesAnnonces = Array.isArray(data) ? data : data.data;
 
    if(annonces.length === 0) {container.innerHTML = '<p style="text-align:center;">Aucune annonce</p>'; return;}
     
