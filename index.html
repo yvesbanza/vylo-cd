@@ -79,7 +79,7 @@ function afficherAnnonces(data) {
     return;
   }
     container.innerHTML = '';
-data.reverse().forEach(item => {
+annonces.reverse().forEach(item => {
 container.innerHTML += `
 <div class="annonce-card">
   ${item.photo? `<img src="${item.photo}">` : ''}
@@ -97,13 +97,13 @@ container.innerHTML += `
   }
 // AFFICHER LES ANNONCES
 async function fetchAnnonces() {
-  const container = document.getElementById('annonces');
-  try {
-    const res = await fetch(SHEETDB_READ);
-    const data = await res.json();
-    toutesLesAnnonces = data; // on garde toutes les annonces en mémoire
-    
-    if(annonces.length === 0) {container.innerHTML = '<p style="text-align:center">Aucune annonce pour le moment</p>'; return;}
+ const container = document.getElementById('annonces');
+ try {
+   const res = await fetch(SHEETDB_READ);
+   const data = await res.json();
+   const annonces = Array.isArray(data) ? data : data.data; // <-- AJOUTE ÇA
+
+   if(annonces.length === 0) {container.innerHTML = '<p style="text-align:center;">Aucune annonce</p>'; return;}
     
     container.innerHTML = '';
     annonces.reverse().forEach(item => {
