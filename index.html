@@ -85,18 +85,18 @@ async function fetchAnnonces() {
     
     container.innerHTML = '';
     annonces.reverse().forEach(item => {
-      container.innerHTML += `
-        <div class="annonce-card">
-          ${item.photo? `<img src="${item.photo}">` : ''}
-          <h3>${item.titre}</h3>
-          <p class="prix">${item.prix} ${item.devise}</p>
-          <p>${item.description}</p>
-          <p><b>Ville:</b> ${item.ville} | <b>Cat:</b> ${item.categorie}</p>
-          <p><small>${item.date}</small></p>
-          <a href="tel:${item.telephone}" class="btn-call">📞 Appeler</a>
-          ${item.whatsapp? `<a href="https://wa.me/${item.whatsapp}" target="_blank" class="btn-whatsapp">💬 WhatsApp</a>` : ''}
-        </div>`;
-    });
+  container.innerHTML += `
+    <div class="annonce-card">
+      ${item.photo? `<img src="${item.photo}">` : ''}
+      <h3>${item.titre}</h3>
+      <p class="prix">${item.prix} ${item.devise}</p>
+      <p>${item.description}</p>
+      <p><b>Ville:</b> ${item.ville} | <b>Cat:</b> ${item.categorie}</p>
+      <p><small>${item.date}</small></p>
+      <a href="tel:${item.telephone}" class="btn-call">📞 Appeler</a>
+      ${item.whatsapp? `<a href="https://wa.me/243${item.telephone.replace(/^0/,'')}" target="_blank" class="btn-whatsapp">💬 WhatsApp</a>` : ''}
+    </div>`;
+  });
   } catch(e) {container.innerHTML = `<p style="color:red; text-align:center">ERREUR: ${e.message}</p>`;}
 }
 
