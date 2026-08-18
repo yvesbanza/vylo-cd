@@ -43,4 +43,94 @@ header img{height:40px; background:white; padding:5px; border-radius:8px}
 <h2>Publier une annonce</h2>
 <form id="annonceForm">
 <input type="text" name="titre" placeholder="Titre de l'annonce" required>
-<textarea name="description
+<textarea name="description" placeholder="Description" required></textarea>
+<input type="number" name="prix" placeholder="Prix" required>
+<select name="devise"><option value="FC">Franc Congolais</option><option value="$">Dollar</option></select>
+<input type="text" name="ville" placeholder="Ville" required>
+<select name="categorie" required>
+<option value="">-- Choisir une catégorie --</option>
+<option value="Téléphone">Téléphone</option>
+<option value="Automobile">Automobile</option>
+<option value="Mode">Mode</option>
+<option value="Maison">Maison</option>
+<option value="Emploi">Emploi</option>
+<option value="Autres">Autres</option>
+</select>
+<input type="text" name="whatsapp" placeholder="Numéro WhatsApp 243..." required>
+<input type="url" name="image" placeholder="Lien de l'image https://..." required>
+<button type="submit">Publier l'annonce</button>
+</form>
+</div>
+</div>
+
+<script>
+const SHEETDB_WRITE = "https://sheetdb.io/api/v1/4q2s5t6u7v8w9";
+const SHEETDB_READ = "https://sheetdb.io/api/v1/4q2s5t6u7v8w9?sheet=ANNONCES";
+let toutesLesAnnonces = [];
+
+function openModal(){document.getElementById('formModal').style.display='block'}
+function closeModal(){document.getElementById('formModal').style.display='none'}
+
+document.getElementById('annonceForm').addEventListener('submit', async (e) => {
+ e.preventDefault();
+ const formData = new FormData(e.target);
+ const data = Object.fromEntries(formData);
+ data.date = new Date().toISOString();
+ 
+ await fetch(SHEETDB_WRITE, {
+   method: 'POST',
+   headers: {'Content-Type': 'application/json'},
+   body: JSON.stringify({data: [data]})
+ });
+ 
+ alert('Annonce publiée !');
+ closeModal();
+ e.target.reset();
+ fetchAnnonces();
+});
+
+async function fetchAnnonces() {
+ const container = document.getElementById('annonces');
+ try {
+   const res = await fetch(SHEETDB_READ);
+   const data = await res.json();
+   toutesLesAnnonces = Array.isArray(data) ? data : data.data;
+   afficherAnnonces(toutesLesAnnonces);
+ } catch(error) {
+   container.innerHTML = '<p style="text-align:center; color:red">Erreur de chargement</p>';
+ }
+}
+
+function afficherAnnonces(annonces) {
+ const container = document.getElementById('annonces');
+ if(annonces.length === 0){
+   container.innerHTML = '<p style="text-align:center">Aucune annonce trouvée 😅</p>';
+   return;
+ }
+ container.innerHTML = annonces.reverse().map(a => `
+   <div class="annonce-card">
+     <img src="${a.image}" alt="${a.titre}">
+     <h3>${a.titre}</h3>
+     <p>${a.description}</p>
+     <p class="prix">${a.prix} ${a.devise}</p>
+     <p>📍 ${a.ville} | ${a.categorie}</p>
+     <a href="tel:${a.whatsapp}" class="btn-call">📞 Appeler</a>
+     <a href="https://wa.me/${a.whatsapp}" class="btn-whatsapp" target="_blank">💬 WhatsApp</a>
+   </div>
+ `).join('');
+}
+
+document.getElementById('searchInput').addEventListener('input', (e) => {
+ const terme = e.target.value.toLowerCase();
+ const filtrees = toutesLesAnnonces.filter(a => 
+   a.titre.toLowerCase().includes(terme) || 
+   a.description.toLowerCase().includes(terme) || 
+   a.ville.toLowerCase().includes(terme)
+ );
+ afficherAnnonces(filtrees);
+});
+
+fetchAnnonces();
+</script>
+</body>
+  </html>
