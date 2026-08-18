@@ -64,7 +64,7 @@ function openModal(){document.getElementById('formModal').style.display='block'}
 function closeModal(){document.getElementById('formModal').style.display='none'}
 
 async function fetchAnnonces() {
-  const url = `https://opensheet.elk.sh/${SHEET_ID}/ANNONCES`;
+  const url = SHEETDB_URL; // On utilise SheetDB pour lire aussi
   const container = document.getElementById('annonces');
   try {
     const res = await fetch(url);
