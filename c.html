@@ -12,9 +12,16 @@ header img{height:40px; background:white; padding:5px; border-radius:8px}
 .annonce-card{background:white; margin:10px; padding:10px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1)}
 .annonce-card img{width:100%; height:200px; object-fit:cover; border-radius:5px}
 .prix{color:orange; font-weight:bold; font-size:18px}
-.btn-call, .btn-whatsapp{display:inline-block; padding:8px 12px; margin:5px; border-radius:5px; text-decoration:none; color:white}
-.btn-call{background:green} .btn-whatsapp{background:#25D366}
+.btn-call,.btn-whatsapp{display:inline-block; padding:8px 12px; margin:5px; border-radius:5px; text-decoration:none; color:white}
+.btn-call{background:green}.btn-whatsapp{background:#25D366}
 #searchInput{width:calc(100% - 30px); margin:0 15px 15px 15px; padding:10px; border:1px solid #ddd; border-radius:8px}
+/* POPUP */
+.modal{display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:1000; overflow-y:auto}
+.modal-content{background:white; margin:5% auto; padding:20px; width:90%; max-width:400px; border-radius:10px}
+.modal-content input,.modal-content textarea,.modal-content select{width:calc(100% - 22px); padding:10px; margin:8px 0; border:1px solid #ddd; border-radius:5px}
+.modal-content button{background:orange; color:white; border:none; padding:12px; width:100%; border-radius:5px; cursor:pointer; font-size:16px}
+.close{float:right; font-size:28px; cursor:pointer}
+.loader{display:none; text-align:center; padding:10px}
 </style>
 </head>
 <body>
@@ -23,13 +30,38 @@ header img{height:40px; background:white; padding:5px; border-radius:8px}
 <h1>VYLO-CD TEST</h1>
 </header>
 
-<button class="btn-publier" onclick="alert('On connectera le formulaire à l\'étape 2')">+ Publier</button>
+<button class="btn-publier" onclick="openModal()">+ Publier</button>
 <input type="text" id="searchInput" placeholder="🔍 Rechercher: iPhone, Kinshasa...">
 <div id="annonces"><p style="text-align:center">Chargement...</p></div>
 
+<!-- POPUP FORMULAIRE -->
+<div id="formModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h3>Publier une annonce</h3>
+    <form id="annonceForm">
+      <input name="titre" placeholder="Titre ex: iPhone 13" required>
+      <textarea name="description" placeholder="Description" required></textarea>
+      <input name="prix" type="number" placeholder="Prix" required>
+      <select name="devise"><option value="FC">FC</option><option value="$">$</option></select>
+      <input name="ville" placeholder="Ville" required>
+      <input name="categorie" placeholder="Catégorie: Téléphone, Auto..." required>
+      <input name="telephone" placeholder="Téléphone: 0812345678" required>
+      <input name="whatsapp" placeholder="WhatsApp: 24381..." required>
+      <input name="photo" type="url" placeholder="Lien Image https://postimg.cc/..." required>
+      <button type="submit">Publier l'annonce</button>
+      <div class="loader" id="loader">Publication en cours...</div>
+    </form>
+  </div>
+</div>
+
 <script>
 const SHEET_ID = '1h0kKoCdJ59-yvYurhA0A3gGkRT8T4Z76LeRXTyqrNqs';
+const SHEETDB_URL = 'https://sheetdb.io/api/v1/ulpea3mizv'; // TON API
 let toutesLesAnnonces = [];
+
+function openModal(){document.getElementById('formModal').style.display='block'}
+function closeModal(){document.getElementById('formModal').style.display='none'}
 
 async function fetchAnnonces() {
   const url = `https://opensheet.elk.sh/${SHEET_ID}/ANNONCES`;
@@ -65,6 +97,34 @@ function afficherAnnonces(annonces) {
   });
 }
 
+// ENVOYER LE FORMULAIRE VERS SHEETDB
+document.getElementById('annonceForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+  const data = Object.fromEntries(formData);
+  data.date = new Date().toLocaleString("fr-CD"); // ajoute la date
+
+  document.getElementById('loader').style.display = 'block';
+  const btn = e.target.querySelector('button');
+  btn.disabled = true;
+
+  try {
+    await fetch(SHEETDB_URL, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({data: [data]})
+    });
+    alert('Annonce publiée avec succès!');
+    closeModal();
+    e.target.reset();
+    fetchAnnonces(); // recharge les annonces
+  } catch(error) {
+    alert('Erreur: ' + error.message);
+  }
+  document.getElementById('loader').style.display = 'none';
+  btn.disabled = false;
+});
+
 document.getElementById('searchInput').addEventListener('input', (e) => {
   const terme = e.target.value.toLowerCase();
   const filtrees = toutesLesAnnonces.filter(a => 
@@ -78,4 +138,4 @@ document.getElementById('searchInput').addEventListener('input', (e) => {
 fetchAnnonces();
 </script>
 </body>
-  </html>
+</html>
