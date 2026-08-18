@@ -125,7 +125,21 @@ document.getElementById('annonceForm').addEventListener('submit', async(e)=>{
     } else {msg.innerText = '❌ Erreur de publication'}
   } catch(err){msg.innerText = '❌ Erreur: ' + err.message}
 });
-
+// FONCTION DE RECHERCHE
+function searchAnnonces() {
+  const terme = document.getElementById('searchBar').value.toLowerCase();
+  
+  const resultats = toutesLesAnnonces.filter(item => {
+    return (
+      item.titre.toLowerCase().includes(terme) ||
+      item.description.toLowerCase().includes(terme) ||
+      item.ville.toLowerCase().includes(terme) ||
+      item.categorie.toLowerCase().includes(terme)
+    );
+  });
+  
+  afficherAnnonces(resultats);
+  }
 fetchAnnonces();
 </script>
 </body>
