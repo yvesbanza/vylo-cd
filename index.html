@@ -1,136 +1,63 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VYLO-CD</title>
-<style>
-body{font-family:Arial; margin:0; background:#f5f5f5}
-header{background:orange; color:white; padding:15px; text-align:center}
-header img{height:40px; background:white; padding:5px; border-radius:8px}
-.btn-publier{background:orange; color:white; border:none; padding:15px; width:calc(100% - 30px); margin:15px; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer}
-.annonce-card{background:white; margin:10px; padding:10px; border-radius:8px; box-shadow:0 2px 4px rgba(0,0,0,0.1)}
-.annonce-card img{width:100%; height:200px; object-fit:cover; border-radius:5px}
-.prix{color:orange; font-weight:bold; font-size:20px}
-.btn-call,.btn-whatsapp{display:inline-block; padding:10px 15px; margin:5px 5px 0 0; border-radius:5px; color:white; text-decoration:none; font-weight:bold}
-.btn-call{background:orange}
-.btn-whatsapp{background:#25D366}
-/* FORMULAIRE */
-.modal{display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); z-index:1000; overflow-y:auto}
-.modal-content{background:white; margin:5% auto; padding:20px; width:90%; max-width:500px; border-radius:10px}
-.modal-content input,.modal-content textarea,.modal-content select{width:calc(100% - 22px); padding:10px; margin:8px 0; border:1px solid #ddd; border-radius:5px}
-.modal-content button{background:orange; color:white; border:none; padding:12px; width:100%; border-radius:5px; font-size:16px; cursor:pointer}
-.close{float:right; font-size:28px; cursor:pointer}
-#searchInput{width:calc(100% - 30px); margin:0 15px 15px 15px; padding:12px; border:1px solid #ddd; border-radius:8px; font-size:16px}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VYLO-CD</title>
+  <style>
+    body{font-family:Arial; margin:0; background:#f5f5f5}
+    header{background:orange; color:white; padding:15px; display:flex; gap:10px; align-items:center}
+    header img{height:40px; background:white; padding:5px; border-radius:8px}
+    .btn-publier{background:orange; color:white; border:none; padding:12px 20px; border-radius:8px; font-weight:bold; margin:15px}
+    .annonce-card{background:white; margin:10px; padding:10px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.1)}
+    .annonce-card img{width:100%; height:200px; object-fit:cover; border-radius:5px}
+    .prix{color:orange; font-weight:bold; font-size:18px}
+    .btn-call, .btn-whatsapp{display:inline-block; padding:8px 12px; margin:5px; border-radius:5px; text-decoration:none; color:white}
+    .btn-call{background:green} .btn-whatsapp{background:#25D366}
+  </style>
 </head>
 <body>
-<header>
-<img src="https://i.postimg.cc/nL9cKQrP/logo.jpg" alt="Logo">
-<h1>VYLO-CD</h1>
-</header>
-
-<button class="btn-publier" onclick="openModal()">+ Publier une annonce</button>
-
-<input type="text" id="searchInput" placeholder="🔍 Rechercher: iPhone, Voiture, Kinshasa...">
-
-<div id="annonces"><p style="text-align:center">Chargement...</p></div>
-
-<!-- POPUP FORMULAIRE -->
-<div id="formModal" class="modal">
-<div class="modal-content">
-<span class="close" onclick="closeModal()">&times;</span>
-<h2>Publier une annonce</h2>
-<form id="annonceForm">
-<input type="text" name="titre" placeholder="Titre de l'annonce" required>
-<textarea name="description" placeholder="Description" required></textarea>
-<input type="number" name="prix" placeholder="Prix" required>
-<select name="devise"><option value="FC">Franc Congolais</option><option value="$">Dollar</option></select>
-<input type="text" name="ville" placeholder="Ville" required>
-<select name="categorie" required>
-<option value="">-- Choisir une catégorie --</option>
-<option value="Téléphone">Téléphone</option>
-<option value="Automobile">Automobile</option>
-<option value="Mode">Mode</option>
-<option value="Maison">Maison</option>
-<option value="Emploi">Emploi</option>
-<option value="Autres">Autres</option>
-</select>
-<input type="text" name="whatsapp" placeholder="Numéro WhatsApp 243..." required>
-<input type="url" name="image" placeholder="Lien de l'image https://..." required>
-<button type="submit">Publier l'annonce</button>
-</form>
-</div>
-</div>
+  <header>
+    <img src="https://via.placeholder.com/40/FFA500/FFFFFF?text=V" alt="VYLO">
+    <h1>VYLO-CD</h1>
+  </header>
+  
+  <button class="btn-publier">+ Publier</button>
+  <div id="annonces"><p>Chargement...</p></div>
 
 <script>
-const SHEETDB_WRITE = "https://sheetdb.io/api/v1/4q2s5t6u7v8w9";
-const SHEETDB_READ = "https://sheetdb.io/api/v1/4q2s5t6u7v8w9?sheet=ANNONCES";
-let toutesLesAnnonces = [];
-
-function openModal(){document.getElementById('formModal').style.display='block'}
-function closeModal(){document.getElementById('formModal').style.display='none'}
-
-document.getElementById('annonceForm').addEventListener('submit', async (e) => {
- e.preventDefault();
- const formData = new FormData(e.target);
- const data = Object.fromEntries(formData);
- data.date = new Date().toISOString();
- 
- await fetch(SHEETDB_WRITE, {
-   method: 'POST',
-   headers: {'Content-Type': 'application/json'},
-   body: JSON.stringify({data: [data]})
- });
- 
- alert('Annonce publiée !');
- closeModal();
- e.target.reset();
- fetchAnnonces();
-});
-
+const SHEET_ID = '1h0kKoCdJ59-yvYurhA0A3gGkRT8T4Z76LeRXTyqrNqs';
 async function fetchAnnonces() {
- const container = document.getElementById('annonces');
- try {
-   const res = await fetch(SHEETDB_READ);
-   const data = await res.json();
-   toutesLesAnnonces = Array.isArray(data) ? data : data.data;
-   afficherAnnonces(toutesLesAnnonces);
- } catch(error) {
-   container.innerHTML = '<p style="text-align:center; color:red">Erreur de chargement</p>';
- }
+  const url = `https://opensheet.elk.sh/${SHEET_ID}/ANNONCES`;
+  const container = document.getElementById('annonces');
+  try {
+    const res = await fetch(url);
+    const data = await res.json();
+    const annonces = data.filter(item => item.titre && item.titre.toLowerCase() !== 'titre');
+    
+    if(annonces.length === 0) {
+      container.innerHTML = '<p>Aucune annonce</p>';
+      return;
+    }
+    
+    container.innerHTML = '';
+    annonces.forEach(item => {
+      container.innerHTML += `
+        <div class="annonce-card">
+          ${item.photo? `<img src="${item.photo}">` : ''}
+          <h3>${item.titre}</h3>
+          <p class="prix">${item.prix} ${item.devise || 'FC'}</p>
+          <p>${item.description}</p>
+          <p><b>Ville:</b> ${item.ville} | <b>Cat:</b> ${item.categorie}</p>
+          <a href="tel:${item.telephone}" class="btn-call">Appeler</a>
+          ${item.whatsapp? `<a href="https://wa.me/243${item.whatsapp}" target="_blank" class="btn-whatsapp">WhatsApp</a>` : ''}
+        </div>`;
+    });
+  } catch(e) {
+    container.innerHTML = `<p style="color:red">ERREUR: ${e.message}</p>`;
+  }
 }
-
-function afficherAnnonces(annonces) {
- const container = document.getElementById('annonces');
- if(annonces.length === 0){
-   container.innerHTML = '<p style="text-align:center">Aucune annonce trouvée 😅</p>';
-   return;
- }
- container.innerHTML = annonces.reverse().map(a => `
-   <div class="annonce-card">
-     <img src="${a.image}" alt="${a.titre}">
-     <h3>${a.titre}</h3>
-     <p>${a.description}</p>
-     <p class="prix">${a.prix} ${a.devise}</p>
-     <p>📍 ${a.ville} | ${a.categorie}</p>
-     <a href="tel:${a.whatsapp}" class="btn-call">📞 Appeler</a>
-     <a href="https://wa.me/${a.whatsapp}" class="btn-whatsapp" target="_blank">💬 WhatsApp</a>
-   </div>
- `).join('');
-}
-
-document.getElementById('searchInput').addEventListener('input', (e) => {
- const terme = e.target.value.toLowerCase();
- const filtrees = toutesLesAnnonces.filter(a => 
-   a.titre.toLowerCase().includes(terme) || 
-   a.description.toLowerCase().includes(terme) || 
-   a.ville.toLowerCase().includes(terme)
- );
- afficherAnnonces(filtrees);
-});
-
 fetchAnnonces();
 </script>
 </body>
-  </html>
+</html>
