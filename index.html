@@ -162,6 +162,51 @@ function searchAnnonces() {
   afficherAnnonces(resultats);
   }
 fetchAnnonces();
+  let toutesLesAnnonces = []; // variable globale pour garder toutes les annonces
+
+async function fetchAnnonces() {
+ const container = document.getElementById('annonces');
+ try {
+   const res = await fetch(SHEETDB_READ);
+   const data = await res.json();
+   toutesLesAnnonces = Array.isArray(data) ? data : data.data; // <-- on stocke
+   afficherAnnonces(toutesLesAnnonces); // <-- on affiche
+} catch(e) { ... }
+}
+
+function afficherAnnonces(annonces) {
+  const container = document.getElementById('annonces');
+  if(annonces.length === 0) {container.innerHTML = '<p style="text-align:center;">Aucune annonce trouvée 😅</p>'; return;}
+  
+  container.innerHTML = '';
+  annonces.reverse().forEach(item => {
+  container.innerHTML += `
+  <div class="annonce-card">
+    ${item.photo? `<img src="${item.photo}">` : ''}
+    <h3>${item.titre}</h3>
+    <p>${item.description}</p>
+    <p class="prix">${item.prix} ${item.devise}</p>
+    <p><b>Catégorie:</b> ${item.categorie}</p>
+    <p><b>Ville:</b> ${item.ville}</p>
+    <p><b>Tel:</b> 0${item.telephone}</p>
+    <p><small>Publié le: ${item.date}</small></p>
+    <a href="tel:0${item.telephone}" class="btn-call">📞 Appeler</a>
+    ${item.whatsapp? `<a href="https://wa.me/${item.whatsapp}" target="_blank" class="btn-whatsapp">💬 WhatsApp</a>` : ''}
+  </div>`;
+  });
+}
+
+// CODE RECHERCHE
+document.getElementById('searchInput').addEventListener('input', (e) => {
+  const recherche = e.target.value.toLowerCase();
+  const filtre = toutesLesAnnonces.filter(item => 
+    item.titre.toLowerCase().includes(recherche) ||
+    item.description.toLowerCase().includes(recherche) ||
+    item.ville.toLowerCase().includes(recherche) ||
+    item.categorie.toLowerCase().includes(recherche)
+  );
+  afficherAnnonces(filtre);
+});
 </script>
 </body>
 </html>
