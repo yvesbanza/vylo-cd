@@ -79,20 +79,22 @@ function afficherAnnonces(data) {
     container.innerHTML = '<p style="text-align:center;">Aucune annonce trouvée 😅</p>'; 
     return;
   }
-  container.innerHTML = '';
-  data.reverse().forEach(item => {
-    container.innerHTML += `
-    <div class="annonce-card">
-      ${item.photo? `<img src="${item.photo}">` : ''}
-      <h3>${item.titre}</h3>
-      <p>${item.description}</p>
-      <p class="prix">${item.prix} ${item.devise}</p>
-      <p><b>Catégorie:</b> ${item.categorie}</p>
-      <p><b>Ville:</b> ${item.ville}</p>
-      <p><b>Tel:</b> 0${item.telephone}</p>
-      <p><small>Publié le: ${item.date}</small></p>
-      <a href="tel:0${item.telephone}" class="btn-call">📞 Appeler</a>
-      ${item.whatsapp? `<a href="https://wa.me/${item.whatsapp}" target="_blank" class="btn-whatsapp">💬 WhatsApp</a>` : ''}
+container.innerHTML = '';
+data.reverse().forEach(item => {
+container.innerHTML += `
+<div class="annonce-card">
+  ${item.photo? `<img src="${item.photo}">` : ''}
+  <h3>${item.titre}</h3>
+  <p>${item.description}</p>
+  <p class="prix">${item.prix} ${item.devise}</p>
+  <p><b>Catégorie:</b> ${item.categorie}</p>
+  <p><b>Ville:</b> ${item.ville}</p>
+  <p><b>Tel:</b> 0${item.telephone}</p>
+  <p><small>Publié le: ${item.date}</small></p>
+  <a href="tel:0${item.telephone}" class="btn-call">📞 Appeler</a>
+  ${item.whatsapp? `<a href="https://wa.me/${item.whatsapp}" target="_blank" class="btn-whatsapp">💬 WhatsApp</a>` : ''}
+</div>`;
+});
     </div>`;
   });
   }
