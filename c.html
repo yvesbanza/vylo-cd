@@ -62,13 +62,15 @@ let toutesLesAnnonces = [];
 
 function openModal(){document.getElementById('formModal').style.display='block'}
 function closeModal(){document.getElementById('formModal').style.display='none'}
-
 async function fetchAnnonces() {
-  const url = SHEETDB_URL; // On utilise SheetDB pour lire aussi
+  const url = SHEETDB_URL;
   const container = document.getElementById('annonces');
   try {
     const res = await fetch(url);
-    const data = await res.json();
+    const json = await res.json();
+    
+    const data = json.data || json; // <--- CORRECTION ICI
+    
     toutesLesAnnonces = data.filter(item => item.titre).reverse();
     afficherAnnonces(toutesLesAnnonces);
   } catch(e) {
