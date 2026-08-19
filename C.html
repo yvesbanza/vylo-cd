@@ -404,25 +404,10 @@ function stockFini(btn){
   card.querySelector('h3').innerHTML += ' (STOCK FINI)';
   alert('Marqué comme stock fini');
 }
-let carteASupprimer = null;
-
-function ouvrirSupprimer(btn){
-  carteASupprimer = btn.closest('.annonce-card');
-  document.getElementById('modalSupprimer').style.display = 'flex';
-}
-function fermerSupprimer(){
-  document.getElementById('modalSupprimer').style.display = 'none';
-  carteASupprimer = null;
-}
-function confirmerSupprimer(){
-  if(carteASupprimer) carteASupprimer.remove();
-  fermerSupprimer();
-}
-function activerModeSombreDepuisMenu(){
-  const lune = document.getElementById('toggleTheme');
-  if(lune) lune.click();
-  document.querySelectorAll('.seller-menu').forEach(m=>m.classList.remove('show'));
-}
+function supprimerAnnonce(btn){
+  if(confirm('Vraiment supprimer cette annonce ?')){
+    btn.closest('.annonce-card').remove();
+  }
 function modifierProfil(){
   let url = prompt('Colle le lien de ta nouvelle photo de profil boutique:');
   if(url) localStorage.setItem('photoBoutique', url);
