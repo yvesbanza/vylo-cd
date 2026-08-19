@@ -154,6 +154,42 @@ body.dark input::placeholder {
   background-repeat: no-repeat;
   background-position: 14px center;
     }
+    /* STYLE FORMULAIRE COMME 2ÈME CAPTURE */
+.modal-content input, 
+.modal-content select, 
+.modal-content textarea {
+  width: calc(100% - 24px);
+  padding: 14px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--input-bg);
+  color: var(--text-color);
+  font-size: 15px;
+  box-sizing: border-box;
+}
+
+.modal-content button[type="submit"] {
+  background: var(--header-bg); /* Orange VYLO */
+  color: white;
+  border: none;
+  padding: 16px;
+  width: 100%;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.modal-content button[type="submit"]:active {
+  transform: scale(0.98);
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+  font-size: 22px;
+  }
   </style>
 </head>
 <body>
