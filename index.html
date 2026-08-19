@@ -85,8 +85,8 @@ async function fetchAnnonces() {
           <p>${item.description}</p>
           <p><b>Ville:</b> ${item.ville} | <b>Cat:</b> ${item.categorie}</p>
           <p><small>${item.date}</small></p>
-          <a href="tel:${item.telephone}" class="btn-call">📞 Appeler</a>
-          ${item.whatsapp? `<a href="https://wa.me/${item.whatsapp}" target="_blank" class="btn-whatsapp">💬 WhatsApp</a>` : ''}
+          <a href="tel:${item.telephone}" class="btn-call"><img src="https://cdn-icons-png.flaticon.com/512/597/597177.png"> Appeler</a>
+${item.whatsapp ? `<a href="https://wa.me/${item.whatsapp}" target="_blank" class="btn-whatsapp"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"></a>` : ''}
         </div>`;
     });
   } catch(e) {container.innerHTML = `<p style="color:red; text-align:center">ERREUR: ${e.message}</p>`;}
