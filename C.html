@@ -150,16 +150,23 @@ document.getElementById('annonceForm').addEventListener('submit', async(e)=>{
 
 fetchAnnonces();
 // MODE SOMBRE
-const btn = document.getElementById('toggleTheme');
-btn.onclick = () => {
-  document.body.classList.toggle('dark');
-  btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
-  localStorage.setItem('theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-}
-// Garder le thème choisi
+const btn = document.getElementById('theme-toggle');
+
+// Charger le thème sauvegardé au démarrage
 if(localStorage.getItem('theme') === 'dark') {
-  document.body.classList.add('dark');
+  document.body.classList.add('dark-mode');
   btn.textContent = '☀️';
+}
+
+btn.onclick = () => {
+  document.body.classList.toggle('dark-mode');
+  if(document.body.classList.contains('dark-mode')) {
+    btn.textContent = '☀️';
+    localStorage.setItem('theme', 'dark');
+  } else {
+    btn.textContent = '🌙';
+    localStorage.setItem('theme', 'light');
+  }
 }
 </script>
 </body>
