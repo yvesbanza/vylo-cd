@@ -370,12 +370,12 @@ async function fetchAnnonces() {
       <h3 style="flex:1; margin:0;">${item.titre}</h3>
       <button class="menu-btn" onclick="toggleShopMenu(this)">⋮</button>
       <div class="seller-menu">
-        <button onclick="alert('Modifier: ${item.titre}')">✏️ Modifier prix / photo</button>
-        <button onclick="alert('Stock fini pour: ${item.titre}')">📦 Signaler stock fini</button>
-        <button onclick="alert('Modifier profil boutique')">🏪 Photo profil boutique</button>
-        <button onclick="alert('Modifier coordonnées')">📞 Modifier coordonnées</button>
-        <button onclick="if(confirm('Supprimer ?')) alert('Supprimé')" style="color:red;">🗑️ Supprimer annonce</button>
-      </div>
+  <button onclick="modifierAnnonce(this)">✏️ Modifier prix / photo</button>
+  <button onclick="stockFini(this)">📦 Signaler stock fini</button>
+  <button onclick="modifierProfil()">🏪 Photo profil boutique</button>
+  <button onclick="modifierCoord()">📞 Modifier coordonnées</button>
+  <button onclick="supprimerAnnonce(this)" style="color:red;">🗑️ Supprimer annonce</button>
+</div>
     </div>
     <p class="prix">${item.prix} ${item.devise}</p>
     <p class="desc">${item.description}</p>
