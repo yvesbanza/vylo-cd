@@ -5,191 +5,183 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VYLO-CD</title>
   <style>
-:root {
-  --bg-color: #F5F5F5;
-  --text-color: #1A1A1A;
-  --card-bg: #FFFFFF;
-  --header-bg: #FF8C00;
-  --border-color: #E5E5E5;
-  --input-bg: #FFFFFF;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-body.dark {
-  --bg-color: #0D0D0D;
-  --text-color: #EAEAEA;
-  --card-bg: #1A1A1A;
-  --header-bg: #FF8C00; /* On garde l'orange VYLO */
-  --border-color: #2A2A2A;
-  --input-bg: #222;
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important;
+  position: relative;
+  touch-action: pan-y;
 }
 
 body {
-  font-family: Arial; 
-  margin: 0; 
-  background: var(--bg-color); 
+  background: var(--bg-color);
+  font-family: Arial, sans-serif;
   color: var(--text-color);
-  transition: background 0.3s, color 0.3s;
+  margin: 0;
+  padding: 0;
 }
 
+:root {
+  --header-bg: #FF8C00;
+  --bg-color: #f5f5f5;
+  --card-bg: white;
+  --text-color: black;
+  --border-color: #ddd;
+  --input-bg: white;
+}
+
+body.dark {
+  --bg-color: #121212;
+  --card-bg: #1e1e1e;
+  --text-color: white;
+  --border-color: #333;
+  --input-bg: #2a2a2a;
+}
+
+/* HEADER */
 header {
-  background: var(--header-bg); 
-  color: white; 
-  padding: 15px; 
-  display: flex; 
-  gap: 10px; 
+  background: var(--header-bg);
+  padding: 12px 15px;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  width: 100%;
 }
 
-.annonce-card {
-  background: var(--card-bg); 
-  margin: 10px; 
-  padding: 10px; 
-  border-radius: 10px; 
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  border: 1px solid var(--border-color);
-  color: var(--text-color);
-  transition: all 0.3s;
-}
-
-body.dark .annonce-card {
-  box-shadow: 0 2px 10px rgba(0,0,0,0.4); /* Ombre plus marquée en sombre */
-}
-
-.annonce-card img {
-  width: 100%; 
-  height: 200px; 
-  object-fit: cover; 
-  border-radius: 8px;
-}
-
-.prix {
-  color: #FF8C00 !important; 
-  font-weight: bold; 
+header h1 {
+  color: white;
   font-size: 20px;
+  margin: 0;
 }
 
-.btn-call, .btn-whatsapp {
-  display: inline-block; 
-  padding: 10px; 
-  border-radius: 8px; 
-  margin: 5px 5px 0 0; 
+header button {
+  background: rgba(255,255,255,0.2);
   border: none;
-}
-
-.btn-call {
-  background: green; 
   color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
 }
 
-.btn-whatsapp {
-  background: #25D366; 
-  color: white;
-}
-
-input, select, textarea {
-  background: var(--input-bg);
-  color: var(--text-color);
-  border: 1px solid var(--border-color);
-  transition: all 0.3s;
-}
-
-body.dark input::placeholder {
-  color: #888;
-}
-
-.modal {
-  display: none; 
-  position: fixed; 
-  top: 0; 
-  left: 0; 
-  width: 100%; 
-  height: 100%; 
-  background: rgba(0,0,0,0.6);
-}
-
-.modal-content {
-  background: var(--card-bg); 
-  margin: 5% auto; 
-  padding: 20px; 
-  width: 90%; 
-  max-width: 500px; 
-  border-radius: 10px;
-  color: var(--text-color);
-}
-
-.close {
-  float: right; 
-  font-size: 28px; 
-  cursor: pointer; 
-  color: var(--text-color);
-}
-    .btn-publier {
+/* BOUTON PUBLIER */
+.btn-publier {
   background: var(--header-bg);
   color: white;
   border: none;
   padding: 14px;
-  width: calc(100% - 30px);
-  margin: 15px;
+  width: calc(100% - 30px) !important;
+  margin: 15px !important;
   border-radius: 12px;
   font-weight: bold;
   font-size: 16px;
   display: block;
   cursor: pointer;
-  transition: 0.2s;
-}
-.btn-publier:active {
-  transform: scale(0.98);
+  max-width: calc(100% - 30px) !important;
 }
 
+/* BARRE DE RECHERCHE - 1 LOUPE */
 #searchBar {
-  width: calc(100% - 30px);
-  margin: 0 15px 15px 15px;
-  padding: 14px 14px 14px 40px;
+  width: calc(100% - 30px) !important;
+  margin: 0 15px 15px 15px !important;
+  padding: 14px 14px 14px 40px !important;
   border-radius: 12px;
   border: 1px solid var(--border-color);
-  background: var(--input-bg);
+  background-color: var(--input-bg);
   color: var(--text-color);
   font-size: 15px;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23888' viewBox='0 0 16 16'%3E%3Cpath d='M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: 14px center;
-    }
-    /* STYLE FORMULAIRE COMME 2ÈME CAPTURE */
-.modal-content input, 
-.modal-content select, 
-.modal-content textarea {
-  width: calc(100% - 24px);
-  padding: 14px;
-  margin-bottom: 12px;
-  border-radius: 8px;
-  border: 1px solid var(--border-color);
-  background: var(--input-bg);
-  color: var(--text-color);
-  font-size: 15px;
-  box-sizing: border-box;
+  max-width: calc(100% - 30px) !important;
 }
 
-.modal-content button[type="submit"] {
-  background: var(--header-bg); /* Orange VYLO */
-  color: white;
-  border: none;
-  padding: 16px;
+/* ANNONCES */
+#annoncesContainer {
   width: 100%;
-  border-radius: 8px;
-  font-weight: bold;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 10px;
+  overflow-x: hidden;
+  padding: 0 15px;
+  display: grid;
+  gap: 15px;
 }
 
-.modal-content button[type="submit"]:active {
-  transform: scale(0.98);
+.annonce-card {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  width: 100%;
+}
+
+/* MODAL PLEIN ÉCRAN FIXE */
+.modal {
+  display: none;
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0,0,0,0.6);
+  z-index: 9999;
+  overflow-y: auto;
+  overflow-x: hidden !important;
+  touch-action: pan-y;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 100vh;
+  margin: 0 !important;
+  border-radius: 0 !important;
+  padding: 20px 15px;
+  overflow-x: hidden;
 }
 
 .modal-content h2 {
   margin-bottom: 20px;
   font-size: 22px;
-  }
+}
+
+.modal-content input, 
+.modal-content select, 
+.modal-content textarea {
+  width: 100% !important;
+  padding: 14px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--input-bg);
+  color: var(--text-color);
+  font-size: 15px;
+}
+
+.modal-content button[type="submit"] {
+  background: var(--header-bg);
+  color: white;
+  border: none;
+  padding: 16px;
+  width: 100%;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 17px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.close {
+  float: right;
+  font-size: 28px;
+  cursor: pointer;
+}
   </style>
 </head>
 <body>
