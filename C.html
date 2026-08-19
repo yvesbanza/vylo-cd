@@ -141,6 +141,47 @@ header button {
   margin-bottom: 6px;
   color: var(--text-color);
 }
+    /* MENU 3 POINTS BOUTIQUE */
+.shop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  position: relative;
+}
+.menu-btn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  color: var(--text-color);
+  padding: 0 8px;
+}
+.seller-menu {
+  position: absolute;
+  right: 0;
+  top: 28px;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  border: 1px solid var(--border-color);
+  width: 230px;
+  z-index: 20;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+}
+.seller-menu.show { display: flex; }
+.seller-menu button {
+  padding: 13px 14px;
+  border: none;
+  background: var(--card-bg);
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border-color);
+}
+.seller-menu button:last-child { border-bottom: none; }
 
 .annonce-infos .prix {
   color: #FFA500;
