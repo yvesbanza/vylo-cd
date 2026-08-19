@@ -44,9 +44,15 @@
         <input type="number" name="prix" placeholder="Prix" required>
         <select name="devise"><option value="FC">Franc Congolais FC</option><option value="$">Dollar $</option></select>
         <input type="text" name="ville" placeholder="Ville: Kinshasa, Lubumbashi..." required>
-        <select name="categorie">
-          <option>Téléphone</option><option>Voiture</option><option>Maison</option>
-          <option>Vêtements</option><option>Électronique</option><option>Autre</option>
+        <select name="categorie" required>
+  <option value="">-- Choisir une catégorie --</option>
+  <option value="Téléphone">Téléphone</option>
+  <option value="Automobile">Automobile</option>
+  <option value="Mode">Mode</option>
+  <option value="Immobilier">Immobilier</option>
+  <option value="Électronique">Électronique</option>
+  <option value="Divers">Divers</option>
+  <option value="Autre">Autre</option>
         </select>
         <input type="tel" name="telephone" placeholder="Téléphone: 099XXXXXXX" required>
         <input type="tel" name="whatsapp" placeholder="WhatsApp sans +243: 24399XXXXXXX">
