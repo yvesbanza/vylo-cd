@@ -329,12 +329,12 @@ async function fetchAnnonces() {
           <p>${item.description}</p>
           <p><b>Ville:</b> ${item.ville} | <b>Cat:</b> ${item.categorie}</p>
           <p><small>${item.date}</small></p>
-              <div style="display:flex; gap:10px; margin-top:12px; justify-content:flex-start;">
+                <div style="display:flex; gap:10px; margin-top:12px; justify-content:flex-start;">
     <a href="tel:${item.telephone}" style="background:#0B7E2E; color:white; padding:8px 16px; border-radius:6px; text-decoration:none; font-weight:bold; font-size:14px; display:flex; align-items:center; gap:6px;">
-      <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" style="width:16px; height:16px; filter: brightness(0) invert(1);"> Appeler
+      <svg style="width:16px; height:16px; fill:white;" viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg> Appeler
     </a>
     ${item.whatsapp ? `<a href="https://wa.me/${item.whatsapp}" target="_blank" style="background:#25D366; padding:8px 12px; border-radius:6px; display:flex; align-items:center; justify-content:center;">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width:22px; height:22px;">
+      <svg style="width:22px; height:22px; fill:white;" viewBox="0 0 24 24"><path d="M19.11 17.2c-.27-.14-1.58-.78-1.82-.87-.24-.09-.42-.14-.6.14-.17.27-.66.87-.81 1.05-.15.17-.3.19-.56.06-.27-.14-1.12-.41-2.13-1.32-.79-.7-1.32-1.57-1.47-1.84-.15-.27-.02-.42.11-.55.11-.11.27-.3.4-.45.14-.15.17-.27.26-.45.08-.17.04-.32-.02-.45-.06-.14-.6-1.45-.82-1.99-.22-.52-.44-.45-.6-.46h-.51c-.17 0-.45.06-.69.32-.24.27-.91.89-.91 2.18s.93 2.53 1.06 2.7c.14.17 1.83 2.8 4.44 3.92.62.27 1.1.43 1.48.55.62.2 1.18.17 1.62.11.5-.07 1.58-.64 1.8-1.27.22-.62.22-1.15.15-1.27-.06-.11-.24-.17-.51-.31zM12.04 2c-5.46 0-9.91 4.44-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.44 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0012.04 2zm0 18.12c-1.47 0-2.91-.39-4.18-1.14l-.3-.18-3.12.82.83-3.04-.2-.31A8.264 8.264 0 013.77 11.91a8.28 8.28 0 018.27-8.27c2.21 0 4.29.86 5.85 2.43a8.217 8.217 0 012.42 5.84 8.28 8.28 0 01-8.27 8.21z"/></svg>
     </a>` : ''}
   </div>
         </div>`;
