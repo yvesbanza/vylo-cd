@@ -329,8 +329,14 @@ async function fetchAnnonces() {
           <p>${item.description}</p>
           <p><b>Ville:</b> ${item.ville} | <b>Cat:</b> ${item.categorie}</p>
           <p><small>${item.date}</small></p>
-          <a href="tel:${item.telephone}" class="btn-call"><img src="https://cdn-icons-png.flaticon.com/512/597/597177.png"> Appeler</a>
-${item.whatsapp ? `<a href="https://wa.me/${item.whatsapp}" target="_blank" class="btn-whatsapp"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg"></a>` : ''}
+            <div style="display:flex; gap:12px; margin-top:12px;">
+    <a href="tel:${item.telephone}" style="flex:1; background:#2E7D32; color:white; padding:12px; border-radius:10px; text-align:center; text-decoration:none; font-weight:bold; display:flex; align-items:center; justify-content:center; gap:8px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/724/724664.png" style="width:20px; height:20px; filter: brightness(0) invert(1);"> Appeler
+    </a>
+    ${item.whatsapp ? `<a href="https://wa.me/${item.whatsapp}" target="_blank" style="width:60px; background:#25D366; border-radius:10px; display:flex; align-items:center; justify-content:center; text-decoration:none;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width:28px; height:28px;">
+    </a>` : ''}
+  </div>
         </div>`;
     });
   } catch(e) {container.innerHTML = `<p style="color:red; text-align:center">ERREUR: ${e.message}</p>`;}
