@@ -397,6 +397,37 @@ function toggleShopMenu(btn) {
   });
   btn.nextElementSibling.classList.toggle('show');
 }
+  function modifierAnnonce(btn){
+  let card = btn.closest('.annonce-card');
+  let prixEl = card.querySelector('.prix');
+  let nouveauPrix = prompt('Nouveau prix ?', prixEl.innerText);
+  if(nouveauPrix) prixEl.innerText = nouveauPrix + ' $';
+  let nouvellePhoto = prompt('Nouveau lien photo ? Laisse vide pour garder');
+  if(nouvellePhoto) card.querySelector('img').src = nouvellePhoto;
+}
+function stockFini(btn){
+  let card = btn.closest('.annonce-card');
+  card.style.opacity = '0.5';
+  card.querySelector('h3').innerHTML += ' (STOCK FINI)';
+  alert('Marqué comme stock fini');
+}
+function supprimerAnnonce(btn){
+  if(confirm('Vraiment supprimer cette annonce ?')){
+    btn.closest('.annonce-card').remove();
+  }
+}
+function modifierProfil(){
+  let url = prompt('Colle le lien de ta nouvelle photo de profil boutique:');
+  if(url) localStorage.setItem('photoBoutique', url);
+  alert('Photo profil enregistrée !');
+}
+function modifierCoord(){
+  let tel = prompt('Nouveau numéro téléphone:');
+  let wa = prompt('Nouveau WhatsApp:');
+  if(tel) localStorage.setItem('telBoutique', tel);
+  if(wa) localStorage.setItem('waBoutique', wa);
+  alert('Coordonnées mises à jour !');
+       }
 document.addEventListener('click', function(e){
   if(!e.target.closest('.shop-header')) {
     document.querySelectorAll('.seller-menu').forEach(m=>m.classList.remove('show'));
