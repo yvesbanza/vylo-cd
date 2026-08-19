@@ -427,8 +427,7 @@ function confirmerSupprimer(){
   fermerSupprimer();
 }
 function activerModeSombreDepuisMenu(){
-  // ça clique sur ta lune qui existe déjà en haut
-  const lune = document.querySelector('header button:last-child');
+  const lune = document.getElementById('toggleTheme');
   if(lune) lune.click();
   document.querySelectorAll('.seller-menu').forEach(m=>m.classList.remove('show'));
 }
