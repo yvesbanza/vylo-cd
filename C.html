@@ -20,15 +20,14 @@ header{background:var(--header-bg);padding:12px 15px;display:flex;justify-conten
 .annonce-header{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 0 14px}
 .right-actions{display:flex;align-items:center;gap:8px}
 .share-btn{background:#f2f2f2;border:none;border-radius:8px;cursor:pointer;padding:6px 7px;display:flex;align-items:center;justify-content:center}
-body.dark.share-btn{background:#2a2a2a}
-body.dark.share-btn svg{stroke:#ccc!important}
 .seller-menu-btn{background:#f2f2f2;border:none;font-size:20px;cursor:pointer;color:#444;padding:5px 10px;border-radius:8px;line-height:1}
-body.dark.seller-menu-btn{background:#2a2a2a;color:#ccc}
 .seller-menu{display:none;position:absolute;right:10px;top:42px;background:var(--card-bg);border:1px solid var(--border-color);border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.2);z-index:200;flex-direction:column;min-width:210px}
 .seller-menu.show{display:flex}
 .seller-menu button{background:none;border:none;text-align:left;padding:12px 14px;cursor:pointer;font-size:14px;color:var(--text-color);border-bottom:1px solid var(--border-color)}
 .modal{display:none;position:fixed;inset:0;width:100vw;height:100vh;background:rgba(0,0,0,0.6);z-index:9999;overflow-y:auto}
-.modal-content{background:var(--card-bg);width:100%;min-height:100vh;padding:20px 15px}
+.modal-content{background:var(--card-bg);width:100%;min-height:100vh;padding:20px 15px 50px 15px;display:flex;flex-direction:column}
+#annonceForm{flex:1;display:flex;flex-direction:column}
+.btn-publier-fixed{background:var(--card-bg);padding:20px 0 40px 0;margin-top:15px}
 #modalSupprimer, #modalPartage{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:10000;justify-content:center;align-items:center}
 .box-sup{background:var(--card-bg);padding:22px;border-radius:14px;text-align:center;max-width:320px;width:90%}
 .share-box{background:var(--card-bg);padding:22px;border-radius:14px;max-width:320px;width:90%;text-align:center}
@@ -50,55 +49,47 @@ body.dark.seller-menu-btn{background:#2a2a2a;color:#ccc}
 <div id="annonces"><p style="text-align:center">Chargement...</p></div>
 
 <div id="modalSupprimer"><div class="box-sup"><p><b>Voulez-vous supprimer le produit?</b></p><div style="display:flex;gap:10px;margin-top:18px;"><button onclick="fermerSupprimer()" style="flex:1;padding:12px;border-radius:8px;border:1px solid #ddd;">Non</button><button onclick="confirmerSupprimer()" style="flex:1;padding:12px;border-radius:8px;background:#ff3b30;color:white;border:none;font-weight:bold;">Oui</button></div></div></div>
-
 <div id="modalPartage"><div class="share-box"><h3 style="margin-bottom:15px;">Partager cette annonce</h3><a id="shareWhats" target="_blank" style="display:block;background:#25D366;color:white;padding:12px;border-radius:8px;margin-bottom:8px;text-decoration:none;font-weight:bold;">WhatsApp</a><a id="shareFacebook" target="_blank" style="display:block;background:#1877F2;color:white;padding:12px;border-radius:8px;margin-bottom:8px;text-decoration:none;font-weight:bold;">Facebook</a><button onclick="copierLien()" style="display:block;width:100%;background:#eee;color:black;padding:12px;border-radius:8px;border:none;font-weight:bold;">📋 Copier le lien</button><button onclick="fermerPartage()" style="margin-top:12px;background:#FF8C00;color:white;padding:10px 20px;border-radius:8px;border:none;font-weight:bold;width:100%;">Fermer</button></div></div>
 
-<div id="formModal" class="modal"><div class="modal-content"><span onclick="closeModal()" style="float:right;font-size:32px;cursor:pointer;">&times;</span><h2 style="text-align:center;margin-bottom:20px;">Publier une annonce</h2><form id="annonceForm"><label>Titre du produit</label><input type="text" name="titre" placeholder="Ex: iPhone 13" required><label>Description</label><textarea name="description" placeholder="Décrivez votre produit..." required></textarea><div class="row2"><div><label>Prix</label><input type="number" name="prix" placeholder="850" required></div><div><label>Devise</label><select name="devise"><option value="FC">FC</option><option value="$">$</option></select></div></div><div class="row2"><div><label>Ville</label><input type="text" name="ville" placeholder="Kinshasa" required></div><div><label>Catégorie</label><select name="categorie" required><option value="">Choisir</option><option value="Téléphone">Téléphone</option><option value="Automobile">Automobile</option><option value="Mode">Mode</option><option value="Immobilier">Immobilier</option><option value="Électronique">Électronique</option><option value="Autre">Autre</option></select></div></div><label>Téléphone</label><input type="tel" name="telephone" placeholder="Ex: 082..." required><label>WhatsApp (optionnel)</label><input type="tel" name="whatsapp" placeholder="Ex: 24382..."><label>Lien photo</label><input type="url" name="photo" placeholder="https://..."><button type="submit" style="background:#FF8C00;color:white;border:none;padding:16px;width:100%;border-radius:12px;font-weight:bold;margin-top:15px;font-size:16px;">Publier maintenant</button></form><p id="formMsg" style="text-align:center;margin-top:10px"></p></div></div>
+<div id="formModal" class="modal"><div class="modal-content"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;"><h2>Publier une annonce</h2><span onclick="closeModal()" style="font-size:32px;cursor:pointer;">×</span></div>
+<form id="annonceForm">
+<div class="form-fields">
+<label>Titre du produit</label><input type="text" name="titre" placeholder="Ex: iPhone 13" required>
+<label>Description</label><textarea name="description" placeholder="Décrivez votre produit..." required></textarea>
+<div class="row2"><div><label>Prix</label><input type="number" name="prix" placeholder="850" required></div><div><label>Devise</label><select name="devise"><option value="FC">FC</option><option value="$">$</option></select></div></div>
+<div class="row2"><div><label>Ville</label><input type="text" name="ville" placeholder="Kinshasa" required></div><div><label>Catégorie</label><select name="categorie" required><option value="">Choisir</option><option value="Téléphone">Téléphone</option><option value="Automobile">Automobile</option><option value="Mode">Mode</option><option value="Immobilier">Immobilier</option><option value="Électronique">Électronique</option><option value="Autre">Autre</option></select></div></div>
+<label>Téléphone</label><input type="tel" name="telephone" placeholder="Ex: 082..." required>
+<label>WhatsApp (optionnel)</label><input type="tel" name="whatsapp" placeholder="Ex: 24382...">
+<label>Lien photo</label><input type="url" name="photo" placeholder="https://...">
+</div>
+<div class="btn-publier-fixed">
+<button type="submit" style="background:#FF8C00;color:white;border:none;padding:18px;width:100%;border-radius:12px;font-weight:bold;font-size:17px;">Publier maintenant</button>
+<p id="formMsg" style="text-align:center;margin-top:10px"></p>
+</div>
+</form>
+</div></div>
 
 <script>
 const SHEETDB='https://sheetdb.io/api/v1/ulpea3mizvmlt';
 function openModal(){document.getElementById('formModal').style.display='block'}
 function closeModal(){document.getElementById('formModal').style.display='none'}
-let toutesAnnonces=[];
-let lienPartage="";
-function partagerAnnonce(btn){
- const card=btn.closest('.annonce-card');
- const titre=card.querySelector('h3')?.innerText || 'Annonce VYLO-CD';
- lienPartage=window.location.href;
- const texte=encodeURIComponent(titre+" sur VYLO-CD - "+lienPartage);
- document.getElementById('shareWhats').href="https://wa.me/?text="+texte;
- document.getElementById('shareFacebook').href="https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(lienPartage);
- if(navigator.share){navigator.share({title:titre,text:titre+" sur VYLO-CD",url:lienPartage}).catch(()=>{document.getElementById('modalPartage').style.display='flex';});}else{document.getElementById('modalPartage').style.display='flex';}
-}
+let toutesAnnonces=[];let lienPartage="";
+function partagerAnnonce(btn){const card=btn.closest('.annonce-card');const titre=card.querySelector('h3')?.innerText||'Annonce VYLO-CD';lienPartage=window.location.href;const texte=encodeURIComponent(titre+" sur VYLO-CD - "+lienPartage);document.getElementById('shareWhats').href="https://wa.me/?text="+texte;document.getElementById('shareFacebook').href="https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(lienPartage);if(navigator.share){navigator.share({title:titre,text:titre+" sur VYLO-CD",url:lienPartage}).catch(()=>{document.getElementById('modalPartage').style.display='flex';});}else{document.getElementById('modalPartage').style.display='flex';}}
 function fermerPartage(){document.getElementById('modalPartage').style.display='none';}
 function copierLien(){navigator.clipboard.writeText(lienPartage);alert('Lien copié!');fermerPartage();}
 async function fetchAnnonces(){const c=document.getElementById('annonces');try{const r=await fetch(SHEETDB);const d=await r.json();toutesAnnonces=d.filter(x=>x.titre);afficherAnnonces(toutesAnnonces);}catch(e){c.innerHTML='Erreur:'+e.message}}
-function afficherAnnonces(list){
- const c=document.getElementById('annonces');
- if(list.length==0){c.innerHTML='<p style="text-align:center">Aucune annonce</p>';return;}
- c.innerHTML='';
- list.slice().reverse().forEach(item=>{
-  c.innerHTML+=`<div class="annonce-card"><div class="annonce-header"><small>${item.date||''}</small><div class="right-actions">
-  <button class="share-btn" onclick="partagerAnnonce(this)" title="Partager">
-    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
-  </button>
-  <div style="position:relative;"><button class="seller-menu-btn" onclick="toggleMenu(this)">⋮</button><div class="seller-menu"><button onclick="activerModeSombreDepuisMenu(this)">🌙 Mode sombre</button><button onclick="ouvrirSupprimer(this)" style="color:#ff3b30;">🗑️ Supprimer</button></div></div>
-  </div></div>${item.photo?`<img src="${item.photo}">`:''}<div class="annonce-infos"><h3>${item.titre}</h3><p style="color:#FFA500;font-weight:800;font-size:20px;">${item.prix} ${item.devise}</p><p>${item.description}</p><p style="font-size:13px;"><b>${item.ville}</b> | ${item.categorie}</p><div style="display:flex;gap:10px;margin-top:12px;"><a href="tel:${item.telephone}" style="background:#0B7E2E;color:white;padding:8px 16px;border-radius:6px;text-decoration:none;font-weight:bold;">Appeler</a>${item.whatsapp?`<a href="https://wa.me/${item.whatsapp}" target="_blank" style="background:#25D366;width:42px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;"><svg style="width:22px;height:22px;fill:white;" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg></a>`:''}</div></div></div>`;
- });
-}
+function afficherAnnonces(list){const c=document.getElementById('annonces');if(list.length==0){c.innerHTML='<p style="text-align:center">Aucune annonce</p>';return;}c.innerHTML='';list.slice().reverse().forEach(item=>{c.innerHTML+=`<div class="annonce-card"><div class="annonce-header"><small>${item.date||''}</small><div class="right-actions"><button class="share-btn" onclick="partagerAnnonce(this)"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#222" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg></button><div style="position:relative;"><button class="seller-menu-btn" onclick="toggleMenu(this)">⋮</button><div class="seller-menu"><button onclick="activerModeSombreDepuisMenu(this)">🌙 Mode sombre</button><button onclick="ouvrirSupprimer(this)" style="color:#ff3b30;">🗑️ Supprimer</button></div></div></div></div>${item.photo?`<img src="${item.photo}">`:''}<div class="annonce-infos"><h3>${item.titre}</h3><p style="color:#FFA500;font-weight:800;font-size:20px;">${item.prix} ${item.devise}</p><p>${item.description}</p><p style="font-size:13px;"><b>${item.ville}</b> | ${item.categorie}</p><div style="display:flex;gap:10px;margin-top:12px;"><a href="tel:${item.telephone}" style="background:#0B7E2E;color:white;padding:8px 16px;border-radius:6px;text-decoration:none;font-weight:bold;">Appeler</a>${item.whatsapp?`<a href="https://wa.me/${item.whatsapp}" target="_blank" style="background:#25D366;width:42px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;"><svg style="width:22px;height:22px;fill:white;" viewBox="0 0 448 512"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg></a>`:''}</div></div></div>`;});}
 function searchAnnonces(){const q=document.getElementById('searchBar').value.toLowerCase();const f=toutesAnnonces.filter(i=>(i.titre+i.description+i.ville).toLowerCase().includes(q));afficherAnnonces(f);}
 function toggleMenu(b){document.querySelectorAll('.seller-menu').forEach(m=>{if(m!==b.nextElementSibling)m.classList.remove('show')});b.nextElementSibling.classList.toggle('show');}
-let carteASupprimer=null;
-function ouvrirSupprimer(b){carteASupprimer=b.closest('.annonce-card');document.getElementById('modalSupprimer').style.display='flex';b.closest('.seller-menu').classList.remove('show');}
+let carteASupprimer=null;function ouvrirSupprimer(b){carteASupprimer=b.closest('.annonce-card');document.getElementById('modalSupprimer').style.display='flex';b.closest('.seller-menu').classList.remove('show');}
 function fermerSupprimer(){document.getElementById('modalSupprimer').style.display='none';carteASupprimer=null;}
 function confirmerSupprimer(){if(carteASupprimer)carteASupprimer.remove();fermerSupprimer();}
 function activerModeSombreDepuisMenu(b){document.getElementById('toggleTheme').click();b.closest('.seller-menu').classList.remove('show');}
 window.addEventListener('click',function(e){if(!e.target.closest('.seller-menu')&&!e.target.closest('.seller-menu-btn')&&!e.target.closest('.share-btn')){document.querySelectorAll('.seller-menu').forEach(m=>m.classList.remove('show'));}});
 document.getElementById('annonceForm').addEventListener('submit',async(e)=>{e.preventDefault();const msg=document.getElementById('formMsg');msg.innerText='En cours...';const data=Object.fromEntries(new FormData(e.target).entries());data.date=new Date().toLocaleString('fr-FR');try{const r=await fetch(SHEETDB,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:[data]})});if(r.ok){msg.innerText='✅ Publiée!';e.target.reset();setTimeout(()=>{closeModal();fetchAnnonces();msg.innerText=''},1500);}else msg.innerText='❌ Erreur'}catch(err){msg.innerText='❌ '+err.message}});
 fetchAnnonces();
-const themeBtn=document.getElementById('toggleTheme');
-themeBtn.onclick=()=>{document.body.classList.toggle('dark');themeBtn.textContent=document.body.classList.contains('dark')?'☀️':'🌙';localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light');};
+const themeBtn=document.getElementById('toggleTheme');themeBtn.onclick=()=>{document.body.classList.toggle('dark');themeBtn.textContent=document.body.classList.contains('dark')?'☀️':'🌙';localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light');};
 if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');themeBtn.textContent='☀️';}
 </script>
 </body>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </html>
+ </html>
