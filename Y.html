@@ -24,9 +24,8 @@ padding:10px 12px;display:flex;
 align-items:center;position:sticky;
 top:0;z-index:100;gap:10px}
 .logo-left{height:42px;border-radius:8px}
-.header-center{
-flex:1;text-align:center;color:white;
-font-size:20px;font-weight:bold}
+.header-center{flex:1;text-align:center;
+color:white;font-size:20px;font-weight:bold}
 .profil-avatar{
 width:42px;height:42px;border-radius:50%;
 border:2px solid white;object-fit:cover;
@@ -40,19 +39,17 @@ font-size:16px;cursor:pointer}
 .search-row{
 display:flex;gap:8px;padding:0 15px;
 margin-bottom:15px;align-items:center}
-#searchBar{
-flex:1;padding:14px;border-radius:12px;
+#searchBar{flex:1;padding:14px;
+border-radius:12px;
 border:1px solid var(--border-color);
-background:var(--input-bg);
-color:var(--text-color)}
+background:var(--input-bg);color:var(--text-color)}
 .btn-params{
 background:var(--card-bg);
 border:1px solid var(--border-color);
 width:48px;height:48px;border-radius:12px;
 display:flex;align-items:center;
 justify-content:center;cursor:pointer}
-#annonces{
-width:100%;padding:0 15px 20px 15px;
+#annonces{width:100%;padding:0 15px 20px 15px;
 display:grid;gap:15px}
 .annonce-card{
 background:var(--card-bg);border-radius:16px;
@@ -61,87 +58,66 @@ position:relative}
 .annonce-card img.annonce-photo{
 width:100%;aspect-ratio:1.6/1;
 object-fit:contain;background:#fff;
-display:block;border-bottom:1px solid var(--border-color)}
+display:block;
+border-bottom:1px solid var(--border-color)}
 .annonce-infos{padding:12px 14px}
 .annonce-header{
 display:flex;justify-content:space-between;
 align-items:center;padding:10px 14px 0 14px}
-.right-actions{
-display:flex;align-items:center;gap:6px}
-.share-btn{
-background:#F0F0F0;border:none;
+.right-actions{display:flex;align-items:center;gap:6px}
+.share-btn{background:#F0F0F0;border:none;
 border-radius:10px;cursor:pointer;
-width:34px;height:34px;
-display:flex;align-items:center;
-justify-content:center}
-.edit-btn{
-background:#FFF4E5;border:none;
+width:34px;height:34px;display:flex;
+align-items:center;justify-content:center}
+.edit-btn{background:#FFF4E5;border:none;
 border-radius:10px;cursor:pointer;
-width:34px;height:34px;
-display:flex;align-items:center;
-justify-content:center}
-.seller-menu-btn{
-background:#F0F0F0;border:none;
+width:34px;height:34px;display:flex;
+align-items:center;justify-content:center}
+.seller-menu-btn{background:#F0F0F0;border:none;
 font-size:20px;cursor:pointer;color:#444;
 width:34px;height:34px;border-radius:10px;
-display:flex;align-items:center;
-justify-content:center}
-.modal{
-display:none;position:fixed;inset:0;
-width:100vw;height:100vh;
-background:rgba(0,0,0,0.6);
+display:flex;align-items:center;justify-content:center}
+.modal{display:none;position:fixed;inset:0;
+width:100vw;height:100vh;background:rgba(0,0,0,0.6);
 z-index:9999;overflow-y:auto}
-.modal-content{
-background:var(--card-bg);width:100%;
+.modal-content{background:var(--card-bg);width:100%;
 min-height:100vh;padding:20px 15px 0 15px;
 display:flex;flex-direction:column}
-#annonceForm{
-flex:1;display:flex;flex-direction:column;
-padding-bottom:120px}
-.btn-publier-fixed{
-position:fixed;bottom:0;left:0;right:0;
+#annonceForm{flex:1;display:flex;
+flex-direction:column;padding-bottom:120px}
+.btn-publier-fixed{position:fixed;bottom:0;left:0;right:0;
 background:var(--card-bg);padding:15px;
 box-shadow:0 -4px 20px rgba(0,0,0,0.15);
 z-index:20;border-top:1px solid var(--border-color)}
-#modalSupprimer,#modalPartage,
-#modalModifier,#modalParametres,
-#modalProfil{
+#modalSupprimer,#modalPartage,#modalModifier,
+#modalParametres,#modalProfil{
 display:none;position:fixed;inset:0;
-background:rgba(0,0,0,0.6);
-z-index:10000;justify-content:center;
-align-items:center}
-.box-sup,.share-box,.edit-box,
-.param-box,.profil-box{
+background:rgba(0,0,0,0.6);z-index:10000;
+justify-content:center;align-items:center}
+.box-sup,.share-box,.edit-box,.param-box,.profil-box{
 background:var(--card-bg);padding:22px;
 border-radius:14px;max-width:360px;width:92%}
 .edit-box,.param-box,.profil-box{
-text-align:left;max-height:90vh;
-overflow-y:auto}
-.param-item{
-display:flex;justify-content:space-between;
+text-align:left;max-height:90vh;overflow-y:auto}
+.param-item{display:flex;justify-content:space-between;
 align-items:center;padding:12px 0;
 border-bottom:1px solid var(--border-color)}
 .profil-box input,#modalModifier input,
 #modalModifier textarea,#modalModifier select,
 #annonceForm input,#annonceForm textarea,
-#annonceForm select{
-width:100%;padding:12px;border-radius:8px;
-border:1.5px solid var(--border-color);
-background:var(--input-bg);
-color:var(--text-color);margin-bottom:10px}
+#annonceForm select{width:100%;padding:12px;
+border-radius:8px;border:1.5px solid var(--border-color);
+background:var(--input-bg);color:var(--text-color);
+margin-bottom:10px}
 .row2{display:flex;gap:10px}.row2>*{flex:1}
-.seller-menu{
-display:none;position:absolute;
+.seller-menu{display:none;position:absolute;
 right:10px;top:42px;background:var(--card-bg);
-border:1px solid var(--border-color);
-border-radius:10px;
+border:1px solid var(--border-color);border-radius:10px;
 box-shadow:0 4px 12px rgba(0,0,0,0.2);
-z-index:200;flex-direction:column;
-min-width:180px}
+z-index:200;flex-direction:column;min-width:180px}
 .seller-menu.show{display:flex}
-.seller-menu button{
-background:none;border:none;text-align:left;
-padding:12px 14px;cursor:pointer;
+.seller-menu button{background:none;border:none;
+text-align:left;padding:12px 14px;cursor:pointer;
 font-size:14px;color:var(--text-color)}
 </style>
 </head>
@@ -154,17 +130,16 @@ class="logo-left">
 src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
 class="profil-avatar" onclick="ouvrirProfil()">
 </header>
-<button class="btn-publier"
-onclick="openModal()">+ Publier une annonce</button>
+<button class="btn-publier" onclick="openModal()">
++ Publier une annonce
+</button>
 <div class="search-row">
 <input type="text" id="searchBar"
 placeholder="Rechercher..."
 onkeyup="searchAnnonces()">
-<button class="btn-params"
-onclick="ouvrirParametres()">
+<button class="btn-params" onclick="ouvrirParametres()">
 <svg width="26" height="26" viewBox="0 0 24 24"
-fill="none" stroke="currentColor"
-stroke-width="1.8">
+fill="none" stroke="currentColor" stroke-width="1.8">
 <path d="M12 3l7 4v8l-7 4-7-4V7l7-4z"></path>
 <circle cx="12" cy="12" r="2.5"></circle>
 </svg>
@@ -178,7 +153,7 @@ stroke-width="1.8">
 align-items:center;margin-bottom:10px">
 <h3 style="margin:0">Mon Profil</h3>
 <span onclick="fermerProfil()"
-style="font-size:26px;cursor:pointer">×</span>
+style="font-size:26px;cursor:pointer">x</span>
 </div>
 <div style="text-align:center;margin-bottom:15px">
 <img id="previewProfil"
@@ -192,7 +167,7 @@ placeholder="https://...">
 <label>Nom du vendeur</label>
 <input id="profilNom" type="text"
 placeholder="Ex: Jean Bosco">
-<label>Nom de l'entreprise</label>
+<label>Nom entreprise</label>
 <input id="profilEntreprise" type="text"
 placeholder="Ex: JB Shop">
 <label>Tel entreprise</label>
@@ -204,10 +179,9 @@ border:none;padding:14px;width:100%;
 border-radius:10px;font-weight:bold;
 margin-top:10px">Enregistrer</button>
 <button onclick="fermerProfil()"
-style="background:#eee;color:#333;
-border:none;padding:12px;width:100%;
-border-radius:10px;font-weight:bold;
-margin-top:8px">Fermer</button>
+style="background:#eee;color:#333;border:none;
+padding:12px;width:100%;border-radius:10px;
+font-weight:bold;margin-top:8px">Fermer</button>
 </div></div>
 <div id="modalSupprimer"><div class="box-sup">
 <p><b>Supprimer?</b></p>
@@ -217,8 +191,8 @@ style="flex:1;padding:12px;border-radius:8px;
 border:1px solid #ddd">Non</button>
 <button onclick="confirmerSupprimer()"
 style="flex:1;padding:12px;border-radius:8px;
-background:#ff3b30;color:white;
-border:none;font-weight:bold">Oui</button>
+background:#ff3b30;color:white;border:none;
+font-weight:bold">Oui</button>
 </div></div></div>
 <div id="modalPartage"><div class="share-box">
 <h3>Partager</h3>
@@ -233,22 +207,20 @@ color:white;padding:12px;border-radius:8px;
 margin-bottom:8px;text-decoration:none;
 font-weight:bold">Facebook</a>
 <button onclick="copierLien()"
-style="display:block;width:100%;
-background:#eee;color:black;
-padding:12px;border-radius:8px;
+style="display:block;width:100%;background:#eee;
+color:black;padding:12px;border-radius:8px;
 border:none;font-weight:bold">Copier lien</button>
 <button onclick="fermerPartage()"
 style="margin-top:12px;background:#FF8C00;
-color:white;padding:10px 20px;
-border-radius:8px;border:none;
-font-weight:bold;width:100%">Fermer</button>
+color:white;padding:10px 20px;border-radius:8px;
+border:none;font-weight:bold;width:100%">Fermer</button>
 </div></div>
 <div id="modalModifier"><div class="edit-box">
 <div style="display:flex;justify-content:space-between;
 align-items:center;margin-bottom:15px">
 <h3>Modifier</h3>
 <span onclick="fermerModifier()"
-style="font-size:26px;cursor:pointer">×</span>
+style="font-size:26px;cursor:pointer">x</span>
 </div>
 <label>Titre</label><input id="editTitre" type="text">
 <label>Description</label>
@@ -257,8 +229,7 @@ style="height:80px;resize:none"></textarea>
 <div class="row2"><div>
 <label>Prix</label><input id="editPrix" type="number">
 </div><div>
-<label>Devise</label>
-<select id="editDevise">
+<label>Devise</label><select id="editDevise">
 <option value="FC">FC</option>
 <option value="$">$</option>
 </select></div></div>
@@ -272,17 +243,16 @@ border:none;padding:14px;width:100%;
 border-radius:10px;font-weight:bold;
 margin-top:10px">Enregistrer</button>
 <button onclick="fermerModifier()"
-style="background:#eee;color:#333;
-border:none;padding:12px;width:100%;
-border-radius:10px;font-weight:bold;
-margin-top:8px">Annuler</button>
+style="background:#eee;color:#333;border:none;
+padding:12px;width:100%;border-radius:10px;
+font-weight:bold;margin-top:8px">Annuler</button>
 </div></div>
 <div id="modalParametres"><div class="param-box">
 <div style="display:flex;justify-content:space-between;
 align-items:center">
 <h3 style="margin:0">Parametres</h3>
 <span onclick="fermerParametres()"
-style="font-size:26px;cursor:pointer">×</span>
+style="font-size:26px;cursor:pointer">x</span>
 </div>
 <div class="param-item">
 <span>Mode sombre</span>
@@ -293,10 +263,9 @@ border:none;padding:8px 14px;
 border-radius:8px;font-weight:bold">Activer</button>
 </div>
 <button onclick="fermerParametres()"
-style="background:#eee;color:#333;
-border:none;padding:12px;width:100%;
-border-radius:10px;font-weight:bold;
-margin-top:15px">Fermer</button>
+style="background:#eee;color:#333;border:none;
+padding:12px;width:100%;border-radius:10px;
+font-weight:bold;margin-top:15px">Fermer</button>
 </div></div>
 <div id="formModal" class="modal">
 <div class="modal-content">
@@ -304,7 +273,7 @@ margin-top:15px">Fermer</button>
 align-items:center;margin-bottom:20px">
 <h2>Publier</h2>
 <span onclick="closeModal()"
-style="font-size:32px;cursor:pointer">×</span>
+style="font-size:32px;cursor:pointer">x</span>
 </div>
 <form id="annonceForm">
 <label>Titre</label>
@@ -315,8 +284,7 @@ style="font-size:32px;cursor:pointer">×</span>
 <label>Prix</label>
 <input type="number" name="prix" required>
 </div><div>
-<label>Devise</label>
-<select name="devise">
+<label>Devise</label><select name="devise">
 <option value="FC">FC</option>
 <option value="$">$</option>
 </select></div></div>
@@ -324,8 +292,7 @@ style="font-size:32px;cursor:pointer">×</span>
 <label>Ville</label>
 <input type="text" name="ville" required>
 </div><div>
-<label>Categorie</label>
-<select name="categorie" required>
+<label>Categorie</label><select name="categorie" required>
 <option value="">Choisir</option>
 <option value="Telephone">Telephone</option>
 <option value="Automobile">Auto</option>
@@ -487,35 +454,71 @@ photo='<img class="annonce-photo" src="'+item.photo+'">';
 }
 let wa='';
 if(item.whatsapp){
-wa='<a href="https://wa.me/'+item.whatsapp+
-'" target="_blank" style="background:#25D366;'+
-'width:42px;height:38px;border-radius:8px;'+
-'display:flex;align-items:center;'+
-'justify-content:center;color:white;'+
-'text-decoration:none">W</a>';
+wa+='<a href="https://wa.me/'+item.whatsapp+'"';
+wa+=' target="_blank"';
+wa+=' style="background:#25D366;';
+wa+='width:42px;height:38px;';
+wa+='border-radius:8px;';
+wa+='display:flex;';
+wa+='align-items:center;';
+wa+='justify-content:center;">';
+wa+='<svg style="width:22px;height:22px;';
+wa+='fill:white;" viewBox="0 0 448 512">';
+wa+='<path d="M380.9 97.1C339 55.1 283.2 32 223.9 32';
+wa+='c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111';
+wa+='L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1';
+wa+='c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157';
+wa+='zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3';
+wa+='L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2';
+wa+=' 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2';
+wa+=' 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5';
+wa+=' 0 101.8-84.9 184.6-186 184.6z"/></svg></a>';
 }
 let h='';
 h+='<div class="annonce-header">';
 h+='<small>'+(item.date||'')+'</small>';
 h+='<div class="right-actions">';
-h+='<button class="edit-btn" onclick="ouvrirModifier(this)">E</button>';
-h+='<button class="share-btn" onclick="partagerAnnonce(this)">S</button>';
+h+='<button class="edit-btn"';
+h+=' onclick="ouvrirModifier(this)">';
+h+='<svg viewBox="0 0 24 24" width="18" height="18"';
+h+=' fill="none" stroke="#FF8C00" stroke-width="2">';
+h+='<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14';
+h+='a2 2 0 0 0 2-2v-7"></path>';
+h+='<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1';
+h+=' 1-4 9.5-9.5z"></path></svg></button>';
+h+='<button class="share-btn"';
+h+=' onclick="partagerAnnonce(this)">';
+h+='<svg width="20" height="20" viewBox="0 0 24 24" fill="none">';
+h+='<circle cx="18" cy="5" r="3" stroke="black" stroke-width="2"/>';
+h+='<circle cx="6" cy="12" r="3" stroke="black" stroke-width="2"/>';
+h+='<circle cx="18" cy="19" r="3" stroke="black" stroke-width="2"/>';
+h+='<line x1="8.6" y1="13.5" x2="15.4" y2="17.5"';
+h+=' stroke="black" stroke-width="2" stroke-linecap="round"/>';
+h+='<line x1="15.4" y1="6.5" x2="8.6" y2="10.5"';
+h+=' stroke="black" stroke-width="2" stroke-linecap="round"/>';
+h+='</svg></button>';
 h+='<div style="position:relative">';
-h+='<button class="seller-menu-btn" onclick="toggleMenu(this)">:</button>';
+h+='<button class="seller-menu-btn"';
+h+=' onclick="toggleMenu(this)">:</button>';
 h+='<div class="seller-menu">';
-h+='<button onclick="ouvrirSupprimer(this)" style="color:#ff3b30">Supprimer</button>';
+h+='<button onclick="ouvrirSupprimer(this)"';
+h+=' style="color:#ff3b30">Supprimer</button>';
 h+='</div></div></div></div>';
 h+=photo;
 h+='<div class="annonce-infos">';
 h+='<h3>'+item.titre+'</h3>';
-h+='<p style="color:#FFA500;font-weight:800;font-size:20px">'+item.prix+' '+item.devise+'</p>';
+h+='<p style="color:#FFA500;';
+h+='font-weight:800;font-size:20px">';
+h+=item.prix+' '+item.devise+'</p>';
 h+='<p>'+item.description+'</p>';
-h+='<p style="font-size:13px"><b>'+item.ville+'</b> | '+item.categorie+'</p>';
+h+='<p style="font-size:13px">';
+h+='<b>'+item.ville+'</b> | '+item.categorie+'</p>';
 h+='<div style="display:flex;gap:10px;margin-top:12px">';
-h+='<a href="tel:'+item.telephone+
-'" style="background:#0B7E2E;color:white;'+
-'padding:8px 16px;border-radius:6px;'+
-'text-decoration:none;font-weight:bold">Appeler</a>';
+h+='<a href="tel:'+item.telephone+'"';
+h+=' style="background:#0B7E2E;color:white;';
+h+='padding:8px 16px;border-radius:6px;';
+h+='text-decoration:none;font-weight:bold">';
+h+='Appeler</a>';
 h+=wa;
 h+='</div></div>';
 d.innerHTML=h;
@@ -544,7 +547,8 @@ carteASupprimer=null;}
 function confirmerSupprimer(){
 if(carteASupprimer) carteASupprimer.remove();
 fermerSupprimer();}
-document.getElementById('annonceForm').addEventListener('submit',async(e)=>{
+document.getElementById('annonceForm').addEventListener('submit',
+async(e)=>{
 e.preventDefault();
 let msg=document.getElementById('formMsg');
 msg.innerText='En cours...';
@@ -559,8 +563,9 @@ headers:{'Content-Type':'application/json'},
 body:JSON.stringify({data:[data]})});
 if(r.ok){
 msg.innerText='Publiee';e.target.reset();
-setTimeout(()=>{closeModal();fetchAnnonces();msg.innerText=''},1200);
-}else msg.innerText='Erreur';
+setTimeout(()=>{closeModal();fetchAnnonces();
+msg.innerText=''},1200);
+}else{msg.innerText='Erreur';}
 }catch(err){msg.innerText=err.message}
 });
 fetchAnnonces();
