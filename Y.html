@@ -26,7 +26,14 @@ header{background:var(--header-bg);padding:12px 15px;display:flex;justify-conten
 .modal{display:none;position:fixed;inset:0;width:100vw;height:100vh;background:rgba(0,0,0,0.6);z-index:9999;overflow-y:auto}
 .modal-content{background:var(--card-bg);width:100%;min-height:100vh;margin:0;padding:20px 15px}
 #modalSupprimer{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:10000;justify-content:center;align-items:center}
-.box-sup{background:var(--card-bg);padding:22px;border-radius:14px;text-align:center;max-width:320px;width:90%}
+#annonceForm input, #annonceForm textarea, #annonceForm select{
+width:100%;padding:14px;border-radius:10px;border:1px solid var(--border-color);
+background:var(--input-bg);color:var(--text-color);margin-bottom:12px;font-size:15px;
+display:block;
+}
+#annonceForm textarea{resize:none;height:90px}
+#formModal h2{margin-bottom:15px;text-align:center}
+.modal-content{border-radius:0}
 </style>
 </head>
 <body>
