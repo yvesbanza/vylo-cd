@@ -2,233 +2,299 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
 <title>VYLO-CD</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{width:100%;overflow-x:hidden}
-body{background:var(--bg-color);font-family:Arial,sans-serif;color:var(--text-color)}
-:root{--header-bg:#FF8C00;--bg-color:#f5f5f5;--card-bg:white;--text-color:black;--border-color:#ddd;--input-bg:white}
-body.dark{--bg-color:#121212;--card-bg:#1e1e1e;--text-color:white;--border-color:#333;--input-bg:#2a2a2a}
-header{background:var(--header-bg);padding:10px 12px;display:flex;align-items:center;position:sticky;top:0;z-index:100;gap:10px}
+body{background:var(--bg-color);
+font-family:Arial,sans-serif;color:var(--text-color)}
+:root{
+--header-bg:#FF8C00;--bg-color:#f5f5f5;
+--card-bg:white;--text-color:black;
+--border-color:#ddd;--input-bg:white}
+body.dark{
+--bg-color:#121212;--card-bg:#1e1e1e;
+--text-color:white;--border-color:#333;
+--input-bg:#2a2a2a}
+header{
+background:var(--header-bg);
+padding:10px 12px;display:flex;
+align-items:center;position:sticky;
+top:0;z-index:100;gap:10px}
 .logo-left{height:42px;border-radius:8px}
-.header-center{flex:1;text-align:center;color:white;font-size:20px;font-weight:bold}
-.profil-avatar{width:42px;height:42px;border-radius:50%;border:2px solid white;object-fit:cover;background:white;cursor:pointer}
-.btn-publier{background:var(--header-bg);color:white;border:none;padding:14px;width:calc(100% - 30px);margin:15px;border-radius:12px;font-weight:bold;font-size:16px;cursor:pointer}
-.search-row{display:flex;gap:8px;padding:0 15px;margin-bottom:15px;align-items:center}
-#searchBar{flex:1;padding:14px;border-radius:12px;border:1px solid var(--border-color);background:var(--input-bg);color:var(--text-color)}
-.btn-params{background:var(--card-bg);border:1px solid var(--border-color);width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-#annonces{width:100%;padding:0 15px 20px 15px;display:grid;gap:15px}
-.annonce-card{background:var(--card-bg);border-radius:16px;overflow:hidden;border:1px solid var(--border-color);position:relative}
-.annonce-card img.annonce-photo{width:100%;aspect-ratio:1.6/1;object-fit:contain;background:#fff;display:block;border-bottom:1px solid var(--border-color)}
+.header-center{
+flex:1;text-align:center;color:white;
+font-size:20px;font-weight:bold}
+.profil-avatar{
+width:42px;height:42px;border-radius:50%;
+border:2px solid white;object-fit:cover;
+background:white;cursor:pointer}
+.btn-publier{
+background:var(--header-bg);color:white;
+border:none;padding:14px;
+width:calc(100% - 30px);margin:15px;
+border-radius:12px;font-weight:bold;
+font-size:16px;cursor:pointer}
+.search-row{
+display:flex;gap:8px;padding:0 15px;
+margin-bottom:15px;align-items:center}
+#searchBar{
+flex:1;padding:14px;border-radius:12px;
+border:1px solid var(--border-color);
+background:var(--input-bg);
+color:var(--text-color)}
+.btn-params{
+background:var(--card-bg);
+border:1px solid var(--border-color);
+width:48px;height:48px;border-radius:12px;
+display:flex;align-items:center;
+justify-content:center;cursor:pointer}
+#annonces{
+width:100%;padding:0 15px 20px 15px;
+display:grid;gap:15px}
+.annonce-card{
+background:var(--card-bg);border-radius:16px;
+overflow:hidden;border:1px solid var(--border-color);
+position:relative}
+.annonce-card img.annonce-photo{
+width:100%;aspect-ratio:1.6/1;
+object-fit:contain;background:#fff;
+display:block;border-bottom:1px solid var(--border-color)}
 .annonce-infos{padding:12px 14px}
-.annonce-header{display:flex;justify-content:space-between;align-items:center;padding:10px 14px 0 14px}
-.right-actions{display:flex;align-items:center;gap:6px}
-.share-btn{background:#F0F0F0;border:none;border-radius:10px;cursor:pointer;width:34px;height:34px;display:flex;align-items:center;justify-content:center}
-.edit-btn{background:#FFF4E5;border:none;border-radius:10px;cursor:pointer;width:34px;height:34px;display:flex;align-items:center;justify-content:center}
-.seller-menu-btn{background:#F0F0F0;border:none;font-size:20px;cursor:pointer;color:#444;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center}
-.modal{display:none;position:fixed;inset:0;width:100vw;height:100vh;background:rgba(0,0,0,0.6);z-index:9999;overflow-y:auto}
-.modal-content{background:var(--card-bg);width:100%;min-height:100vh;padding:20px 15px 0 15px;display:flex;flex-direction:column}
-#annonceForm{flex:1;display:flex;flex-direction:column;padding-bottom:120px}
-.btn-publier-fixed{position:fixed;bottom:0;left:0;right:0;background:var(--card-bg);padding:15px;box-shadow:0 -4px 20px rgba(0,0,0,0.15);z-index:20;border-top:1px solid var(--border-color)}
-#modalSupprimer,#modalPartage,#modalModifier,#modalParametres,#modalProfil{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:10000;justify-content:center;align-items:center}
-.box-sup,.share-box,.edit-box,.param-box,.profil-box{background:var(--card-bg);padding:22px;border-radius:14px;max-width:360px;width:92%}
-.edit-box,.param-box,.profil-box{text-align:left;max-height:90vh;overflow-y:auto}
-.param-item{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border-color)}
-.profil-box input,#modalModifier input,#modalModifier textarea,#modalModifier select,#annonceForm input,#annonceForm textarea,#annonceForm select{width:100%;padding:12px;border-radius:8px;border:1.5px solid var(--border-color);background:var(--input-bg);color:var(--text-color);margin-bottom:10px}
+.annonce-header{
+display:flex;justify-content:space-between;
+align-items:center;padding:10px 14px 0 14px}
+.right-actions{
+display:flex;align-items:center;gap:6px}
+.share-btn{
+background:#F0F0F0;border:none;
+border-radius:10px;cursor:pointer;
+width:34px;height:34px;
+display:flex;align-items:center;
+justify-content:center}
+.edit-btn{
+background:#FFF4E5;border:none;
+border-radius:10px;cursor:pointer;
+width:34px;height:34px;
+display:flex;align-items:center;
+justify-content:center}
+.seller-menu-btn{
+background:#F0F0F0;border:none;
+font-size:20px;cursor:pointer;color:#444;
+width:34px;height:34px;border-radius:10px;
+display:flex;align-items:center;
+justify-content:center}
+.modal{
+display:none;position:fixed;inset:0;
+width:100vw;height:100vh;
+background:rgba(0,0,0,0.6);
+z-index:9999;overflow-y:auto}
+.modal-content{
+background:var(--card-bg);width:100%;
+min-height:100vh;padding:20px 15px 0 15px;
+display:flex;flex-direction:column}
+#annonceForm{
+flex:1;display:flex;flex-direction:column;
+padding-bottom:120px}
+.btn-publier-fixed{
+position:fixed;bottom:0;left:0;right:0;
+background:var(--card-bg);padding:15px;
+box-shadow:0 -4px 20px rgba(0,0,0,0.15);
+z-index:20;border-top:1px solid var(--border-color)}
+#modalSupprimer,#modalPartage,
+#modalModifier,#modalParametres,
+#modalProfil{
+display:none;position:fixed;inset:0;
+background:rgba(0,0,0,0.6);
+z-index:10000;justify-content:center;
+align-items:center}
+.box-sup,.share-box,.edit-box,
+.param-box,.profil-box{
+background:var(--card-bg);padding:22px;
+border-radius:14px;max-width:360px;width:92%}
+.edit-box,.param-box,.profil-box{
+text-align:left;max-height:90vh;
+overflow-y:auto}
+.param-item{
+display:flex;justify-content:space-between;
+align-items:center;padding:12px 0;
+border-bottom:1px solid var(--border-color)}
+.profil-box input,#modalModifier input,
+#modalModifier textarea,#modalModifier select,
+#annonceForm input,#annonceForm textarea,
+#annonceForm select{
+width:100%;padding:12px;border-radius:8px;
+border:1.5px solid var(--border-color);
+background:var(--input-bg);
+color:var(--text-color);margin-bottom:10px}
 .row2{display:flex;gap:10px}.row2>*{flex:1}
-.seller-menu{display:none;position:absolute;right:10px;top:42px;background:var(--card-bg);border:1px solid var(--border-color);border-radius:10px;box-shadow:0 4px 12px rgba(0,0,0,0.2);z-index:200;flex-direction:column;min-width:180px}
+.seller-menu{
+display:none;position:absolute;
+right:10px;top:42px;background:var(--card-bg);
+border:1px solid var(--border-color);
+border-radius:10px;
+box-shadow:0 4px 12px rgba(0,0,0,0.2);
+z-index:200;flex-direction:column;
+min-width:180px}
 .seller-menu.show{display:flex}
-.seller-menu button{background:none;border:none;text-align:left;padding:12px 14px;cursor:pointer;font-size:14px;color:var(--text-color)}
+.seller-menu button{
+background:none;border:none;text-align:left;
+padding:12px 14px;cursor:pointer;
+font-size:14px;color:var(--text-color)}
 </style>
 </head>
 <body>
 <header>
-<img src="https://i.postimg.cc/d3mG4Th1/logo.jpg" class="logo-left">
+<img src="https://i.postimg.cc/d3mG4Th1/logo.jpg"
+class="logo-left">
 <div class="header-center">VYLO-CD</div>
-<img id="profilAvatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="profil-avatar" onclick="ouvrirProfil()">
+<img id="profilAvatar"
+src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+class="profil-avatar" onclick="ouvrirProfil()">
 </header>
-<button class="btn-publier" onclick="openModal()">+ Publier une annonce</button>
+<button class="btn-publier"
+onclick="openModal()">+ Publier une annonce</button>
 <div class="search-row">
-<input type="text" id="searchBar" placeholder="Rechercher..." onkeyup="searchAnnonces()">
-<button class="btn-params" onclick="ouvrirParametres()"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3l7 4v8l-7 4-7-4V7l7-4z"></path><circle cx="12" cy="12" r="2.5"></circle></svg></button>
+<input type="text" id="searchBar"
+placeholder="Rechercher..."
+onkeyup="searchAnnonces()">
+<button class="btn-params"
+onclick="ouvrirParametres()">
+<svg width="26" height="26" viewBox="0 0 24 24"
+fill="none" stroke="currentColor"
+stroke-width="1.8">
+<path d="M12 3l7 4v8l-7 4-7-4V7l7-4z"></path>
+<circle cx="12" cy="12" r="2.5"></circle>
+</svg>
+</button>
 </div>
-<div id="annonces"><p style="text-align:center">Chargement...</p></div>
-
+<div id="annonces">
+<p style="text-align:center">Chargement...</p>
+</div>
 <div id="modalProfil"><div class="profil-box">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><h3 style="margin:0">Mon Profil</h3><span onclick="fermerProfil()" style="font-size:26px;cursor:pointer">×</span></div>
-<div style="text-align:center;margin-bottom:15px"><img id="previewProfil" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="width:80px;height:80px;border-radius:50%;border:3px solid #FF8C00;object-fit:cover"></div>
-<label>Photo profil (lien)</label><input id="profilPhotoInput" type="url" placeholder="https://...">
-<label>Nom du vendeur</label><input id="profilNom" type="text" placeholder="Ex: Jean Bosco">
-<label>Nom de l'entreprise</label><input id="profilEntreprise" type="text" placeholder="Ex: JB Shop">
-<label>Tel entreprise</label><input id="profilTel" type="tel" placeholder="Ex: 082...">
-<button onclick="enregistrerProfil()" style="background:#FF8C00;color:white;border:none;padding:14px;width:100%;border-radius:10px;font-weight:bold;margin-top:10px">Enregistrer</button>
-<button onclick="fermerProfil()" style="background:#eee;color:#333;border:none;padding:12px;width:100%;border-radius:10px;font-weight:bold;margin-top:8px">Fermer</button>
+<div style="display:flex;justify-content:space-between;
+align-items:center;margin-bottom:10px">
+<h3 style="margin:0">Mon Profil</h3>
+<span onclick="fermerProfil()"
+style="font-size:26px;cursor:pointer">×</span>
+</div>
+<div style="text-align:center;margin-bottom:15px">
+<img id="previewProfil"
+src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+style="width:80px;height:80px;border-radius:50%;
+border:3px solid #FF8C00;object-fit:cover">
+</div>
+<label>Photo profil (lien)</label>
+<input id="profilPhotoInput" type="url"
+placeholder="https://...">
+<label>Nom du vendeur</label>
+<input id="profilNom" type="text"
+placeholder="Ex: Jean Bosco">
+<label>Nom de l'entreprise</label>
+<input id="profilEntreprise" type="text"
+placeholder="Ex: JB Shop">
+<label>Tel entreprise</label>
+<input id="profilTel" type="tel"
+placeholder="Ex: 082...">
+<button onclick="enregistrerProfil()"
+style="background:#FF8C00;color:white;
+border:none;padding:14px;width:100%;
+border-radius:10px;font-weight:bold;
+margin-top:10px">Enregistrer</button>
+<button onclick="fermerProfil()"
+style="background:#eee;color:#333;
+border:none;padding:12px;width:100%;
+border-radius:10px;font-weight:bold;
+margin-top:8px">Fermer</button>
 </div></div>
-
-<div id="modalSupprimer"><div class="box-sup"><p><b>Supprimer?</b></p><div style="display:flex;gap:10px;margin-top:18px"><button onclick="fermerSupprimer()" style="flex:1;padding:12px;border-radius:8px;border:1px solid #ddd">Non</button><button onclick="confirmerSupprimer()" style="flex:1;padding:12px;border-radius:8px;background:#ff3b30;color:white;border:none;font-weight:bold">Oui</button></div></div></div>
-<div id="modalPartage"><div class="share-box"><h3>Partager</h3><a id="shareWhats" target="_blank" style="display:block;background:#25D366;color:white;padding:12px;border-radius:8px;margin:8px 0;text-decoration:none;font-weight:bold">WhatsApp</a><a id="shareFacebook" target="_blank" style="display:block;background:#1877F2;color:white;padding:12px;border-radius:8px;margin-bottom:8px;text-decoration:none;font-weight:bold">Facebook</a><button onclick="copierLien()" style="display:block;width:100%;background:#eee;color:black;padding:12px;border-radius:8px;border:none;font-weight:bold">Copier lien</button><button onclick="fermerPartage()" style="margin-top:12px;background:#FF8C00;color:white;padding:10px 20px;border-radius:8px;border:none;font-weight:bold;width:100%">Fermer</button></div></div>
-<div id="modalModifier"><div class="edit-box"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px"><h3>Modifier</h3><span onclick="fermerModifier()" style="font-size:26px;cursor:pointer">×</span></div><label>Titre</label><input id="editTitre" type="text"><label>Description</label><textarea id="editDescription" style="height:80px;resize:none"></textarea><div class="row2"><div><label>Prix</label><input id="editPrix" type="number"></div><div><label>Devise</label><select id="editDevise"><option value="FC">FC</option><option value="$">$</option></select></div></div><label>Telephone</label><input id="editTelephone" type="tel"><label>WhatsApp</label><input id="editWhatsapp" type="tel"><button onclick="enregistrerModification()" style="background:#FF8C00;color:white;border:none;padding:14px;width:100%;border-radius:10px;font-weight:bold;margin-top:10px">Enregistrer</button><button onclick="fermerModifier()" style="background:#eee;color:#333;border:none;padding:12px;width:100%;border-radius:10px;font-weight:bold;margin-top:8px">Annuler</button></div></div>
-<div id="modalParametres"><div class="param-box"><div style="display:flex;justify-content:space-between;align-items:center"><h3 style="margin:0">Parametres</h3><span onclick="fermerParametres()" style="font-size:26px;cursor:pointer">×</span></div><div class="param-item"><span>Mode sombre</span><button id="btnToggleTheme" onclick="toggleThemeFromParams()" style="background:#FF8C00;color:white;border:none;padding:8px 14px;border-radius:8px;font-weight:bold">Activer</button></div><button onclick="fermerParametres()" style="background:#eee;color:#333;border:none;padding:12px;width:100%;border-radius:10px;font-weight:bold;margin-top:15px">Fermer</button></div></div>
-<div id="formModal" class="modal"><div class="modal-content"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h2>Publier</h2><span onclick="closeModal()" style="font-size:32px;cursor:pointer">×</span></div><form id="annonceForm"><label>Titre</label><input type="text" name="titre" required><label>Description</label><textarea name="description" required></textarea><div class="row2"><div><label>Prix</label><input type="number" name="prix" required></div><div><label>Devise</label><select name="devise"><option value="FC">FC</option><option value="$">$</option></select></div></div><div class="row2"><div><label>Ville</label><input type="text" name="ville" required></div><div><label>Categorie</label><select name="categorie" required><option value="">Choisir</option><option value="Telephone">Telephone</option><option value="Automobile">Auto</option><option value="Mode">Mode</option><option value="Immobilier">Immo</option><option value="Electronique">Elec</option><option value="Autre">Autre</option></select></div></div><label>Telephone</label><input type="tel" name="telephone" required><label>WhatsApp</label><input type="tel" name="whatsapp"><label>Photo</label><input type="url" name="photo"></form></div><div class="btn-publier-fixed"><button type="submit" form="annonceForm" style="background:#FF8C00;color:white;border:none;padding:18px;width:100%;border-radius:12px;font-weight:bold;font-size:17px">Publier maintenant</button><p id="formMsg" style="text-align:center;margin-top:8px"></p></div></div>
-
-<script>
-const SHEETDB='https://sheetdb.io/api/v1/ulpea3mizvmlt';
-function openModal(){document.getElementById('formModal').style.display='block'}
-function closeModal(){document.getElementById('formModal').style.display='none'}
-function ouvrirProfil(){
-document.getElementById('modalProfil').style.display='flex';
-document.getElementById('profilNom').value=localStorage.getItem('vendeurNom')||'';
-document.getElementById('profilEntreprise').value=localStorage.getItem('entrepriseNom')||'';
-document.getElementById('profilTel').value=localStorage.getItem('entrepriseTel')||'';
-document.getElementById('profilPhotoInput').value=localStorage.getItem('profilPhoto')||'';
-document.getElementById('previewProfil').src=localStorage.getItem('profilPhoto')||'https://cdn-icons-png.flaticon.com/512/149/149071.png';
-}
-function fermerProfil(){document.getElementById('modalProfil').style.display='none';}
-function enregistrerProfil(){
-localStorage.setItem('vendeurNom',document.getElementById('profilNom').value);
-localStorage.setItem('entrepriseNom',document.getElementById('profilEntreprise').value);
-localStorage.setItem('entrepriseTel',document.getElementById('profilTel').value);
-let p=document.getElementById('profilPhotoInput').value;
-if(p) localStorage.setItem('profilPhoto',p);
-document.getElementById('profilAvatar').src=p||'https://cdn-icons-png.flaticon.com/512/149/149071.png';
-alert('Profil enregistre');fermerProfil();
-}
-(function(){
-let p=localStorage.getItem('profilPhoto');
-if(p) document.getElementById('profilAvatar').src=p;
-let inp=document.getElementById('profilPhotoInput');
-if(inp){
-inp.addEventListener('input',function(){
-document.getElementById('previewProfil').src=this.value||'https://cdn-icons-png.flaticon.com/512/149/149071.png';
-});
-}
-})();
-function ouvrirParametres(){document.getElementById('modalParametres').style.display='flex';majBoutonTheme();}
-function fermerParametres(){document.getElementById('modalParametres').style.display='none';}
-function majBoutonTheme(){
-let b=document.getElementById('btnToggleTheme');
-if(document.body.classList.contains('dark')){b.textContent='Desactiver';b.style.background='#333';}
-else{b.textContent='Activer';b.style.background='#FF8C00';}
-}
-function toggleThemeFromParams(){
-document.body.classList.toggle('dark');
-localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light');
-majBoutonTheme();
-}
-let toutesAnnonces=[];
-let lienPartage="";
-let indexAEditer=-1;
-function partagerAnnonce(btn){
-let card=btn.closest('.annonce-card');
-let titre=card.querySelector('h3')?.innerText||'Annonce';
-lienPartage=window.location.href;
-let texte=encodeURIComponent(titre+" sur VYLO-CD - "+lienPartage);
-document.getElementById('shareWhats').href="https://wa.me/?text="+texte;
-document.getElementById('shareFacebook').href="https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(lienPartage);
-document.getElementById('modalPartage').style.display='flex';
-}
-function fermerPartage(){document.getElementById('modalPartage').style.display='none';}
-function copierLien(){navigator.clipboard.writeText(lienPartage);alert('Lien copie');fermerPartage();}
-function ouvrirModifier(btn){
-let card=btn.closest('.annonce-card');
-let idx=parseInt(card.dataset.index);
-indexAEditer=idx;
-let item=toutesAnnonces[idx];
-document.getElementById('editTitre').value=item.titre||'';
-document.getElementById('editDescription').value=item.description||'';
-document.getElementById('editPrix').value=item.prix||'';
-document.getElementById('editDevise').value=item.devise||'FC';
-document.getElementById('editTelephone').value=item.telephone||'';
-document.getElementById('editWhatsapp').value=item.whatsapp||'';
-document.getElementById('modalModifier').style.display='flex';
-}
-function fermerModifier(){document.getElementById('modalModifier').style.display='none';}
-function enregistrerModification(){
-if(indexAEditer<0) return;
-let it=toutesAnnonces[indexAEditer];
-it.titre=document.getElementById('editTitre').value;
-it.description=document.getElementById('editDescription').value;
-it.prix=document.getElementById('editPrix').value;
-it.devise=document.getElementById('editDevise').value;
-it.telephone=document.getElementById('editTelephone').value;
-it.whatsapp=document.getElementById('editWhatsapp').value;
-afficherAnnonces(toutesAnnonces);
-fermerModifier();
-alert('Modifie');
-}
-async function fetchAnnonces(){
-let c=document.getElementById('annonces');
-try{
-let r=await fetch(SHEETDB);
-let d=await r.json();
-toutesAnnonces=d.filter(x=>x.titre);
-afficherAnnonces(toutesAnnonces);
-}catch(e){c.innerHTML='Erreur:'+e.message}
-}
-function afficherAnnonces(list){
-let c=document.getElementById('annonces');
-if(list.length==0){c.innerHTML='<p style="text-align:center">Aucune annonce</p>';return;}
-c.innerHTML='';
-let rev=list.slice().reverse();
-rev.forEach(function(item,rIdx){
-let idx=list.length-1-rIdx;
-let div=document.createElement('div');
-div.className='annonce-card';
-div.dataset.index=idx;
-let photo=item.photo?'<img class="annonce-photo" src="'+item.photo+'">':'';
-let wa=item.whatsapp?'<a href="https://wa.me/'+item.whatsapp+'" target="_blank" style="background:#25D366;width:42px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:white;text-decoration:none">W</a>':'';
-let htmlCard='';
-htmlCard+='<div class="annonce-header"><small>'+(item.date||'')+'</small>';
-htmlCard+='<div class="right-actions">';
-htmlCard+='<button class="edit-btn" onclick="ouvrirModifier(this)">E</button>';
-htmlCard+='<button class="share-btn" onclick="partagerAnnonce(this)">S</button>';
-htmlCard+='<div style="position:relative">';
-htmlCard+='<button class="seller-menu-btn" onclick="toggleMenu(this)">:</button>';
-htmlCard+='<div class="seller-menu"><button onclick="ouvrirSupprimer(this)" style="color:#ff3b30">Supprimer</button></div>';
-htmlCard+='</div></div></div>';
-htmlCard+=photo;
-htmlCard+='<div class="annonce-infos"><h3>'+item.titre+'</h3>';
-htmlCard+='<p style="color:#FFA500;font-weight:800;font-size:20px">'+item.prix+' '+item.devise+'</p>';
-htmlCard+='<p>'+item.description+'</p>';
-htmlCard+='<p style="font-size:13px"><b>'+item.ville+'</b> | '+item.categorie+'</p>';
-htmlCard+='<div style="display:flex;gap:10px;margin-top:12px">';
-htmlCard+='<a href="tel:'+item.telephone+'" style="background:#0B7E2E;color:white;padding:8px 16px;border-radius:6px;text-decoration:none;font-weight:bold">Appeler</a>';
-htmlCard+=wa;
-htmlCard+='</div></div>';
-div.innerHTML=htmlCard;
-c.appendChild(div);
-});
-}
-function searchAnnonces(){
-let q=document.getElementById('searchBar').value.toLowerCase();
-let f=toutesAnnonces.filter(i=>(i.titre+i.description+i.ville).toLowerCase().includes(q));
-afficherAnnonces(f);
-}
-function toggleMenu(b){
-document.querySelectorAll('.seller-menu').forEach(m=>{if(m!==b.nextElementSibling)m.classList.remove('show')});
-b.nextElementSibling.classList.toggle('show');
-}
-let carteASupprimer=null;
-function ouvrirSupprimer(b){carteASupprimer=b.closest('.annonce-card');document.getElementById('modalSupprimer').style.display='flex';b.closest('.seller-menu').classList.remove('show');}
-function fermerSupprimer(){document.getElementById('modalSupprimer').style.display='none';carteASupprimer=null;}
-function confirmerSupprimer(){if(carteASupprimer)carteASupprimer.remove();fermerSupprimer();}
-document.getElementById('annonceForm').addEventListener('submit',async(e)=>{
-e.preventDefault();
-let msg=document.getElementById('formMsg');
-msg.innerText='En cours...';
-let data=Object.fromEntries(new FormData(e.target).entries());
-data.date=new Date().toLocaleString('fr-FR');
-data.vendeur=localStorage.getItem('vendeurNom')||'';
-data.entreprise=localStorage.getItem('entrepriseNom')||'';
-try{
-let r=await fetch(SHEETDB,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:[data]})});
-if(r.ok){msg.innerText='Publiee';e.target.reset();setTimeout(()=>{closeModal();fetchAnnonces();msg.innerText=''},1200);}
-else msg.innerText='Erreur';
-}catch(err){msg.innerText=err.message}
-});
-fetchAnnonces();
-if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark');}
-</script>
-</body>
-                                                                                                                                                                                                                                                                                                                                                         </html>
+<div id="modalSupprimer"><div class="box-sup">
+<p><b>Supprimer?</b></p>
+<div style="display:flex;gap:10px;margin-top:18px">
+<button onclick="fermerSupprimer()"
+style="flex:1;padding:12px;border-radius:8px;
+border:1px solid #ddd">Non</button>
+<button onclick="confirmerSupprimer()"
+style="flex:1;padding:12px;border-radius:8px;
+background:#ff3b30;color:white;
+border:none;font-weight:bold">Oui</button>
+</div></div></div>
+<div id="modalPartage"><div class="share-box">
+<h3>Partager</h3>
+<a id="shareWhats" target="_blank"
+style="display:block;background:#25D366;
+color:white;padding:12px;border-radius:8px;
+margin:8px 0;text-decoration:none;
+font-weight:bold">WhatsApp</a>
+<a id="shareFacebook" target="_blank"
+style="display:block;background:#1877F2;
+color:white;padding:12px;border-radius:8px;
+margin-bottom:8px;text-decoration:none;
+font-weight:bold">Facebook</a>
+<button onclick="copierLien()"
+style="display:block;width:100%;
+background:#eee;color:black;
+padding:12px;border-radius:8px;
+border:none;font-weight:bold">Copier lien</button>
+<button onclick="fermerPartage()"
+style="margin-top:12px;background:#FF8C00;
+color:white;padding:10px 20px;
+border-radius:8px;border:none;
+font-weight:bold;width:100%">Fermer</button>
+</div></div>
+<div id="modalModifier"><div class="edit-box">
+<div style="display:flex;justify-content:space-between;
+align-items:center;margin-bottom:15px">
+<h3>Modifier</h3>
+<span onclick="fermerModifier()"
+style="font-size:26px;cursor:pointer">×</span>
+</div>
+<label>Titre</label><input id="editTitre" type="text">
+<label>Description</label>
+<textarea id="editDescription"
+style="height:80px;resize:none"></textarea>
+<div class="row2"><div>
+<label>Prix</label><input id="editPrix" type="number">
+</div><div>
+<label>Devise</label>
+<select id="editDevise">
+<option value="FC">FC</option>
+<option value="$">$</option>
+</select></div></div>
+<label>Telephone</label>
+<input id="editTelephone" type="tel">
+<label>WhatsApp</label>
+<input id="editWhatsapp" type="tel">
+<button onclick="enregistrerModification()"
+style="background:#FF8C00;color:white;
+border:none;padding:14px;width:100%;
+border-radius:10px;font-weight:bold;
+margin-top:10px">Enregistrer</button>
+<button onclick="fermerModifier()"
+style="background:#eee;color:#333;
+border:none;padding:12px;width:100%;
+border-radius:10px;font-weight:bold;
+margin-top:8px">Annuler</button>
+</div></div>
+<div id="modalParametres"><div class="param-box">
+<div style="display:flex;justify-content:space-between;
+align-items:center">
+<h3 style="margin:0">Parametres</h3>
+<span onclick="fermerParametres()"
+style="font-size:26px;cursor:pointer">×</span>
+</div>
+<div class="param-item">
+<span>Mode sombre</span>
+<button id="btnToggleTheme"
+onclick="toggleThemeFromParams()"
+style="background:#FF8C00;color:white;
+border:none;padding:8px 14px;
+border-radius:8px;font-weight:bold">Activer</button>
+</div>
+<button onclick="fermerParametres()"
+style="background:#eee;color:#333;
+border:none;padding:12px;width:100%;
+border-radius:10px;font-weight:bold;
+margin-top:15px">Fermer</button>
+</div></div>
