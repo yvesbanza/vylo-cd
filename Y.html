@@ -386,14 +386,33 @@ let indexAEditer=-1;
 function partagerAnnonce(btn){
 let card=btn.closest('.annonce-card');
 let titre=card.querySelector('h3')?.innerText||'Annonce';
+let desc=card.querySelector('.annonce-infos p')?.innerText||'';
 lienPartage=window.location.href;
-let texte=encodeURIComponent(titre+" sur VYLO-CD - "+lienPartage);
+let textePartage=titre+" sur VYLO-CD "+lienPartage;
+let texte=encodeURIComponent(textePartage);
+// prepare les liens pour le tableau 2
 document.getElementById('shareWhats').href=
 "https://wa.me/?text="+texte;
 document.getElementById('shareFacebook').href=
 "https://www.facebook.com/sharer/sharer.php?u="+
 encodeURIComponent(lienPartage);
+// 1. essaye d'abord le tableau natif (capture 1)
+if(navigator.share){
+navigator.share({
+title:titre,
+text:textePartage,
+url:lienPartage
+}).then(()=>{
+// partage reussi, on ne montre rien d'autre
+}).catch((err)=>{
+// utilisateur a clique a cote ou annule
+// on montre le tableau 2 (capture 2)
 document.getElementById('modalPartage').style.display='flex';
+});
+}else{
+// pas de partage natif, montre direct tableau 2
+document.getElementById('modalPartage').style.display='flex';
+}
 }
 function fermerPartage(){
 document.getElementById('modalPartage').style.display='none';}
