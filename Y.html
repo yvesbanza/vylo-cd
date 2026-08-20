@@ -298,3 +298,274 @@ border:none;padding:12px;width:100%;
 border-radius:10px;font-weight:bold;
 margin-top:15px">Fermer</button>
 </div></div>
+<div id="formModal" class="modal">
+<div class="modal-content">
+<div style="display:flex;justify-content:space-between;
+align-items:center;margin-bottom:20px">
+<h2>Publier</h2>
+<span onclick="closeModal()"
+style="font-size:32px;cursor:pointer">×</span>
+</div>
+<form id="annonceForm">
+<label>Titre</label>
+<input type="text" name="titre" required>
+<label>Description</label>
+<textarea name="description" required></textarea>
+<div class="row2"><div>
+<label>Prix</label>
+<input type="number" name="prix" required>
+</div><div>
+<label>Devise</label>
+<select name="devise">
+<option value="FC">FC</option>
+<option value="$">$</option>
+</select></div></div>
+<div class="row2"><div>
+<label>Ville</label>
+<input type="text" name="ville" required>
+</div><div>
+<label>Categorie</label>
+<select name="categorie" required>
+<option value="">Choisir</option>
+<option value="Telephone">Telephone</option>
+<option value="Automobile">Auto</option>
+<option value="Mode">Mode</option>
+<option value="Immobilier">Immo</option>
+<option value="Electronique">Elec</option>
+<option value="Autre">Autre</option>
+</select></div></div>
+<label>Telephone</label>
+<input type="tel" name="telephone" required>
+<label>WhatsApp</label>
+<input type="tel" name="whatsapp">
+<label>Photo</label>
+<input type="url" name="photo">
+</form></div>
+<div class="btn-publier-fixed">
+<button type="submit" form="annonceForm"
+style="background:#FF8C00;color:white;
+border:none;padding:18px;width:100%;
+border-radius:12px;font-weight:bold;
+font-size:17px">Publier maintenant</button>
+<p id="formMsg"
+style="text-align:center;margin-top:8px"></p>
+</div></div>
+<script>
+const SHEETDB='https://sheetdb.io/api/v1/ulpea3mizvmlt';
+function openModal(){
+document.getElementById('formModal').style.display='block'}
+function closeModal(){
+document.getElementById('formModal').style.display='none'}
+function ouvrirProfil(){
+document.getElementById('modalProfil').style.display='flex';
+document.getElementById('profilNom').value=
+localStorage.getItem('vendeurNom')||'';
+document.getElementById('profilEntreprise').value=
+localStorage.getItem('entrepriseNom')||'';
+document.getElementById('profilTel').value=
+localStorage.getItem('entrepriseTel')||'';
+document.getElementById('profilPhotoInput').value=
+localStorage.getItem('profilPhoto')||'';
+document.getElementById('previewProfil').src=
+localStorage.getItem('profilPhoto')||
+'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+}
+function fermerProfil(){
+document.getElementById('modalProfil').style.display='none';}
+function enregistrerProfil(){
+localStorage.setItem('vendeurNom',
+document.getElementById('profilNom').value);
+localStorage.setItem('entrepriseNom',
+document.getElementById('profilEntreprise').value);
+localStorage.setItem('entrepriseTel',
+document.getElementById('profilTel').value);
+let p=document.getElementById('profilPhotoInput').value;
+if(p) localStorage.setItem('profilPhoto',p);
+document.getElementById('profilAvatar').src=p||
+'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+alert('Profil enregistre');fermerProfil();
+}
+(function(){
+let p=localStorage.getItem('profilPhoto');
+if(p) document.getElementById('profilAvatar').src=p;
+let inp=document.getElementById('profilPhotoInput');
+if(inp){
+inp.addEventListener('input',function(){
+document.getElementById('previewProfil').src=
+this.value||
+'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+});}
+})();
+function ouvrirParametres(){
+document.getElementById('modalParametres').style.display='flex';
+majBoutonTheme();}
+function fermerParametres(){
+document.getElementById('modalParametres').style.display='none';}
+function majBoutonTheme(){
+let b=document.getElementById('btnToggleTheme');
+if(document.body.classList.contains('dark')){
+b.textContent='Desactiver';b.style.background='#333';}
+else{b.textContent='Activer';b.style.background='#FF8C00';}
+}
+function toggleThemeFromParams(){
+document.body.classList.toggle('dark');
+localStorage.setItem('theme',
+document.body.classList.contains('dark')?'dark':'light');
+majBoutonTheme();
+}
+let toutesAnnonces=[];
+let lienPartage="";
+let indexAEditer=-1;
+function partagerAnnonce(btn){
+let card=btn.closest('.annonce-card');
+let titre=card.querySelector('h3')?.innerText||'Annonce';
+lienPartage=window.location.href;
+let texte=encodeURIComponent(titre+" sur VYLO-CD - "+lienPartage);
+document.getElementById('shareWhats').href=
+"https://wa.me/?text="+texte;
+document.getElementById('shareFacebook').href=
+"https://www.facebook.com/sharer/sharer.php?u="+
+encodeURIComponent(lienPartage);
+document.getElementById('modalPartage').style.display='flex';
+}
+function fermerPartage(){
+document.getElementById('modalPartage').style.display='none';}
+function copierLien(){
+navigator.clipboard.writeText(lienPartage);
+alert('Lien copie');fermerPartage();}
+function ouvrirModifier(btn){
+let card=btn.closest('.annonce-card');
+let idx=parseInt(card.dataset.index);
+indexAEditer=idx;
+let item=toutesAnnonces[idx];
+document.getElementById('editTitre').value=item.titre||'';
+document.getElementById('editDescription').value=item.description||'';
+document.getElementById('editPrix').value=item.prix||'';
+document.getElementById('editDevise').value=item.devise||'FC';
+document.getElementById('editTelephone').value=item.telephone||'';
+document.getElementById('editWhatsapp').value=item.whatsapp||'';
+document.getElementById('modalModifier').style.display='flex';
+}
+function fermerModifier(){
+document.getElementById('modalModifier').style.display='none';}
+function enregistrerModification(){
+if(indexAEditer<0) return;
+let it=toutesAnnonces[indexAEditer];
+it.titre=document.getElementById('editTitre').value;
+it.description=document.getElementById('editDescription').value;
+it.prix=document.getElementById('editPrix').value;
+it.devise=document.getElementById('editDevise').value;
+it.telephone=document.getElementById('editTelephone').value;
+it.whatsapp=document.getElementById('editWhatsapp').value;
+afficherAnnonces(toutesAnnonces);
+fermerModifier();alert('Modifie');
+}
+async function fetchAnnonces(){
+let c=document.getElementById('annonces');
+try{
+let r=await fetch(SHEETDB);
+let d=await r.json();
+toutesAnnonces=d.filter(x=>x.titre);
+afficherAnnonces(toutesAnnonces);
+}catch(e){c.innerHTML='Erreur:'+e.message}
+}
+function afficherAnnonces(list){
+let c=document.getElementById('annonces');
+if(list.length==0){
+c.innerHTML='<p style="text-align:center">Aucune annonce</p>';
+return;}
+c.innerHTML='';
+let rev=list.slice().reverse();
+rev.forEach((item,revIdx)=>{
+let idx=list.length-1-revIdx;
+let d=document.createElement('div');
+d.className='annonce-card';
+d.dataset.index=idx;
+let photo='';
+if(item.photo){
+photo='<img class="annonce-photo" src="'+item.photo+'">';
+}
+let wa='';
+if(item.whatsapp){
+wa='<a href="https://wa.me/'+item.whatsapp+
+'" target="_blank" style="background:#25D366;'+
+'width:42px;height:38px;border-radius:8px;'+
+'display:flex;align-items:center;'+
+'justify-content:center;color:white;'+
+'text-decoration:none">W</a>';
+}
+let h='';
+h+='<div class="annonce-header">';
+h+='<small>'+(item.date||'')+'</small>';
+h+='<div class="right-actions">';
+h+='<button class="edit-btn" onclick="ouvrirModifier(this)">E</button>';
+h+='<button class="share-btn" onclick="partagerAnnonce(this)">S</button>';
+h+='<div style="position:relative">';
+h+='<button class="seller-menu-btn" onclick="toggleMenu(this)">:</button>';
+h+='<div class="seller-menu">';
+h+='<button onclick="ouvrirSupprimer(this)" style="color:#ff3b30">Supprimer</button>';
+h+='</div></div></div></div>';
+h+=photo;
+h+='<div class="annonce-infos">';
+h+='<h3>'+item.titre+'</h3>';
+h+='<p style="color:#FFA500;font-weight:800;font-size:20px">'+item.prix+' '+item.devise+'</p>';
+h+='<p>'+item.description+'</p>';
+h+='<p style="font-size:13px"><b>'+item.ville+'</b> | '+item.categorie+'</p>';
+h+='<div style="display:flex;gap:10px;margin-top:12px">';
+h+='<a href="tel:'+item.telephone+
+'" style="background:#0B7E2E;color:white;'+
+'padding:8px 16px;border-radius:6px;'+
+'text-decoration:none;font-weight:bold">Appeler</a>';
+h+=wa;
+h+='</div></div>';
+d.innerHTML=h;
+c.appendChild(d);
+});
+}
+function searchAnnonces(){
+let q=document.getElementById('searchBar').value.toLowerCase();
+let f=toutesAnnonces.filter(i=>
+(i.titre+i.description+i.ville).toLowerCase().includes(q));
+afficherAnnonces(f);
+}
+function toggleMenu(b){
+document.querySelectorAll('.seller-menu').forEach(m=>{
+if(m!==b.nextElementSibling) m.classList.remove('show')});
+b.nextElementSibling.classList.toggle('show');
+}
+let carteASupprimer=null;
+function ouvrirSupprimer(b){
+carteASupprimer=b.closest('.annonce-card');
+document.getElementById('modalSupprimer').style.display='flex';
+b.closest('.seller-menu').classList.remove('show');}
+function fermerSupprimer(){
+document.getElementById('modalSupprimer').style.display='none';
+carteASupprimer=null;}
+function confirmerSupprimer(){
+if(carteASupprimer) carteASupprimer.remove();
+fermerSupprimer();}
+document.getElementById('annonceForm').addEventListener('submit',async(e)=>{
+e.preventDefault();
+let msg=document.getElementById('formMsg');
+msg.innerText='En cours...';
+let data=Object.fromEntries(new FormData(e.target).entries());
+data.date=new Date().toLocaleString('fr-FR');
+data.vendeur=localStorage.getItem('vendeurNom')||'';
+data.entreprise=localStorage.getItem('entrepriseNom')||'';
+try{
+let r=await fetch(SHEETDB,{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({data:[data]})});
+if(r.ok){
+msg.innerText='Publiee';e.target.reset();
+setTimeout(()=>{closeModal();fetchAnnonces();msg.innerText=''},1200);
+}else msg.innerText='Erreur';
+}catch(err){msg.innerText=err.message}
+});
+fetchAnnonces();
+if(localStorage.getItem('theme')==='dark'){
+document.body.classList.add('dark');}
+</script>
+</body>
+  </html>
