@@ -26,53 +26,43 @@ top:0;z-index:100;gap:10px}
 .logo-left{height:42px;border-radius:8px}
 .header-center{flex:1;text-align:center;
 color:white;font-size:20px;font-weight:bold}
-.profil-avatar{
-width:42px;height:42px;border-radius:50%;
-border:2px solid white;object-fit:cover;
-background:white;cursor:pointer}
-.btn-publier{
-background:var(--header-bg);color:white;
+.profil-avatar{width:42px;height:42px;
+border-radius:50%;border:2px solid white;
+object-fit:cover;background:white;cursor:pointer}
+.btn-publier{background:var(--header-bg);color:white;
 border:none;padding:14px;
 width:calc(100% - 30px);margin:15px;
 border-radius:12px;font-weight:bold;
 font-size:16px;cursor:pointer}
-.search-row{
-display:flex;gap:8px;padding:0 15px;
+.search-row{display:flex;gap:8px;padding:0 15px;
 margin-bottom:15px;align-items:center}
-#searchBar{flex:1;padding:14px;
-border-radius:12px;
+#searchBar{flex:1;padding:14px;border-radius:12px;
 border:1px solid var(--border-color);
 background:var(--input-bg);color:var(--text-color)}
-.btn-params{
-background:var(--card-bg);
+.btn-params{background:var(--card-bg);
 border:1px solid var(--border-color);
 width:48px;height:48px;border-radius:12px;
 display:flex;align-items:center;
 justify-content:center;cursor:pointer}
 #annonces{width:100%;padding:0 15px 20px 15px;
 display:grid;gap:15px}
-.annonce-card{
-background:var(--card-bg);border-radius:16px;
+.annonce-card{background:var(--card-bg);border-radius:16px;
 overflow:hidden;border:1px solid var(--border-color);
 position:relative}
 .annonce-card img.annonce-photo{
 width:100%;aspect-ratio:1.6/1;
 object-fit:contain;background:#fff;
-display:block;
-border-bottom:1px solid var(--border-color)}
+display:block;border-bottom:1px solid var(--border-color)}
 .annonce-infos{padding:12px 14px}
-.annonce-header{
-display:flex;justify-content:space-between;
+.annonce-header{display:flex;justify-content:space-between;
 align-items:center;padding:10px 14px 0 14px}
 .right-actions{display:flex;align-items:center;gap:6px}
-.share-btn{background:#F0F0F0;border:none;
-border-radius:10px;cursor:pointer;
-width:34px;height:34px;display:flex;
-align-items:center;justify-content:center}
-.edit-btn{background:#FFF4E5;border:none;
-border-radius:10px;cursor:pointer;
-width:34px;height:34px;display:flex;
-align-items:center;justify-content:center}
+.share-btn{background:#F0F0F0;border:none;border-radius:10px;
+cursor:pointer;width:34px;height:34px;
+display:flex;align-items:center;justify-content:center}
+.edit-btn{background:#FFF4E5;border:none;border-radius:10px;
+cursor:pointer;width:34px;height:34px;
+display:flex;align-items:center;justify-content:center}
 .seller-menu-btn{background:#F0F0F0;border:none;
 font-size:20px;cursor:pointer;color:#444;
 width:34px;height:34px;border-radius:10px;
@@ -83,22 +73,21 @@ z-index:9999;overflow-y:auto}
 .modal-content{background:var(--card-bg);width:100%;
 min-height:100vh;padding:20px 15px 0 15px;
 display:flex;flex-direction:column}
-#annonceForm{flex:1;display:flex;
-flex-direction:column;padding-bottom:120px}
+#annonceForm{flex:1;display:flex;flex-direction:column;
+padding-bottom:120px}
 .btn-publier-fixed{position:fixed;bottom:0;left:0;right:0;
 background:var(--card-bg);padding:15px;
 box-shadow:0 -4px 20px rgba(0,0,0,0.15);
 z-index:20;border-top:1px solid var(--border-color)}
 #modalSupprimer,#modalPartage,#modalModifier,
-#modalParametres,#modalProfil{
-display:none;position:fixed;inset:0;
-background:rgba(0,0,0,0.6);z-index:10000;
-justify-content:center;align-items:center}
+#modalParametres,#modalProfil{display:none;
+position:fixed;inset:0;background:rgba(0,0,0,0.6);
+z-index:10000;justify-content:center;align-items:center}
 .box-sup,.share-box,.edit-box,.param-box,.profil-box{
 background:var(--card-bg);padding:22px;
 border-radius:14px;max-width:360px;width:92%}
-.edit-box,.param-box,.profil-box{
-text-align:left;max-height:90vh;overflow-y:auto}
+.edit-box,.param-box,.profil-box{text-align:left;
+max-height:90vh;overflow-y:auto}
 .param-item{display:flex;justify-content:space-between;
 align-items:center;padding:12px 0;
 border-bottom:1px solid var(--border-color)}
@@ -195,7 +184,7 @@ background:#ff3b30;color:white;border:none;
 font-weight:bold">Oui</button>
 </div></div></div>
 <div id="modalPartage"><div class="share-box">
-<h3>Partager</h3>
+<h3>Partager cette annonce</h3>
 <a id="shareWhats" target="_blank"
 style="display:block;background:#25D366;
 color:white;padding:12px;border-radius:8px;
@@ -209,7 +198,7 @@ font-weight:bold">Facebook</a>
 <button onclick="copierLien()"
 style="display:block;width:100%;background:#eee;
 color:black;padding:12px;border-radius:8px;
-border:none;font-weight:bold">Copier lien</button>
+border:none;font-weight:bold">Copier le lien</button>
 <button onclick="fermerPartage()"
 style="margin-top:12px;background:#FF8C00;
 color:white;padding:10px 20px;border-radius:8px;
@@ -386,31 +375,23 @@ let indexAEditer=-1;
 function partagerAnnonce(btn){
 let card=btn.closest('.annonce-card');
 let titre=card.querySelector('h3')?.innerText||'Annonce';
-let desc=card.querySelector('.annonce-infos p')?.innerText||'';
 lienPartage=window.location.href;
 let textePartage=titre+" sur VYLO-CD "+lienPartage;
 let texte=encodeURIComponent(textePartage);
-// prepare les liens pour le tableau 2
 document.getElementById('shareWhats').href=
 "https://wa.me/?text="+texte;
 document.getElementById('shareFacebook').href=
 "https://www.facebook.com/sharer/sharer.php?u="+
 encodeURIComponent(lienPartage);
-// 1. essaye d'abord le tableau natif (capture 1)
 if(navigator.share){
 navigator.share({
 title:titre,
 text:textePartage,
 url:lienPartage
-}).then(()=>{
-// partage reussi, on ne montre rien d'autre
-}).catch((err)=>{
-// utilisateur a clique a cote ou annule
-// on montre le tableau 2 (capture 2)
+}).then(()=>{}).catch(()=>{
 document.getElementById('modalPartage').style.display='flex';
 });
 }else{
-// pas de partage natif, montre direct tableau 2
 document.getElementById('modalPartage').style.display='flex';
 }
 }
