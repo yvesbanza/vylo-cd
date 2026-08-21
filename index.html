@@ -583,3 +583,75 @@ d.innerHTML=h;
 c.appendChild(d);
 });
   }
+function searchAnnonces(){
+let q=document.getElementById('searchBar').value.toLowerCase();
+let f=toutesAnnonces.filter(i=>
+(i.titre+i.description+i.ville).toLowerCase().includes(q));
+afficherAnnonces(f);
+}
+function toggleMenu(b){
+document.querySelectorAll('.seller-menu').forEach(m=>{
+if(m!==b.nextElementSibling) m.classList.remove('show')});
+b.nextElementSibling.classList.toggle('show');
+}
+let carteASupprimer=null;
+function ouvrirSupprimer(b){
+carteASupprimer=b.closest('.annonce-card');
+document.getElementById('modalSupprimer').style.display='flex';
+b.closest('.seller-menu').classList.remove('show');}
+function fermerSupprimer(){
+document.getElementById('modalSupprimer').style.display='none';
+carteASupprimer=null;}
+function confirmerSupprimer(){
+if(carteASupprimer) carteASupprimer.remove();
+fermerSupprimer();}
+document.getElementById('annonceForm').addEventListener('submit',
+async(e)=>{
+e.preventDefault();
+let msg=document.getElementById('formMsg');
+msg.innerText='En cours...';
+let data=Object.fromEntries(new FormData(e.target).entries());
+data.date=new Date().toLocaleString('fr-FR');
+data.vendeur=localStorage.getItem('vendeurNom')||'';
+data.entreprise=localStorage.getItem('entrepriseNom')||'';
+try{
+let r=await fetch(SHEETDB,{
+method:'POST',
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({data:[data]})});
+if(r.ok){
+msg.innerText='Publiee';e.target.reset();
+setTimeout(()=>{closeModal();fetchAnnonces();
+msg.innerText=''},1200);
+}else{msg.innerText='Erreur';}
+}catch(err){msg.innerText=err.message}
+});
+fetchAnnonces();
+if(localStorage.getItem('theme')==='dark'){
+document.body.classList.add('dark');}
+  function ouvrirMenuPhoto(){document.getElementById('modalPhotoChoix').style.display='flex';}
+function fermerMenuPhoto(){document.getElementById('modalPhotoChoix').style.display='none';}
+function prendreCamera(){document.getElementById('inputCamera').click();}
+function ouvrirGalerie(){document.getElementById('inputGalerie').click();}
+function changerPhotoFichier(input){
+if(input.files&&input.files[0]){
+let r=new FileReader();
+r.onload=function(e){
+localStorage.setItem('profilPhoto',e.target.result);
+document.getElementById('previewProfil').src=e.target.result;
+let av=document.getElementById('profilAvatar');
+if(av) av.src=e.target.result;
+fermerMenuPhoto();
+};r.readAsDataURL(input.files[0]);
+}}
+function supprimerPhotoProfil(){
+localStorage.removeItem('profilPhoto');
+let d='https://cdn-icons-png.flaticon.com/512/149/149071.png';
+document.getElementById('previewProfil').src=d;
+let av=document.getElementById('profilAvatar');
+if(av) av.src=d;
+fermerMenuPhoto();
+  }
+</script>
+</body>
+  </html>
