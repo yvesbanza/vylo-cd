@@ -597,6 +597,29 @@ msg.innerText=''},1200);
 fetchAnnonces();
 if(localStorage.getItem('theme')==='dark'){
 document.body.classList.add('dark');}
+  function ouvrirMenuPhoto(){document.getElementById('modalPhotoChoix').style.display='flex';}
+function fermerMenuPhoto(){document.getElementById('modalPhotoChoix').style.display='none';}
+function prendreCamera(){document.getElementById('inputCamera').click();}
+function ouvrirGalerie(){document.getElementById('inputGalerie').click();}
+function changerPhotoFichier(input){
+if(input.files&&input.files[0]){
+let r=new FileReader();
+r.onload=function(e){
+localStorage.setItem('profilPhoto',e.target.result);
+document.getElementById('previewProfil').src=e.target.result;
+let av=document.getElementById('profilAvatar');
+if(av) av.src=e.target.result;
+fermerMenuPhoto();
+};r.readAsDataURL(input.files[0]);
+}}
+function supprimerPhotoProfil(){
+localStorage.removeItem('profilPhoto');
+let d='https://cdn-icons-png.flaticon.com/512/149/149071.png';
+document.getElementById('previewProfil').src=d;
+let av=document.getElementById('profilAvatar');
+if(av) av.src=d;
+fermerMenuPhoto();
+  }
 </script>
 </body>
   </html>
