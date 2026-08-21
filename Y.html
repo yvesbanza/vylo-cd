@@ -178,25 +178,36 @@ fill="none" stroke="currentColor" stroke-width="1.8">
 <div id="annonces">
 <p style="text-align:center">Chargement...</p>
 </div>
-<div id="modalProfil" style="display:none;position:fixed;inset:0;z-index:10000;background:#111;overflow-y:auto">
-<div style="background:#111;min-height:100vh;color:white">
-<div style="display:flex;align-items:center;gap:20px;padding:15px;background:#111">
-<button onclick="fermerProfil()" style="background:none;border:none;color:white;font-size:24px">←</button>
-<span style="font-size:20px">Mon Profil</span>
+<div id="modalProfil" style="display:none;position:fixed;inset:0;z-index:10000;background:#111;flex-direction:column;overflow:auto">
+<!-- HEADER -->
+<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 15px;background:#202020">
+<button onclick="fermerModal('modalProfil')" style="background:none;border:none;color:white;font-size:24px">←</button>
+<div style="display:flex;gap:25px"><span style="font-size:24px;color:white">☆</span><span style="font-size:24px;color:white">⋮</span></div>
 </div>
-<div style="position:relative;width:150px;height:150px;margin:25px auto">
-<img id="previewProfil" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="width:150px;height:150px;border-radius:50%;object-fit:cover">
-<button onclick="ouvrirMenuPhoto()" style="position:absolute;bottom:5px;right:5px;width:48px;height:48px;border-radius:50%;background:#25D366;border:none;display:flex;align-items:center;justify-content:center">
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-</button>
+
+<!-- PHOTO -->
+<div style="display:flex;justify-content:center;padding:15px 0;background:#111">
+<div style="position:relative;width:160px;height:160px">
+<img id="previewProfil" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="width:160px;height:160px;border-radius:50%;object-fit:cover;background:#3a4553">
+<button onclick="ouvrirMenuPhoto()" style="position:absolute;bottom:0;right:0;width:50px;height:50px;border-radius:50%;background:#00a884;border:none;display:flex;align-items:center;justify-content:center;font-size:22px">📷</button>
 </div>
-<div style="padding:0 20px;width:100%;box-sizing:border-box;display:flex;flex-direction:column;align-items:flex-start;text-align:left">
-<div onclick="editerChamp('nom')" style="width:100%;display:flex;gap:20px;padding:18px 0;border-bottom:1px solid #222;align-items:center;text-align:left"><span style="color:#666;font-size:22px">👤</span><div style="text-align:left"><div style="color:#999">Nom</div><div id="affNom" style="font-size:17px;margin-top:3px;color:white;text-align:left">Définir le nom</div></div></div>
-<div style="width:100%;display:flex;gap:20px;padding:18px 0;border-bottom:1px solid #222;align-items:center;text-align:left"><span style="color:#666">ⓘ</span><div style="text-align:left"><div style="color:#999">Infos</div><div style="color:#25D366;margin-top:3px;text-align:left">Définir les infos</div></div></div>
-<div onclick="editerChamp('entreprise')" style="width:100%;display:flex;gap:20px;padding:18px 0;border-bottom:1px solid #222;align-items:center;text-align:left"><span style="color:#666;font-size:24px">@</span><div style="text-align:left"><div style="color:#999">Nom de profil</div><div id="affEntreprise" style="color:#25D366;margin-top:3px;text-align:left">Réserver un nom de profil</div></div></div>
-<div onclick="editerChamp('tel')" style="width:100%;display:flex;gap:20px;padding:18px 0;border-bottom:1px solid #222;align-items:center;text-align:left"><span style="color:#666;font-size:22px">📞</span><div style="text-align:left"><div style="color:#999">Téléphone</div><div id="affTel" style="color:white;margin-top:3px;text-align:left">Ajouter un numéro</div></div></div>
-<div onclick="editerChamp('adresse')" style="width:100%;display:flex;gap:20px;padding:18px 0;align-items:center;text-align:left"><span style="color:#666;font-size:22px">📍</span><div style="text-align:left"><div style="color:#999">Adresse</div><div id="affAdresse" style="color:#25D366;margin-top:3px;text-align:left">Ajouter une adresse</div></div></div>
 </div>
+
+<!-- LISTE COMME TA CAPTURE -->
+<div style="background:#111;width:100%">
+<div onclick="editerChamp('nom')" style="display:flex;gap:20px;padding:18px 20px;border-bottom:1px solid #222;align-items:center;width:100%;box-sizing:border-box"><span style="font-size:22px">👤</span><div><div style="color:white;font-size:17px;font-weight:600">Nom</div><div id="affNom" style="color:#00a884;font-size:15px;margin-top:2px">Définir le nom</div></div></div>
+<div style="display:flex;gap:20px;padding:18px 20px;border-bottom:1px solid #222;align-items:center;width:100%;box-sizing:border-box"><span style="font-size:20px">ⓘ</span><div><div style="color:white;font-size:17px;font-weight:600">Infos</div><div style="color:#00a884;font-size:15px;margin-top:2px">Définir les infos</div></div></div>
+<div onclick="editerChamp('entreprise')" style="display:flex;gap:20px;padding:18px 20px;border-bottom:1px solid #222;align-items:center;width:100%;box-sizing:border-box"><span style="font-size:20px">@</span><div><div style="color:white;font-size:17px;font-weight:600">Nom entreprise</div><div id="affEntreprise" style="color:#00a884;font-size:15px;margin-top:2px">Réserver un nom</div></div></div>
+<div onclick="editerChamp('tel')" style="display:flex;gap:20px;padding:18px 20px;border-bottom:1px solid #222;align-items:center;width:100%;box-sizing:border-box"><span style="font-size:20px">📞</span><div><div style="color:white;font-size:17px;font-weight:600">Téléphone</div><div id="affTel" style="color:#00a884;font-size:15px;margin-top:2px">Ajouter un numéro</div></div></div>
+<div onclick="editerChamp('adresse')" style="display:flex;gap:20px;padding:18px 20px;border-bottom:1px solid #222;align-items:center;width:100%;box-sizing:border-box"><span style="font-size:20px">🔗</span><div><div style="color:white;font-size:17px;font-weight:600">Liens</div><div id="affAdresse" style="color:#00a884;font-size:15px;margin-top:2px">Ajouter des liens</div></div></div>
+</div>
+
+<!-- MENU BAS COMME TA CAPTURE -->
+<div style="position:fixed;bottom:0;left:0;right:0;background:#202020;display:flex;justify-content:space-around;padding:12px 0;border-top:1px solid #333">
+<div style="display:flex;flex-direction:column;align-items:center;color:#aaa"><span style="font-size:22px">↗</span><span style="font-size:13px;margin-top:4px">Partager</span></div>
+<div style="display:flex;flex-direction:column;align-items:center;color:#aaa"><span style="font-size:22px">✨</span><span style="font-size:13px;margin-top:4px">Auto</span></div>
+<div style="display:flex;flex-direction:column;align-items:center;color:#aaa"><span style="font-size:22px">✏️</span><span style="font-size:13px;margin-top:4px">Modifier</span></div>
+<div style="display:flex;flex-direction:column;align-items:center;color:#aaa"><span style="font-size:22px">🗑️</span><span style="font-size:13px;margin-top:4px">Corbeille</span></div>
 </div>
 </div>
 
