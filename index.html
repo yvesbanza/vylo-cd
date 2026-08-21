@@ -348,3 +348,104 @@ style="font-size:32px;cursor:pointer">x</span>
 </div><div>
 <label>Categorie</label><select name="categorie" required>
 <option value="">Choisir</option>
+<option value="Telephone">Telephone</option>
+<option value="Automobile">Auto</option>
+<option value="Mode">Mode</option>
+<option value="Immobilier">Immo</option>
+<option value="Electronique">Elec</option>
+<option value="Autre">Autre</option>
+</select></div></div>
+<label>Telephone</label>
+<input type="tel" name="telephone" required>
+<label>WhatsApp</label>
+<input type="tel" name="whatsapp">
+<label>Photo</label>
+<input type="url" name="photo">
+</form></div>
+<div class="btn-publier-fixed">
+<button type="submit" form="annonceForm"
+style="background:#FF8C00;color:white;
+border:none;padding:18px;width:100%;
+border-radius:12px;font-weight:bold;
+font-size:17px">Publier maintenant</button>
+<p id="formMsg"
+style="text-align:center;margin-top:8px"></p>
+</div></div>
+<script>
+const SHEETDB='https://sheetdb.io/api/v1/ulpea3mizvmlt';
+function openModal(){
+document.getElementById('formModal').style.display='block'}
+function closeModal(){
+document.getElementById('formModal').style.display='none'}
+function ouvrirProfil(){
+document.getElementById('modalProfil').style.display='flex';
+let nom=localStorage.getItem('vendeurNom')||'';
+let ent=localStorage.getItem('entrepriseNom')||'';
+let tel=localStorage.getItem('entrepriseTel')||'';
+let photo=localStorage.getItem('profilPhoto')||'';
+document.getElementById('previewProfil').src=photo||
+'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+document.getElementById('affNom').innerText=
+nom?nom:'Définir le nom';
+document.getElementById('affEntreprise').innerText=
+ent?ent:'Réserver un nom';
+document.getElementById('affTel').innerText=
+tel?tel:'Ajouter un numéro';
+document.getElementById('profilAvatar').src=photo||
+'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+}
+function fermerProfil(){
+document.getElementById('modalProfil').style.display='none';}
+function enregistrerProfil(){
+localStorage.setItem('vendeurNom',
+document.getElementById('profilNom').value);
+localStorage.setItem('entrepriseNom',
+document.getElementById('profilEntreprise').value);
+localStorage.setItem('entrepriseTel',
+document.getElementById('profilTel').value);
+let p=document.getElementById('profilPhotoInput').value;
+if(p) localStorage.setItem('profilPhoto',p);
+document.getElementById('profilAvatar').src=p||
+'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+alert('Profil enregistre');fermerProfil();
+}
+(function(){
+let p=localStorage.getItem('profilPhoto');
+if(p) document.getElementById('profilAvatar').src=p;
+let inp=document.getElementById('profilPhotoInput');
+if(inp){
+inp.addEventListener('input',function(){
+document.getElementById('previewProfil').src=
+this.value||
+'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+});}
+})();
+function ouvrirParametres(){
+document.getElementById('modalParametres').style.display='flex';
+majBoutonTheme();}
+function fermerParametres(){
+document.getElementById('modalParametres').style.display='none';}
+function majBoutonTheme(){
+let b=document.getElementById('btnToggleTheme');
+if(document.body.classList.contains('dark')){
+b.textContent='Desactiver';b.style.background='#333';}
+else{b.textContent='Activer';b.style.background='#FF8C00';}
+}
+function toggleThemeFromParams(){
+document.body.classList.toggle('dark');
+localStorage.setItem('theme',
+document.body.classList.contains('dark')?'dark':'light');
+majBoutonTheme();
+}
+let toutesAnnonces=[];
+let lienPartage="";
+let indexAEditer=-1;
+function partagerAnnonce(btn){
+let card=btn.closest('.annonce-card');
+let titre=card.querySelector('h3')?.innerText||'Annonce';
+lienPartage=window.location.href;
+let textePartage=titre+" sur VYLO-CD "+lienPartage;
+let texte=encodeURIComponent(textePartage);
+document.getElementById('shareWhats').href=
+"https://wa.me/?text="+texte;
+  
