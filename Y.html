@@ -370,16 +370,19 @@ function closeModal(){
 document.getElementById('formModal').style.display='none'}
 function ouvrirProfil(){
 document.getElementById('modalProfil').style.display='flex';
-document.getElementById('profilNom').value=
-localStorage.getItem('vendeurNom')||'';
-document.getElementById('profilEntreprise').value=
-localStorage.getItem('entrepriseNom')||'';
-document.getElementById('profilTel').value=
-localStorage.getItem('entrepriseTel')||'';
-document.getElementById('profilPhotoInput').value=
-localStorage.getItem('profilPhoto')||'';
-document.getElementById('previewProfil').src=
-localStorage.getItem('profilPhoto')||
+let nom=localStorage.getItem('vendeurNom')||'';
+let ent=localStorage.getItem('entrepriseNom')||'';
+let tel=localStorage.getItem('entrepriseTel')||'';
+let photo=localStorage.getItem('profilPhoto')||'';
+document.getElementById('previewProfil').src=photo||
+'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+document.getElementById('affNom').innerText=
+nom?nom:'Définir le nom';
+document.getElementById('affEntreprise').innerText=
+ent?ent:'Réserver un nom';
+document.getElementById('affTel').innerText=
+tel?tel:'Ajouter un numéro';
+document.getElementById('profilAvatar').src=photo||
 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
 }
 function fermerProfil(){
