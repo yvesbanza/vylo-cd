@@ -168,41 +168,66 @@ fill="none" stroke="currentColor" stroke-width="1.8">
 <div id="annonces">
 <p style="text-align:center">Chargement...</p>
 </div>
-<div id="modalProfil"><div class="profil-box">
-<div style="display:flex;justify-content:space-between;
-align-items:center;margin-bottom:10px">
-<h3 style="margin:0">Mon Profil</h3>
-<span onclick="fermerProfil()"
-style="font-size:26px;cursor:pointer">x</span>
-</div>
-<div style="text-align:center;margin-bottom:15px">
-<img id="previewProfil"
-src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
-style="width:80px;height:80px;border-radius:50%;
-border:3px solid #FF8C00;object-fit:cover">
-</div>
-<label>Photo profil (lien)</label>
-<input id="profilPhotoInput" type="url"
-placeholder="https://...">
-<label>Nom du vendeur</label>
-<input id="profilNom" type="text"
-placeholder="Ex: Jean Bosco">
-<label>Nom entreprise</label>
-<input id="profilEntreprise" type="text"
-placeholder="Ex: JB Shop">
-<label>Tel entreprise</label>
-<input id="profilTel" type="tel"
-placeholder="Ex: 082...">
-<button onclick="enregistrerProfil()"
-style="background:#FF8C00;color:white;
-border:none;padding:14px;width:100%;
-border-radius:10px;font-weight:bold;
-margin-top:10px">Enregistrer</button>
+<div id="modalProfil" style="display:none;
+position:fixed;inset:0;
+z-index:10000;background:#111">
+<div class="profil-view">
+<div class="profil-top">
 <button onclick="fermerProfil()"
-style="background:#eee;color:#333;border:none;
-padding:12px;width:100%;border-radius:10px;
-font-weight:bold;margin-top:8px">Fermer</button>
-</div></div>
+style="background:none;border:none;
+color:white;font-size:26px">←</button>
+<span>Profil</span>
+</div>
+<div class="profil-photo-wrap">
+<img id="previewProfil"
+src="https://cdn-icons-png.flaticon.com/512/149/149071.png">
+<button class="cam-btn" onclick="ouvrirParametres()">
+<svg width="22" height="22" viewBox="0 0 24 24"
+fill="none" stroke="black" stroke-width="2">
+<path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8
+a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+<circle cx="12" cy="13" r="4"/></svg>
+</button>
+</div>
+<div class="profil-list">
+<div class="profil-item">
+<span class="ico">👤</span>
+<div>
+<b>Nom</b>
+<p id="affNom">Définir le nom</p>
+</div>
+</div>
+<div class="profil-item">
+<span class="ico">ⓘ</span>
+<div>
+<b>Infos</b>
+<p>Définir les infos</p>
+</div>
+</div>
+<div class="profil-item">
+<span class="ico">@</span>
+<div>
+<b>Nom entreprise</b>
+<p id="affEntreprise">Réserver un nom</p>
+</div>
+</div>
+<div class="profil-item">
+<span class="ico">📞</span>
+<div>
+<b>Téléphone</b>
+<p id="affTel">Ajouter un numéro</p>
+</div>
+</div>
+<div class="profil-item">
+<span class="ico">🔗</span>
+<div>
+<b>Liens</b>
+<p>Ajouter des liens</p>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div id="modalSupprimer"><div class="box-sup">
 <p><b>Supprimer?</b></p>
 <div style="display:flex;gap:10px;margin-top:18px">
