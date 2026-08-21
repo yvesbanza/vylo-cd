@@ -192,9 +192,22 @@ fill="none" stroke="currentColor" stroke-width="1.8">
 <div style="display:flex;justify-content:center;padding:25px 0 10px 0">
 <div style="position:relative;width:160px;height:160px">
 <img id="previewProfil" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="width:160px;height:160px;border-radius:50%;object-fit:cover;background:#2a3942">
-<div onclick="ouvrirMenuPhoto()" style="position:absolute;bottom:5px;right:5px;width:42px;height:42px;background:#000;border:2px solid #d4af37;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer">📷</div>
-<input type="file" id="inputPhotoProfil" accept="image/*" style="display:none" onchange="changerPhotoProfil(this)">
+<div onclick="ouvrirMenuPhoto()" style="position:absolute;bottom:2px;right:2px;width:48px;height:48px;background:#000;border:2px solid #d4af37;border-radius:50%;display:flex;align-items:center;justify-content:center;overflow:hidden;box-shadow:0 0 12px rgba(212,175,55,0.8);cursor:pointer">
+<img src="camera-contour-or.png" style="width:30px;height:30px;object-fit:contain">
 </div>
+
+<!-- INPUTS CACHES -->
+<input type="file" id="inputGalerie" accept="image/*" style="display:none" onchange="changerPhotoProfil(this)">
+<input type="file" id="inputCamera" accept="image/*" capture="environment" style="display:none" onchange="changerPhotoProfil(this)">
+
+<!-- MENU CHOIX -->
+<div id="menuPhoto" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#111;border-top:2px solid #d4af37;border-radius:20px 20px 0 0;padding:20px;z-index:9999">
+<div style="width:40px;height:4px;background:#555;border-radius:10px;margin:0 auto 15px"></div>
+<div onclick="choisirGalerie()" style="padding:15px;background:#222;border:1px solid #d4af37;border-radius:12px;margin-bottom:10px;color:#d4af37;text-align:center;font-weight:bold;cursor:pointer">📁 Galerie - Choisir une photo</div>
+<div onclick="choisirCamera()" style="padding:15px;background:#222;border:1px solid #d4af37;border-radius:12px;margin-bottom:10px;color:#d4af37;text-align:center;font-weight:bold;cursor:pointer">📷 Appareil Photo - Prendre un cliché</div>
+<div onclick="fermerMenuPhoto()" style="padding:12px;background:#000;border-radius:12px;color:#fff;text-align:center;cursor:pointer">Annuler</div>
+</div>
+<div id="fondMenuPhoto" onclick="fermerMenuPhoto()" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9998"></div>
 </div>
 
 <!-- LISTE AVEC VRAIES ICONES CONTOUR -->
