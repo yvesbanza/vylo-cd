@@ -148,3 +148,94 @@ align-items:center!important;
 }
 #modalProfil div{
 text-align:left;
+}
+</style>
+</head>
+<body>
+<header>
+<img src="https://i.postimg.cc/d3mG4Th1/logo.jpg"
+class="logo-left">
+<div class="header-center">VYLO-CD</div>
+<img id="profilAvatar"
+src="https://cdn-icons-png.flaticon.com/512/149/149071.png"
+class="profil-avatar" onclick="ouvrirProfil()">
+</header>
+<button class="btn-publier" onclick="openModal()">
++ Publier une annonce
+</button>
+<div class="search-row">
+<input type="text" id="searchBar"
+placeholder="Rechercher..."
+onkeyup="searchAnnonces()">
+<button class="btn-params" onclick="ouvrirParametres()">
+<svg width="26" height="26" viewBox="0 0 24 24"
+fill="none" stroke="currentColor" stroke-width="1.8">
+<path d="M12 3l7 4v8l-7 4-7-4V7l7-4z"></path>
+<circle cx="12" cy="12" r="2.5"></circle>
+</svg>
+</button>
+</div>
+<div id="annonces">
+<p style="text-align:center">Chargement...</p>
+</div>
+  <div id="modalProfil" style="display:none;position:fixed;inset:0;z-index:10000;background:#0b141a;flex-direction:column;overflow:auto;padding-bottom:75px">
+
+<!-- HEADER SANS CARRÉ BLANC -->
+<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#202c33">
+<button onclick="fermerModal('modalProfil')" style="background:none;border:none;color:#e9edef;font-size:24px">←</button>
+<div style="display:flex;gap:24px;align-items:center">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#e9edef" stroke-width="1.5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+<svg width="22" height="22" viewBox="0 0 24 24" fill="#e9edef"><circle cx="12" cy="12" r="2"/><circle cx="12" cy="5" r="2"/><circle cx="12" cy="19" r="2"/></svg>
+</div>
+</div>
+
+<!-- PHOTO -->
+<div style="display:flex;justify-content:center;padding:25px 0 10px 0">
+<div style="position:relative;width:160px;height:160px">
+<img id="previewProfil" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="width:160px;height:160px;border-radius:50%;object-fit:cover;background:#2a3942">
+<button onclick="ouvrirMenuPhoto()" style="position:absolute;bottom:5px;right:5px;width:42px;height:42px;background:#000;border:2px solid #d4af37;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer">
+<img src="IMG-20260821-WA9502.jpg" style="width:22px;height:22px;object-fit:contain">
+</button>
+</div>
+</div>
+
+<!-- LISTE AVEC VRAIES ICONES CONTOUR -->
+<div style="margin-top:10px">
+
+<div onclick="editerChamp('nom')" style="display:flex;gap:20px;padding:18px 24px;border-bottom:0.5px solid #2a3942;align-items:center">
+<img src="IMG-20260821-WA3726.jpg" style="width:26px;height:26px;object-fit:contain">
+<div><div style="color:#e9edef;font-size:17px">Nom</div><div id="affNom" style="color:#8696a0;font-size:14px;margin-top:3px">Votre nom</div></div>
+</div>
+<div onclick="editerChamp('infos')" style="display:flex;gap:20px;padding:18px 24px;border-bottom:0.5px solid #2a3942;align-items:center">
+<img src="IMG-20260821-WA5388.jpg" style="width:26px;height:26px;object-fit:contain">
+<div><div style="color:#e9edef;font-size:17px">Infos</div><div id="affInfos" style="color:#00a884;font-size:14px;margin-top:3px">Votre bio</div></div>
+</div>
+
+<div onclick="editerChamp('entreprise')" style="display:flex;gap:20px;padding:18px 24px;border-bottom:0.5px solid #2a3942;align-items:center">
+<img src="IMG-20260821-WA8180.jpg" style="width:26px;height:26px;object-fit:contain">
+<div><div style="color:#e9edef;font-size:17px">Entreprise</div><div id="affEntreprise" style="color:#8696a0;font-size:14px;margin-top:3px">Votre entreprise</div></div>
+</div>
+
+<div onclick="editerChamp('tel')" style="display:flex;gap:20px;padding:18px 24px;border-bottom:0.5px solid #2a3942;align-items:center">
+<img src="IMG-20260821-WA8632.jpg" style="width:28px;height:28px;border-radius:50%;object-fit:cover">
+<div><div style="color:#e9edef;font-size:17px">Téléphone</div><div id="affTel" style="color:#00a884;font-size:14px;margin-top:3px">Ajouter un numéro</div></div>
+</div>
+
+<div onclick="editerChamp('adresse')" style="display:flex;gap:20px;padding:18px 24px;align-items:center">
+<img src="IMG-20260821-WA6861.jpg" style="width:26px;height:26px;object-fit:contain">
+<div><div style="color:#e9edef;font-size:17px">Adresse</div><div id="affAdresse" style="color:#00a884;font-size:14px;margin-top:3px">Ajouter une adresse</div></div>
+</div>
+
+</div>
+
+<!-- BARRE BAS FIXE -->
+<div style="position:fixed;bottom:0;left:0;right:0;background:#202c33;display:flex;justify-content:space-around;padding:12px 0;border-top:1px solid #2a3942">
+<div style="color:#8696a0;text-align:center"><div style="font-size:18px">↗</div><div style="font-size:11px;margin-top:2px">Partager</div></div>
+<div style="color:#8696a0;text-align:center"><div style="font-size:18px">✨</div><div style="font-size:11px;margin-top:2px">Auto</div></div>
+<div style="color:#8696a0;text-align:center"><div style="font-size:18px">✏️</div><div style="font-size:11px;margin-top:2px">Modifier</div></div>
+<div style="color:#8696a0;text-align:center"><div style="font-size:18px">🗑️</div><div style="font-size:11px;margin-top:2px">Corbeille</div></div>
+</div>
+
+  </div>
+<div id="modalSupprimer"><div class="box-sup">
+  
