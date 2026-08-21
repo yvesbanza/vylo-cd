@@ -652,6 +652,12 @@ let av=document.getElementById('profilAvatar');
 if(av) av.src=d;
 fermerMenuPhoto();
   }
+  function fermerModal(id){
+  const modal = document.getElementById(id);
+  if(modal){ modal.style.display='none'; }
+  // sécurité si jamais le modal ne se ferme pas
+  document.body.style.overflow='auto';
+  }
 </script>
 </body>
   </html>
