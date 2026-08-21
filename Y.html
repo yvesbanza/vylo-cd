@@ -640,34 +640,47 @@ msg.innerText=''},1200);
 fetchAnnonces();
 if(localStorage.getItem('theme')==='dark'){
 document.body.classList.add('dark');}
-  function ouvrirMenuPhoto(){document.getElementById('modalPhotoChoix').style.display='flex';}
-function fermerMenuPhoto(){document.getElementById('modalPhotoChoix').style.display='none';}
-function prendreCamera(){document.getElementById('inputCamera').click();}
-function ouvrirGalerie(){document.getElementById('inputGalerie').click();}
+  function ouvrirMenuPhoto(){
+ document.getElementById('menuPhoto').style.display='block';
+ document.getElementById('fondMenuPhoto').style.display='block';
+}
+function fermerMenuPhoto(){
+ document.getElementById('menuPhoto').style.display='none';
+ document.getElementById('fondMenuPhoto').style.display='none';
+}
+function prendreCamera(){
+ fermerMenuPhoto();
+ document.getElementById('inputCamera').click();
+}
+function ouvrirGalerie(){
+ fermerMenuPhoto();
+ document.getElementById('inputGalerie').click();
+}
 function changerPhotoFichier(input){
-if(input.files&&input.files[0]){
-let r=new FileReader();
-r.onload=function(e){
-localStorage.setItem('profilPhoto',e.target.result);
-document.getElementById('previewProfil').src=e.target.result;
-let av=document.getElementById('profilAvatar');
-if(av) av.src=e.target.result;
-fermerMenuPhoto();
-};r.readAsDataURL(input.files[0]);
-}}
+ if(input.files && input.files[0]){
+  let r=new FileReader();
+  r.onload=function(e){
+   localStorage.setItem('profilPhoto',e.target.result);
+   document.getElementById('previewProfil').src=e.target.result;
+   let av=document.getElementById('profilAvatar');
+   if(av) av.src=e.target.result;
+   fermerMenuPhoto();
+  };
+  r.readAsDataURL(input.files[0]);
+ }
+}
 function supprimerPhotoProfil(){
-localStorage.removeItem('profilPhoto');
-let d='https://cdn-icons-png.flaticon.com/512/149/149071.png';
-document.getElementById('previewProfil').src=d;
-let av=document.getElementById('profilAvatar');
-if(av) av.src=d;
-fermerMenuPhoto();
-  }
-  function fermerModal(id){
-  const modal = document.getElementById(id);
-  if(modal){ modal.style.display='none'; }
-  // sécurité si jamais le modal ne se ferme pas
-  document.body.style.overflow='auto';
+ localStorage.removeItem('profilPhoto');
+ let d='https://cdn-icons-png.flaticon.com/512/149/149071.png';
+ document.getElementById('previewProfil').src=d;
+ let av=document.getElementById('profilAvatar');
+ if(av) av.src=d;
+ fermerMenuPhoto();
+}
+function fermerModal(id){
+ const modal=document.getElementById(id);
+ if(modal) modal.style.display='none';
+ document.body.style.overflow='auto';
   }
 </script>
 </body>
