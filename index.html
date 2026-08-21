@@ -238,4 +238,113 @@ fill="none" stroke="currentColor" stroke-width="1.8">
 
   </div>
 <div id="modalSupprimer"><div class="box-sup">
-  
+  <p><b>Supprimer?</b></p>
+<div style="display:flex;gap:10px;margin-top:18px">
+<button onclick="fermerSupprimer()"
+style="flex:1;padding:12px;border-radius:8px;
+border:1px solid #ddd">Non</button>
+<button onclick="confirmerSupprimer()"
+style="flex:1;padding:12px;border-radius:8px;
+background:#ff3b30;color:white;border:none;
+font-weight:bold">Oui</button>
+</div></div></div>
+<div id="modalPartage"><div class="share-box">
+<h3>Partager cette annonce</h3>
+<a id="shareWhats" target="_blank"
+style="display:block;background:#25D366;
+color:white;padding:12px;border-radius:8px;
+margin:8px 0;text-decoration:none;
+font-weight:bold">WhatsApp</a>
+<a id="shareFacebook" target="_blank"
+style="display:block;background:#1877F2;
+color:white;padding:12px;border-radius:8px;
+margin-bottom:8px;text-decoration:none;
+font-weight:bold">Facebook</a>
+<button onclick="copierLien()"
+style="display:block;width:100%;background:#eee;
+color:black;padding:12px;border-radius:8px;
+border:none;font-weight:bold">Copier le lien</button>
+<button onclick="fermerPartage()"
+style="margin-top:12px;background:#FF8C00;
+color:white;padding:10px 20px;border-radius:8px;
+border:none;font-weight:bold;width:100%">Fermer</button>
+</div></div>
+<div id="modalModifier"><div class="edit-box">
+<div style="display:flex;justify-content:space-between;
+align-items:center;margin-bottom:15px">
+<h3>Modifier</h3>
+<span onclick="fermerModifier()"
+style="font-size:26px;cursor:pointer">x</span>
+</div>
+<label>Titre</label><input id="editTitre" type="text">
+<label>Description</label>
+<textarea id="editDescription"
+style="height:80px;resize:none"></textarea>
+<div class="row2"><div>
+<label>Prix</label><input id="editPrix" type="number">
+</div><div>
+<label>Devise</label><select id="editDevise">
+<option value="FC">FC</option>
+<option value="$">$</option>
+</select></div></div>
+<label>Telephone</label>
+<input id="editTelephone" type="tel">
+<label>WhatsApp</label>
+<input id="editWhatsapp" type="tel">
+<button onclick="enregistrerModification()"
+style="background:#FF8C00;color:white;
+border:none;padding:14px;width:100%;
+border-radius:10px;font-weight:bold;
+margin-top:10px">Enregistrer</button>
+<button onclick="fermerModifier()"
+style="background:#eee;color:#333;border:none;
+padding:12px;width:100%;border-radius:10px;
+font-weight:bold;margin-top:8px">Annuler</button>
+</div></div>
+<div id="modalParametres"><div class="param-box">
+<div style="display:flex;justify-content:space-between;
+align-items:center">
+<h3 style="margin:0">Parametres</h3>
+<span onclick="fermerParametres()"
+style="font-size:26px;cursor:pointer">x</span>
+</div>
+<div class="param-item">
+<span>Mode sombre</span>
+<button id="btnToggleTheme"
+onclick="toggleThemeFromParams()"
+style="background:#FF8C00;color:white;
+border:none;padding:8px 14px;
+border-radius:8px;font-weight:bold">Activer</button>
+</div>
+<button onclick="fermerParametres()"
+style="background:#eee;color:#333;border:none;
+padding:12px;width:100%;border-radius:10px;
+font-weight:bold;margin-top:15px">Fermer</button>
+</div></div>
+<div id="formModal" class="modal">
+<div class="modal-content">
+<div style="display:flex;justify-content:space-between;
+align-items:center;margin-bottom:20px">
+<h2>Publier</h2>
+<span onclick="closeModal()"
+style="font-size:32px;cursor:pointer">x</span>
+</div>
+<form id="annonceForm">
+<label>Titre</label>
+<input type="text" name="titre" required>
+<label>Description</label>
+<textarea name="description" required></textarea>
+<div class="row2"><div>
+<label>Prix</label>
+<input type="number" name="prix" required>
+</div><div>
+<label>Devise</label><select name="devise">
+<option value="FC">FC</option>
+<option value="$">$</option>
+</select></div></div>
+<div class="row2"><div>
+<label>Ville</label>
+<input type="text" name="ville" required>
+</div><div>
+<label>Categorie</label><select name="categorie" required>
+<option value="">Choisir</option>
