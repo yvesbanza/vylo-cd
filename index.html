@@ -1,1 +1,113 @@
-
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+<title>VYLO-CD</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;overflow-x:hidden}
+body{background:var(--bg-color);
+font-family:Arial,sans-serif;color:var(--text-color)}
+:root{
+--header-bg:#FF8C00;--bg-color:#f5f5f5;
+--card-bg:white;--text-color:black;
+--border-color:#ddd;--input-bg:white}
+body.dark{
+--bg-color:#121212;--card-bg:#1e1e1e;
+--text-color:white;--border-color:#333;
+--input-bg:#2a2a2a}
+header{
+background:var(--header-bg);
+padding:10px 12px;display:flex;
+align-items:center;position:sticky;
+top:0;z-index:100;gap:10px}
+.logo-left{height:42px;border-radius:8px}
+.header-center{flex:1;text-align:center;
+color:white;font-size:20px;font-weight:bold}
+.profil-avatar{width:42px;height:42px;
+border-radius:50%;border:2px solid white;
+object-fit:cover;background:white;cursor:pointer}
+.btn-publier{background:var(--header-bg);color:white;
+border:none;padding:14px;
+width:calc(100% - 30px);margin:15px;
+border-radius:12px;font-weight:bold;
+font-size:16px;cursor:pointer}
+.search-row{display:flex;gap:8px;padding:0 15px;
+margin-bottom:15px;align-items:center}
+#searchBar{flex:1;padding:14px;border-radius:12px;
+border:1px solid var(--border-color);
+background:var(--input-bg);color:var(--text-color)}
+.btn-params{background:var(--card-bg);
+border:1px solid var(--border-color);
+width:48px;height:48px;border-radius:12px;
+display:flex;align-items:center;
+justify-content:center;cursor:pointer}
+#annonces{width:100%;padding:0 15px 20px 15px;
+display:grid;gap:15px}
+.annonce-card{background:var(--card-bg);border-radius:16px;
+overflow:hidden;border:1px solid var(--border-color);
+position:relative}
+.annonce-card img.annonce-photo{
+width:100%;aspect-ratio:1.6/1;
+object-fit:contain;background:#fff;
+display:block;border-bottom:1px solid var(--border-color)}
+.annonce-infos{padding:12px 14px}
+.annonce-header{display:flex;justify-content:space-between;
+align-items:center;padding:10px 14px 0 14px}
+.right-actions{display:flex;align-items:center;gap:6px}
+.share-btn{background:#F0F0F0;border:none;border-radius:10px;
+cursor:pointer;width:34px;height:34px;
+display:flex;align-items:center;justify-content:center}
+.edit-btn{background:#FFF4E5;border:none;border-radius:10px;
+cursor:pointer;width:34px;height:34px;
+display:flex;align-items:center;justify-content:center}
+.seller-menu-btn{background:#F0F0F0;border:none;
+font-size:20px;cursor:pointer;color:#444;
+width:34px;height:34px;border-radius:10px;
+display:flex;align-items:center;justify-content:center}
+.modal{display:none;position:fixed;inset:0;
+width:100vw;height:100vh;background:rgba(0,0,0,0.6);
+z-index:9999;overflow-y:auto}
+.modal-content{background:var(--card-bg);width:100%;
+min-height:100vh;padding:20px 15px 0 15px;
+display:flex;flex-direction:column}
+#annonceForm{flex:1;display:flex;flex-direction:column;
+padding-bottom:120px}
+.btn-publier-fixed{position:fixed;bottom:0;left:0;right:0;
+background:var(--card-bg);padding:15px;
+box-shadow:0 -4px 20px rgba(0,0,0,0.15);
+z-index:20;border-top:1px solid var(--border-color)}
+#modalSupprimer,#modalPartage,#modalModifier,
+#modalParametres,#modalProfil{display:none;
+position:fixed;inset:0;background:rgba(0,0,0,0.6);
+z-index:10000;justify-content:center;align-items:center}
+.box-sup,.share-box,.edit-box,.param-box,.profil-box{
+background:var(--card-bg);padding:22px;
+border-radius:14px;max-width:360px;width:92%}
+.edit-box,.param-box,.profil-box{text-align:left;
+max-height:90vh;overflow-y:auto}
+.param-item{display:flex;justify-content:space-between;
+align-items:center;padding:12px 0;
+border-bottom:1px solid var(--border-color)}
+.profil-box input,#modalModifier input,
+#modalModifier textarea,#modalModifier select,
+#annonceForm input,#annonceForm textarea,
+#annonceForm select{width:100%;padding:12px;
+border-radius:8px;border:1.5px solid var(--border-color);
+background:var(--input-bg);color:var(--text-color);
+margin-bottom:10px}
+.row2{display:flex;gap:10px}.row2>*{flex:1}
+.seller-menu{display:none;position:absolute;
+right:10px;top:42px;background:var(--card-bg);
+border:1px solid var(--border-color);border-radius:10px;
+box-shadow:0 4px 12px rgba(0,0,0,0.2);
+z-index:200;flex-direction:column;min-width:180px}
+.seller-menu.show{display:flex}
+.seller-menu button{background:none;border:none;
+text-align:left;padding:12px 14px;cursor:pointer;
+font-size:14px;color:var(--text-color)}
+  .profil-view{background:#111;
+width:100%;min-height:100vh;
+          
