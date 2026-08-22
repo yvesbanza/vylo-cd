@@ -648,13 +648,13 @@ function fermerMenuPhoto(){
  document.getElementById('menuPhoto').style.display='none';
  document.getElementById('fondMenuPhoto').style.display='none';
 }
-function prendreCamera(){
- fermerMenuPhoto();
- document.getElementById('inputCamera').click();
-}
 function ouvrirGalerie(){
  fermerMenuPhoto();
- document.getElementById('inputGalerie').click();
+ setTimeout(()=>{ document.getElementById('inputGalerie').click(); },200);
+}
+function prendreCamera(){
+ fermerMenuPhoto();
+ setTimeout(()=>{ document.getElementById('inputCamera').click(); },200);
 }
 function changerPhotoFichier(input){
  if(input.files && input.files[0]){
@@ -664,11 +664,10 @@ function changerPhotoFichier(input){
    document.getElementById('previewProfil').src=e.target.result;
    let av=document.getElementById('profilAvatar');
    if(av) av.src=e.target.result;
-   fermerMenuPhoto();
   };
   r.readAsDataURL(input.files[0]);
  }
-}
+  }
 function supprimerPhotoProfil(){
  localStorage.removeItem('profilPhoto');
  let d='https://cdn-icons-png.flaticon.com/512/149/149071.png';
