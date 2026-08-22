@@ -197,17 +197,16 @@ fill="none" stroke="currentColor" stroke-width="1.8">
 </div>
 
 <!-- INPUTS CACHES -->
-<input type="file" id="inputGalerie" accept="image/*" style="display:none" onchange="changerPhotoProfil(this)">
-<input type="file" id="inputCamera" accept="image/*" capture="environment" style="display:none" onchange="changerPhotoProfil(this)">
+<input type="file" id="inputGalerie" accept="image/*" style="display:none" onchange="changerPhotoFichier(this)">
+<input type="file" id="inputCamera" accept="image/*" capture="user" style="display:none" onchange="changerPhotoFichier(this)">
 
-<!-- MENU CHOIX -->
 <div id="menuPhoto" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#111;border-top:2px solid #d4af37;border-radius:20px 20px 0 0;padding:20px;z-index:9999">
 <div style="width:40px;height:4px;background:#555;border-radius:10px;margin:0 auto 15px"></div>
-<div onclick="choisirGalerie()" style="padding:15px;background:#222;border:1px solid #d4af37;border-radius:12px;margin-bottom:10px;color:#d4af37;text-align:center;font-weight:bold;cursor:pointer">📁 Galerie - Choisir une photo</div>
-<div onclick="choisirCamera()" style="padding:15px;background:#222;border:1px solid #d4af37;border-radius:12px;margin-bottom:10px;color:#d4af37;text-align:center;font-weight:bold;cursor:pointer">📷 Appareil Photo - Prendre un cliché</div>
-<div onclick="fermerMenuPhoto()" style="padding:12px;background:#000;border-radius:12px;color:#fff;text-align:center;cursor:pointer">Annuler</div>
+<button onclick="ouvrirGalerie()" style="width:100%;padding:15px;background:#222;border:1px solid #d4af37;border-radius:12px;margin-bottom:10px;color:#d4af37;font-weight:bold">📁 Galerie - Mes Photos</button>
+<button onclick="prendreCamera()" style="width:100%;padding:15px;background:#222;border:1px solid #d4af37;border-radius:12px;margin-bottom:10px;color:#d4af37;font-weight:bold">📷 Appareil Photo - Selfie</button>
+<button onclick="fermerMenuPhoto()" style="width:100%;padding:12px;background:#000;border-radius:12px;color:#fff">Annuler</button>
 </div>
-<div id="fondMenuPhoto" onclick="fermerMenuPhoto()" style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:9998"></div>
+<div id="fondMenuPhoto" onclick="fermerMenuPhoto()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9998"></div>
 </div>
 
 <!-- LISTE AVEC VRAIES ICONES CONTOUR -->
