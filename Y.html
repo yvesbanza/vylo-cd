@@ -347,21 +347,21 @@ function closeModal(){
 document.getElementById('formModal').style.display='none'}
 function ouvrirProfil(){
 document.getElementById('modalProfil').style.display='flex';
+document.getElementById('modalProfil').style.flexDirection='column';
 let nom=localStorage.getItem('vendeurNom')||'';
 let ent=localStorage.getItem('entrepriseNom')||'';
 let tel=localStorage.getItem('entrepriseTel')||'';
 let photo=localStorage.getItem('profilPhoto')||'';
-document.getElementById('previewProfil').src=photo||
-'https://cdn-icons-png.flaticon.com/512/149/149071.png';
-document.getElementById('affNom').innerText=
-nom?nom:'Définir le nom';
-document.getElementById('affEntreprise').innerText=
-ent?ent:'Réserver un nom';
-document.getElementById('affTel').innerText=
-tel?tel:'Ajouter un numéro';
-document.getElementById('profilAvatar').src=photo||
-'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+document.getElementById('previewProfil').src=photo||'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+if(nom)document.getElementById('affNom').innerText=nom;
+if(ent)document.getElementById('affEntreprise').innerText=ent;
+if(tel)document.getElementById('affTel').innerText=tel;
 }
+function fermerProfil(){document.getElementById('modalProfil').style.display='none';}
+function ouvrirMenuPhoto(){document.getElementById('menuPhoto').style.display='block';document.getElementById('fondMenu').style.display='block';}
+function fermerMenuPhoto(){document.getElementById('menuPhoto').style.display='none';document.getElementById('fondMenu').style.display='none';}
+function changerPhoto(e){const f=e.target.files[0];if(f){const u=URL.createObjectURL(f);document.getElementById('previewProfil').src=u;localStorage.setItem('profilPhoto',u);fermerMenuPhoto();}}
+function ouvrirPhotoProfil(){}
 function fermerProfil(){
 document.getElementById('modalProfil').style.display='none';}
 function enregistrerProfil(){
