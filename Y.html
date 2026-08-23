@@ -178,36 +178,33 @@ fill="none" stroke="currentColor" stroke-width="1.8">
 <div id="annonces">
 <p style="text-align:center">Chargement...</p>
 </div>
-  <div id="modalProfil" style="display:none;position:fixed;inset:0;z-index:10000;background:#111b21;overflow-y:auto;">
-  
-  <!-- HEADER -->
-  <div style="display:flex;align-items:center;gap:15px;padding:12px;background:#202c33;color:white;position:sticky;top:0;">
-    <span onclick="document.getElementById('modalProfil').style.display='none'" style="font-size:22px;cursor:pointer;padding:8px;">←</span>
-    <span style="font-size:19px;font-weight:500;">Mon Profil</span>
+  <div id="modalProfil" style="display:none;position:fixed;inset:0;z-index:9999;background:#111b21;overflow-y:auto;">
+  <div style="display:flex;align-items:center;gap:15px;padding:14px;background:#202c33;position:sticky;top:0;">
+    <span onclick="fermerProfil()" style="font-size:24px;color:white;cursor:pointer;padding:8px;">←</span>
+    <span style="font-size:19px;color:white;font-weight:500;">Mon Profil</span>
   </div>
-
-  <!-- PHOTO -->
-  <div style="display:flex;justify-content:center;padding:35px 0;">
-    <div style="position:relative;width:180px;height:180px;">
-      <img id="previewProfil" onclick="ouvrirPhotoProfil()" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="width:180px;height:180px;border-radius:50%;object-fit:cover;background:#0a332c;">
-      <div onclick="ouvrirMenuPhoto()" style="position:absolute;bottom:5px;right:5px;width:56px;height:56px;background:#0b141a;border:2px solid #d4af37;border-radius:50%;display:flex;justify-content:center;align-items:center;">
-        <span style="font-size:22px;">📷</span>
-      </div>
+  <div style="display:flex;justify-content:center;padding:30px 0;">
+    <div style="position:relative;width:170px;height:170px;">
+      <img id="previewProfil" onclick="ouvrirPhotoProfil()" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="width:170px;height:170px;border-radius:50%;object-fit:cover;background:#0a332c;">
+      <div onclick="ouvrirMenuPhoto()" style="position:absolute;bottom:0;right:0;width:52px;height:52px;background:#0b141a;border:2px solid #d4af37;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;">📷</div>
     </div>
   </div>
-
-  <!-- LISTE -->
   <div style="padding:0 25px;">
-    <div style="display:flex;gap:20px;padding:16px 0;border-bottom:1px solid #233138;color:white;"><span>👤</span><div><div>Nom</div><div style="color:#8696a0;font-size:14px;">Définir le nom</div></div></div>
-    <div style="display:flex;gap:20px;padding:16px 0;border-bottom:1px solid #233138;color:white;"><span>ⓘ</span><div><div>Infos</div><div style="color:#00a884;font-size:14px;">Votre bio</div></div></div>
-    <div style="display:flex;gap:20px;padding:16px 0;border-bottom:1px solid #233138;color:white;"><span>🏢</span><div><div>Entreprise</div><div style="color:#8696a0;font-size:14px;">Réserver un nom</div></div></div>
-    <div style="display:flex;gap:20px;padding:16px 0;border-bottom:1px solid #233138;color:white;"><span>📞</span><div><div>Téléphone</div><div style="color:#00a884;font-size:14px;">Ajouter un numéro</div></div></div>
-    <div style="display:flex;gap:20px;padding:16px 0;color:white;"><span>📍</span><div><div>Adresse</div><div style="color:#00a884;font-size:14px;">Ajouter une adresse</div></div></div>
+    <div style="display:flex;gap:18px;padding:18px 0;border-bottom:1px solid #222d34;"><span style="color:#d4af37;font-size:22px;">👤</span><div><div style="color:#e9edef;">Nom</div><div id="affNom" style="color:#8696a0;font-size:14px;">Définir le nom</div></div></div>
+    <div style="display:flex;gap:18px;padding:18px 0;border-bottom:1px solid #222d34;"><span style="color:#d4af37;font-size:22px;">ⓘ</span><div><div style="color:#e9edef;">Infos</div><div style="color:#00a884;font-size:14px;">Votre bio</div></div></div>
+    <div style="display:flex;gap:18px;padding:18px 0;border-bottom:1px solid #222d34;"><span style="color:#d4af37;font-size:22px;">🏢</span><div><div style="color:#e9edef;">Entreprise</div><div id="affEntreprise" style="color:#8696a0;font-size:14px;">Réserver un nom</div></div></div>
+    <div style="display:flex;gap:18px;padding:18px 0;border-bottom:1px solid #222d34;"><span style="color:#d4af37;font-size:22px;">📞</span><div><div style="color:#e9edef;">Téléphone</div><div id="affTel" style="color:#00a884;font-size:14px;">Ajouter un numéro</div></div></div>
+    <div style="display:flex;gap:18px;padding:18px 0;"><span style="color:#d4af37;font-size:22px;">📍</span><div><div style="color:#e9edef;">Adresse</div><div style="color:#00a884;font-size:14px;">Ajouter une adresse</div></div></div>
   </div>
-
-  </div>
-
-  </div>
+</div>
+<div id="menuPhoto" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#202c33;z-index:10000;padding:10px;border-radius:15px 15px 0 0;">
+  <div onclick="document.getElementById('inputGalerie').click()" style="padding:16px;color:white;background:#2a3942;border-radius:8px;margin-bottom:5px;cursor:pointer;">🖼️ Galerie photos</div>
+  <div onclick="document.getElementById('inputCamera').click()" style="padding:16px;color:white;background:#2a3942;border-radius:8px;margin-bottom:5px;cursor:pointer;">📸 Appareil photo</div>
+  <div onclick="fermerMenuPhoto()" style="padding:16px;color:white;background:#00a884;border-radius:8px;text-align:center;cursor:pointer;">Annuler</div>
+</div>
+<div id="fondMenu" onclick="fermerMenuPhoto()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9998;"></div>
+<input type="file" id="inputGalerie" accept="image/*" hidden onchange="changerPhoto(event)">
+<input type="file" id="inputCamera" accept="image/*" capture="environment" hidden onchange="changerPhoto(event)">
 <div id="modalSupprimer"><div class="box-sup">
 <p><b>Supprimer?</b></p>
 <div style="display:flex;gap:10px;margin-top:18px">
