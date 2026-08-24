@@ -624,17 +624,38 @@ function prendreCamera(){
  setTimeout(()=>{ document.getElementById('inputCamera').click(); },200);
 }
 function changerPhotoFichier(input){
- if(input.files && input.files[0]){
-  let r=new FileReader();
-  r.onload=function(e){
-   localStorage.setItem('profilPhoto',e.target.result);
-   document.getElementById('previewProfil').src=e.target.result;
-   let av=document.getElementById('profilAvatar');
-   if(av) av.src=e.target.result;
+  if(!input.files ||!input.files[0]) return;
+  let fichier = input.files[0];
+  let reader = new FileReader();
+
+  reader.onload = function(e){
+    let base64 = e.target.result;
+    // 1. Affiche direct
+    document.getElementById('previewProfil').src = base64;
+    document.getElementById('imgFullProfil').src = base64;
+
+    // 2. Sauvegarde locale pour que ça reste
+    localStorage.setItem('vylo_photo_profil', base64);
+
+    // 3. Si tu as Supabase/Firebase, décommente cette partie
+    // sauvegarderPhotoSurServeur(base64);
+
+    fermerMenuPhoto();
+    console.log('Photo sauvegardée!');
   };
-  r.readAsDataURL(input.files[0]);
- }
+  reader.readAsDataURL(fichier);
+}
+
+// ET ajoute ça tout en haut dans ton <script> au chargement de la page
+window.addEventListener('DOMContentLoaded', () => {
+  let photoSauvee = localStorage.getItem('vylo_photo_profil');
+  if(photoSauvee){
+    let p1 = document.getElementById('previewProfil');
+    let p2 = document.getElementById('imgFullProfil');
+    if(p1) p1.src = photoSauvee;
+    if(p2) p2.src = photoSauvee;
   }
+});
 function supprimerPhotoProfil(){
  localStorage.removeItem('profilPhoto');
  let d='https://cdn-icons-png.flaticon.com/512/149/149071.png';
