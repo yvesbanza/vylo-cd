@@ -639,10 +639,10 @@ function fermerModal(id){
 }
 
 function ouvrirPhotoProfil(){
-  let src=document.getElementById('previewProfil').src;
-  document.getElementById('photoGrande').src=src;
+  const src = document.getElementById('previewProfil').src;
+  document.getElementById('imgFullProfil').src = src;
   document.getElementById('modalPhotoProfil').style.display='flex';
-}
+  }
 
 function fermerPhotoProfil(){
   document.getElementById('modalPhotoProfil').style.display='none';
