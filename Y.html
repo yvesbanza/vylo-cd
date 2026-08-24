@@ -629,22 +629,29 @@ function changerPhotoFichier(input){
   let reader = new FileReader();
 
   reader.onload = function(e){
-    let base64 = e.target.result;
-    // 1. Affiche direct
-    document.getElementById('previewProfil').src = base64;
-    document.getElementById('imgFullProfil').src = base64;
+    let img = new Image();
+    img.onload = function(){
+      // Compression à 400px max
+      let canvas = document.createElement('canvas');
+      let max = 400;
+      let ratio = Math.min(max/img.width, max/img.height);
+      canvas.width = img.width * ratio;
+      canvas.height = img.height * ratio;
+      let ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      let base64Petit = canvas.toDataURL('image/jpeg', 0.7);
 
-    // 2. Sauvegarde locale pour que ça reste
-    localStorage.setItem('vylo_photo_profil', base64);
-
-    // 3. Si tu as Supabase/Firebase, décommente cette partie
-    // sauvegarderPhotoSurServeur(base64);
-
-    fermerMenuPhoto();
-    console.log('Photo sauvegardée!');
+      // Affiche
+      document.getElementById('previewProfil').src = base64Petit;
+      document.getElementById('imgFullProfil').src = base64Petit;
+      // Sauve la version compressée (ne disparaitra plus)
+      localStorage.setItem('vylo_photo_profil', base64Petit);
+      fermerMenuPhoto();
+    };
+    img.src = e.target.result;
   };
   reader.readAsDataURL(fichier);
-}
+  }
 
 // ET ajoute ça tout en haut dans ton <script> au chargement de la page
 window.addEventListener('DOMContentLoaded', () => {
