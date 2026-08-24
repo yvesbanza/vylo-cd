@@ -656,13 +656,14 @@ window.addEventListener('DOMContentLoaded', () => {
     if(p2) p2.src = photoSauvee;
   }
 });
-function supprimerPhotoProfil(){
+  function supprimerPhotoProfil(){
   localStorage.removeItem('vylo_photo_profil');
   let defaut = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
   document.getElementById('previewProfil').src = defaut;
   document.getElementById('imgFullProfil').src = defaut;
   fermerMenuPhoto();
   }
+  
 function fermerModal(id){
  const modal=document.getElementById(id);
  if(modal) modal.style.display='none';
