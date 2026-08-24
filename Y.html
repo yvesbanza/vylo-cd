@@ -657,13 +657,12 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 function supprimerPhotoProfil(){
- localStorage.removeItem('profilPhoto');
- let d='https://cdn-icons-png.flaticon.com/512/149/149071.png';
- document.getElementById('previewProfil').src=d;
- let av=document.getElementById('profilAvatar');
- if(av) av.src=d;
- fermerMenuPhoto();
-}
+  localStorage.removeItem('vylo_photo_profil');
+  let defaut = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+  document.getElementById('previewProfil').src = defaut;
+  document.getElementById('imgFullProfil').src = defaut;
+  fermerMenuPhoto();
+  }
 function fermerModal(id){
  const modal=document.getElementById(id);
  if(modal) modal.style.display='none';
