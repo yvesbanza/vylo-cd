@@ -362,344 +362,196 @@ font-size:17px">Publier maintenant</button>
 style="text-align:center;margin-top:8px"></p>
 </div></div>
 <script>
-const SHEETDB='https://sheetdb.io/api/v1/ulpea3mizvmlt';
-function openModal(){
-document.getElementById('formModal').style.display='block'}
-function closeModal(){
-document.getElementById('formModal').style.display='none'}
-function ouvrirProfil(){
-document.getElementById('modalProfil').style.display='flex';
-document.getElementById('modalProfil').style.flexDirection='column';
-let nom=localStorage.getItem('vendeurNom')||'';
-let ent=localStorage.getItem('entrepriseNom')||'';
-let tel=localStorage.getItem('entrepriseTel')||'';
-let photo=localStorage.getItem('profilPhoto')||'';
-document.getElementById('previewProfil').src=photo||'https://cdn-icons-png.flaticon.com/512/149/149071.png';
-if(nom)document.getElementById('affNom').innerText=nom;
-if(ent)document.getElementById('affEntreprise').innerText=ent;
-if(tel)document.getElementById('affTel').innerText=tel;
-}
-function fermerProfil(){document.getElementById('modalProfil').style.display='none';}
-function ouvrirMenuPhoto(){document.getElementById('menuPhoto').style.display='block';document.getElementById('fondMenu').style.display='block';}
-function fermerMenuPhoto(){document.getElementById('menuPhoto').style.display='none';document.getElementById('fondMenu').style.display='none';}
-function changerPhoto(e){const f=e.target.files[0];if(f){const u=URL.createObjectURL(f);document.getElementById('previewProfil').src=u;localStorage.setItem('profilPhoto',u);fermerMenuPhoto();}}
-function ouvrirPhotoProfil(){}
-function fermerProfil(){
-document.getElementById('modalProfil').style.display='none';}
+// --- CHARGEMENT AU DEMARRAGE ---
+window.addEventListener('DOMContentLoaded', () => {
+  let p = localStorage.getItem('vylo_photo_profil');
+  if(p){
+    let p1=document.getElementById('previewProfil');
+    let p2=document.getElementById('imgFullProfil');
+    let p3=document.getElementById('photoGrande');
+    if(p1) p1.src=p; if(p2) p2.src=p; if(p3) p3.src=p;
+  }
+  let nom=localStorage.getItem('vendeurNom')||'';
+  let ent=localStorage.getItem('entrepriseNom')||'';
+  let tel=localStorage.getItem('entrepriseTel')||'';
+  if(nom) document.getElementById('affNom').innerText=nom;
+  if(ent) document.getElementById('affEntreprise').innerText=ent;
+  if(tel) document.getElementById('affTel').innerText=tel;
+  if(localStorage.getItem('theme')=='dark') document.body.classList.add('dark');
+  afficherNews();
+  fetchAnnonces();
+});
+
+// --- PROFIL ---
+function fermerProfil(){ document.getElementById('modalProfil').style.display='none'; }
+function ouvrirMenuPhoto(){ document.getElementById('menuPhoto').style.display='block'; document.getElementById('fondMenuPhoto').style.display='block'; }
+function fermerMenuPhoto(){ document.getElementById('menuPhoto').style.display='none'; document.getElementById('fondMenuPhoto').style.display='none'; }
+function changerPhoto(e){ const f=e.target.files[0]; if(f){ const u=URL.createObjectURL(f); document.getElementById('previewProfil').src=u; } }
+function ouvrirPhotoProfil(){ const src=document.getElementById('previewProfil').src; document.getElementById('imgFullProfil').src=src; document.getElementById('modalPhotoProfil').style.display='flex'; }
 function enregistrerProfil(){
-localStorage.setItem('vendeurNom',
-document.getElementById('profilNom').value);
-localStorage.setItem('entrepriseNom',
-document.getElementById('profilEntreprise').value);
-localStorage.setItem('entrepriseTel',
-document.getElementById('profilTel').value);
-let p=document.getElementById('profilPhotoInput').value;
-if(p) localStorage.setItem('profilPhoto',p);
-document.getElementById('profilAvatar').src=p||
-'https://cdn-icons-png.flaticon.com/512/149/149071.png';
-alert('Profil enregistre');fermerProfil();
+  localStorage.setItem('vendeurNom',document.getElementById('profilNom').value);
+  localStorage.setItem('entrepriseNom',document.getElementById('profilEntreprise').value);
+  localStorage.setItem('entrepriseTel',document.getElementById('profilTel').value);
+  let p=document.getElementById('profilPhotoInput').value;
+  if(p) localStorage.setItem('profilPhoto',p);
+  document.getElementById('previewProfil').src=p||'https://cdn-icons-png.flaticon.com/512/149/149071.png';
+  alert('Profil enregistre'); fermerProfil();
 }
-(function(){
-let p=localStorage.getItem('profilPhoto');
-if(p) document.getElementById('profilAvatar').src=p;
-let inp=document.getElementById('profilPhotoInput');
-if(inp){
-inp.addEventListener('input',function(){
-document.getElementById('previewProfil').src=
-this.value||
-'https://cdn-icons-png.flaticon.com/512/149/149071.png';
-});}
-})();
-function ouvrirParametres(){
-document.getElementById('modalParametres').style.display='flex';
-majBoutonTheme();}
-function fermerParametres(){
-document.getElementById('modalParametres').style.display='none';}
-function majBoutonTheme(){
-let b=document.getElementById('btnToggleTheme');
-if(document.body.classList.contains('dark')){
-b.textContent='Desactiver';b.style.background='#333';}
-else{b.textContent='Activer';b.style.background='#FF8C00';}
-}
-function toggleThemeFromParams(){
-document.body.classList.toggle('dark');
-localStorage.setItem('theme',
-document.body.classList.contains('dark')?'dark':'light');
-majBoutonTheme();
-}
-let toutesAnnonces=[];
-let lienPartage="";
-let indexAEditer=-1;
-function partagerAnnonce(btn){
-let card=btn.closest('.annonce-card');
-let titre=card.querySelector('h3')?.innerText||'Annonce';
-lienPartage=window.location.href;
-let textePartage=titre+" sur VYLO-CD "+lienPartage;
-let texte=encodeURIComponent(textePartage);
-document.getElementById('shareWhats').href=
-"https://wa.me/?text="+texte;
-document.getElementById('shareFacebook').href=
-"https://www.facebook.com/sharer/sharer.php?u="+
-encodeURIComponent(lienPartage);
-if(navigator.share){
-navigator.share({
-title:titre,
-text:textePartage,
-url:lienPartage
-}).then(()=>{}).catch(()=>{
-document.getElementById('modalPartage').style.display='flex';
-});
-}else{
-document.getElementById('modalPartage').style.display='flex';
-}
-}
-function fermerPartage(){
-document.getElementById('modalPartage').style.display='none';}
-function copierLien(){
-navigator.clipboard.writeText(lienPartage);
-alert('Lien copie');fermerPartage();}
-function ouvrirModifier(btn){
-let card=btn.closest('.annonce-card');
-let idx=parseInt(card.dataset.index);
-indexAEditer=idx;
-let item=toutesAnnonces[idx];
-document.getElementById('editTitre').value=item.titre||'';
-document.getElementById('editDescription').value=item.description||'';
-document.getElementById('editPrix').value=item.prix||'';
-document.getElementById('editDevise').value=item.devise||'FC';
-document.getElementById('editTelephone').value=item.telephone||'';
-document.getElementById('editWhatsapp').value=item.whatsapp||'';
-document.getElementById('modalModifier').style.display='flex';
-}
-function fermerModifier(){
-document.getElementById('modalModifier').style.display='none';}
-function enregistrerModification(){
-if(indexAEditer<0) return;
-let it=toutesAnnonces[indexAEditer];
-it.titre=document.getElementById('editTitre').value;
-it.description=document.getElementById('editDescription').value;
-it.prix=document.getElementById('editPrix').value;
-it.devise=document.getElementById('editDevise').value;
-it.telephone=document.getElementById('editTelephone').value;
-it.whatsapp=document.getElementById('editWhatsapp').value;
-afficherAnnonces(toutesAnnonces);
-fermerModifier();alert('Modifie');
-}
-async function fetchAnnonces(){
-let c=document.getElementById('annonces');
-try{
-let r=await fetch(SHEETDB);
-let d=await r.json();
-toutesAnnonces=d.filter(x=>x.titre);
-afficherAnnonces(toutesAnnonces);
-}catch(e){c.innerHTML='Erreur:'+e.message}
-}
-function afficherAnnonces(list){
-let c=document.getElementById('annonces');
-if(list.length==0){
-c.innerHTML='<p style="text-align:center">Aucune annonce</p>';
-return;}
-c.innerHTML='';
-let rev=list.slice().reverse();
-rev.forEach((item,revIdx)=>{
-let idx=list.length-1-revIdx;
-let d=document.createElement('div');
-d.className='annonce-card';
-d.dataset.index=idx;
-let photo='';
-if(item.photo){
-photo='<img class="annonce-photo" src="'+item.photo+'">';
-}
-let wa='';
-if(item.whatsapp){
-wa+='<a href="https://wa.me/'+item.whatsapp+'" target="_blank" style="width:58px;height:40px;border-radius:8px;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#25D366">';
-wa+='<img src="IMG-20260821-WA4127.jpg" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:8px">';
-wa+='</a>';
-}
-let h='';
-h+='<div class="annonce-header">';
-h+='<small>'+(item.date||'')+'</small>';
-h+='<div class="right-actions">';
-h+='<button class="edit-btn"';
-h+=' onclick="ouvrirModifier(this)">';
-h+='<svg viewBox="0 0 24 24" width="18" height="18"';
-h+=' fill="none" stroke="#FF8C00" stroke-width="2">';
-h+='<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14';
-h+='a2 2 0 0 0 2-2v-7"></path>';
-h+='<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1';
-h+=' 1-4 9.5-9.5z"></path></svg></button>';
-h+='<button class="share-btn"';
-h+=' onclick="partagerAnnonce(this)">';
-h+='<svg width="20" height="20" viewBox="0 0 24 24" fill="none">';
-h+='<circle cx="18" cy="5" r="3" stroke="black" stroke-width="2"/>';
-h+='<circle cx="6" cy="12" r="3" stroke="black" stroke-width="2"/>';
-h+='<circle cx="18" cy="19" r="3" stroke="black" stroke-width="2"/>';
-h+='<line x1="8.6" y1="13.5" x2="15.4" y2="17.5"';
-h+=' stroke="black" stroke-width="2" stroke-linecap="round"/>';
-h+='<line x1="15.4" y1="6.5" x2="8.6" y2="10.5"';
-h+=' stroke="black" stroke-width="2" stroke-linecap="round"/>';
-h+='</svg></button>';
-h+='<div style="position:relative">';
-h+='<button class="seller-menu-btn"';
-h+=' onclick="toggleMenu(this)">';
-h+='<svg width="20" height="20"';
-h+=' viewBox="0 0 24 24" fill="black">';
-h+='<circle cx="12" cy="5" r="2"/>';
-h+='<circle cx="12" cy="12" r="2"/>';
-h+='<circle cx="12" cy="19" r="2"/>';
-h+='</svg></button>';
-h+='<div class="seller-menu">';
-h+='<button onclick="ouvrirSupprimer(this)"';
-h+=' style="color:#ff3b30">Supprimer</button>';
-h+='</div></div></div></div>';
-h+=photo;
-h+='<div class="annonce-infos">';
-h+='<h3>'+item.titre+'</h3>';
-h+='<p style="color:#FFA500;';
-h+='font-weight:800;font-size:20px">';
-h+=item.prix+' '+item.devise+'</p>';
-h+='<p>'+item.description+'</p>';
-h+='<p style="font-size:13px">';
-h+='<b>'+item.ville+'</b> | '+item.categorie+'</p>';
-h+='<div style="display:flex;gap:10px;margin-top:12px">';
-h+='<a href="tel:'+item.telephone+'"';
-h+=' style="background:#0B7E2E;color:white;';
-h+='padding:8px 16px;border-radius:6px;';
-h+='text-decoration:none;font-weight:bold">';
-h+='Appeler</a>';
-h+=wa;
-h+='</div></div>';
-d.innerHTML=h;
-c.appendChild(d);
-});
-}
-function searchAnnonces(){
-let q=document.getElementById('searchBar').value.toLowerCase();
-let f=toutesAnnonces.filter(i=>
-(i.titre+i.description+i.ville).toLowerCase().includes(q));
-afficherAnnonces(f);
-}
-function toggleMenu(b){
-document.querySelectorAll('.seller-menu').forEach(m=>{
-if(m!==b.nextElementSibling) m.classList.remove('show')});
-b.nextElementSibling.classList.toggle('show');
-}
-let carteASupprimer=null;
-function ouvrirSupprimer(b){
-carteASupprimer=b.closest('.annonce-card');
-document.getElementById('modalSupprimer').style.display='flex';
-b.closest('.seller-menu').classList.remove('show');}
-function fermerSupprimer(){
-document.getElementById('modalSupprimer').style.display='none';
-carteASupprimer=null;}
-function confirmerSupprimer(){
-if(carteASupprimer) carteASupprimer.remove();
-fermerSupprimer();}
-document.getElementById('annonceForm').addEventListener('submit',
-async(e)=>{
-e.preventDefault();
-let msg=document.getElementById('formMsg');
-msg.innerText='En cours...';
-let data=Object.fromEntries(new FormData(e.target).entries());
-data.date=new Date().toLocaleString('fr-FR');
-data.vendeur=localStorage.getItem('vendeurNom')||'';
-data.entreprise=localStorage.getItem('entrepriseNom')||'';
-try{
-let r=await fetch(SHEETDB,{
-method:'POST',
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify({data:[data]})});
-if(r.ok){
-msg.innerText='Publiee';e.target.reset();
-setTimeout(()=>{closeModal();fetchAnnonces();
-msg.innerText=''},1200);
-}else{msg.innerText='Erreur';}
-}catch(err){msg.innerText=err.message}
-});
-fetchAnnonces();
-if(localStorage.getItem('theme')==='dark'){
-document.body.classList.add('dark');}
-  function ouvrirMenuPhoto(){
- document.getElementById('menuPhoto').style.display='block';
- document.getElementById('fondMenuPhoto').style.display='block';
-}
-function fermerMenuPhoto(){
- document.getElementById('menuPhoto').style.display='none';
- document.getElementById('fondMenuPhoto').style.display='none';
-}
-function ouvrirGalerie(){
- fermerMenuPhoto();
- setTimeout(()=>{ document.getElementById('inputGalerie').click(); },200);
-}
-function prendreCamera(){
- fermerMenuPhoto();
- setTimeout(()=>{ document.getElementById('inputCamera').click(); },200);
-}
+
+// --- PHOTO PROFIL COMPRESSION (NE DISPARAIT PLUS) ---
+function ouvrirGalerie(){ fermerMenuPhoto(); setTimeout(()=>{ document.getElementById('inputGalerie').click(); },200); }
+function prendreCamera(){ fermerMenuPhoto(); setTimeout(()=>{ document.getElementById('inputCamera').click(); },200); }
 function changerPhotoFichier(input){
   if(!input.files ||!input.files[0]) return;
-  let fichier = input.files[0];
-  let reader = new FileReader();
-
-  reader.onload = function(e){
-    let img = new Image();
-    img.onload = function(){
-      // Compression à 400px max
-      let canvas = document.createElement('canvas');
-      let max = 400;
-      let ratio = Math.min(max/img.width, max/img.height);
-      canvas.width = img.width * ratio;
-      canvas.height = img.height * ratio;
-      let ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-      let base64Petit = canvas.toDataURL('image/jpeg', 0.7);
-
-      // Affiche
-      document.getElementById('previewProfil').src = base64Petit;
-      document.getElementById('imgFullProfil').src = base64Petit;
-      // Sauve la version compressée (ne disparaitra plus)
-      localStorage.setItem('vylo_photo_profil', base64Petit);
+  let fichier=input.files[0]; let reader=new FileReader();
+  reader.onload=function(e){
+    let img=new Image();
+    img.onload=function(){
+      let canvas=document.createElement('canvas'); let max=400;
+      let ratio=Math.min(max/img.width,max/img.height);
+      canvas.width=img.width*ratio; canvas.height=img.height*ratio;
+      let ctx=canvas.getContext('2d'); ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      let base64Petit=canvas.toDataURL('image/jpeg',0.7);
+      document.getElementById('previewProfil').src=base64Petit;
+      document.getElementById('imgFullProfil').src=base64Petit;
+      localStorage.setItem('vylo_photo_profil',base64Petit);
       fermerMenuPhoto();
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(fichier);
-  }
-
-// ET ajoute ça tout en haut dans ton <script> au chargement de la page
-window.addEventListener('DOMContentLoaded', () => {
-  let photoSauvee = localStorage.getItem('vylo_photo_profil');
-  if(photoSauvee){
-    let p1 = document.getElementById('previewProfil');
-    let p2 = document.getElementById('imgFullProfil');
-    if(p1) p1.src = photoSauvee;
-    if(p2) p2.src = photoSauvee;
-  }
-});
-  function supprimerPhotoProfil(){
+    }; img.src=e.target.result;
+  }; reader.readAsDataURL(fichier);
+}
+function supprimerPhotoProfil(){
   localStorage.removeItem('vylo_photo_profil');
-  let defaut = 'https://cdn-icons-png.flaticon.com/512/149/149071.png';
-  document.getElementById('previewProfil').src = defaut;
-  document.getElementById('imgFullProfil').src = defaut;
+  let defaut='https://cdn-icons-png.flaticon.com/512/149/149071.png';
+  document.getElementById('previewProfil').src=defaut;
+  document.getElementById('imgFullProfil').src=defaut;
   fermerMenuPhoto();
-  }
-  
-function fermerModal(id){
- const modal=document.getElementById(id);
- if(modal) modal.style.display='none';
- document.body.style.overflow='auto';
 }
 
-function ouvrirPhotoProfil(){
-  const src = document.getElementById('previewProfil').src;
-  document.getElementById('imgFullProfil').src = src;
-  document.getElementById('modalPhotoProfil').style.display='flex';
-  }
-
-function fermerPhotoProfil(){
-  document.getElementById('modalPhotoProfil').style.display='none';
+// --- NEWS VYLO (NOUVEAU - REMPLACE ENREGISTRER) ---
+function ouvrirNews(){ document.getElementById('modalNews').style.display='block'; afficherNews(); }
+function ajouterNews(){
+  let t=document.getElementById('inputNewsTitre').value;
+  let d=document.getElementById('inputNewsDetail').value;
+  let txt=(t+" "+d).toLowerCase();
+  let keys=["vylo","article","boutique","magasin","electronique","challenge","innovation","stock","commande","livraison"];
+  if(!keys.some(k=>txt.includes(k))){ alert("❌ Bloqué: info non-Vylo non enregistrée"); return; }
+  let news=JSON.parse(localStorage.getItem('vylo_news')||'[]');
+  news.unshift({titre:t,detail:d,date:new Date().toLocaleDateString()});
+  localStorage.setItem('vylo_news',JSON.stringify(news));
+  document.getElementById('inputNewsTitre').value='';
+  document.getElementById('inputNewsDetail').value='';
+  afficherNews();
 }
+function afficherNews(){
+  let cont=document.getElementById('listeNews'); if(!cont) return;
+  let news=JSON.parse(localStorage.getItem('vylo_news')||'[]');
+  cont.innerHTML=news.map(n=>`<div style="background:#fff;padding:14px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,.06);margin-bottom:10px;"><b>${n.titre}</b><br><small>${n.detail}</small><br><small style="color:#888;">${n.date}</small></div>`).join('')||"<center style='color:#888;margin-top:40px;'>Aucune News Vylo</center>";
+}
+
+// --- PARAMETRES ---
+function ouvrirParametres(){ document.getElementById('modalParametres').style.display='flex'; majBoutonTheme(); }
+function fermerParametres(){ document.getElementById('modalParametres').style.display='none'; }
+function majBoutonTheme(){
+  let b=document.getElementById('btnToggleTheme');
+  if(document.body.classList.contains('dark')){ b.textContent='Desactiver'; b.style.background='#333'; }
+  else{ b.textContent='Activer'; b.style.background='#FF8C00'; }
+}
+function toggleThemeFromParams(){
+  document.body.classList.toggle('dark');
+  localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light');
+  majBoutonTheme();
+}
+
+// --- ANNONCES (TES FONCTIONS INTACTES) ---
+let toutesAnnonces=[]; let lienPartage=""; let indexAEditer=-1;
+function partagerAnnonce(btn){
+  let card=btn.closest('.annonce-card');
+  let titre=card.querySelector('h3')?.innerText||'Annonce';
+  lienPartage=window.location.href;
+  let textePartage=titre+" sur VYLO-CD "+lienPartage;
+  let texte=encodeURIComponent(textePartage);
+  document.getElementById('shareWhatsapp').href="https://wa.me/?text="+texte;
+  document.getElementById('shareFacebook').href="https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(lienPartage);
+  if(navigator.share){ navigator.share({title:titre,text:textePartage,url:lienPartage}).then(()=>{}).catch(()=>{ document.getElementById('modalPartage').style.display='flex'; }); }
+  else{ document.getElementById('modalPartage').style.display='flex'; }
+}
+function fermerPartage(){ document.getElementById('modalPartage').style.display='none'; }
+function copierLien(){ navigator.clipboard.writeText(lienPartage); alert('Lien copie'); fermerPartage(); }
+function ouvrirModifier(btn){
+  let card=btn.closest('.annonce-card'); let idx=parseInt(card.dataset.index); indexAEditer=idx;
+  let item=toutesAnnonces[idx];
+  document.getElementById('editTitre').value=item.titre||'';
+  document.getElementById('editDescription').value=item.description||'';
+  document.getElementById('editPrix').value=item.prix||'';
+  document.getElementById('editDevise').value=item.devise||'FC';
+  document.getElementById('editTelephone').value=item.telephone||'';
+  document.getElementById('editWhatsapp').value=item.whatsapp||'';
+  document.getElementById('modalModifier').style.display='flex';
+}
+function fermerModifier(){ document.getElementById('modalModifier').style.display='none'; }
+function enregistrerModification(){
+  if(indexAEditer<0) return;
+  let it=toutesAnnonces[indexAEditer];
+  it.titre=document.getElementById('editTitre').value;
+  it.description=document.getElementById('editDescription').value;
+  it.prix=document.getElementById('editPrix').value;
+  it.devise=document.getElementById('editDevise').value;
+  it.telephone=document.getElementById('editTelephone').value;
+  it.whatsapp=document.getElementById('editWhatsapp').value;
+  afficherAnnonces(toutesAnnonces); fermerModifier(); alert('Modifie');
+}
+
+let carteASupprimer=null;
+function ouvrirSupprimer(b){ carteASupprimer=b.closest('.annonce-card'); document.getElementById('modalSupprimer').style.display='flex'; b.closest('.seller-menu').classList.remove('show'); }
+function fermerSupprimer(){ document.getElementById('modalSupprimer').style.display='none'; carteASupprimer=null; }
+function confirmerSupprimer(){ if(carteASupprimer) carteASupprimer.remove(); fermerSupprimer(); }
+
+function searchAnnonces(){
+  let q=document.getElementById('searchBar').value.toLowerCase();
+  let f=toutesAnnonces.filter(i=>(i.titre+i.description+i.ville).toLowerCase().includes(q));
+  afficherAnnonces(f);
+}
+function toggleMenu(b){
+  document.querySelectorAll('.seller-menu').forEach(m=>{ if(m!=b.nextElementSibling) m.classList.remove('show') });
+  b.nextElementSibling.classList.toggle('show');
+}
+
+async function fetchAnnonces(){
+  let c=document.getElementById('annonces');
+  try{
+    let r=await fetch(SHEETDB); let d=await r.json();
+    toutesAnnonces=d.filter(x=>x.titre); afficherAnnonces(toutesAnnonces);
+  }catch(e){ c.innerHTML='Erreur:'+e.message; }
+}
+function afficherAnnonces(list){
+  let c=document.getElementById('annonces');
+  if(list.length==0){ c.innerHTML='<p style="text-align:center">Aucune annonce</p>'; return; }
+  c.innerHTML=''; let rev=list.slice().reverse();
+  rev.forEach((item,revIdx)=>{
+    let idx=list.length-1-revIdx; let d=document.createElement('div'); d.className='annonce-card'; d.dataset.index=idx;
+    let photo=''; if(item.photo){ photo=`<img class="annonce-photo" src="${item.photo}">`; }
+    let wa=''; if(item.whatsapp){ wa=`<a href="https://wa.me/${item.whatsapp}" target="_blank" style="width:100%;height:100%;"><img src="IMG-20260821-WA4127.jpg" style="width:100%;height:100%;"></a>`; }
+    let h=''; h+=`<div class="annonce-header"><small>${item.date||''}</small><div class="right-actions"><button class="edit-btn" onclick="ouvrirModifier(this)" style="width:18px;height:18px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF8C00" stroke-width="2"><path d="M11 4A2 0 0 1 2 2a2 2 0 0 0 2 2h14"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg></button><button class="share-btn" onclick="partagerAnnonce(this)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="18" cy="5" r="3" stroke="black" stroke-width="2"/><circle cx="6" cy="12" r="3" stroke="black" stroke-width="2"/><circle cx="18" cy="19" r="3" stroke="black" stroke-width="2"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5" stroke="black" stroke-width="2" stroke-linecap="round"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5" stroke="black" stroke-width="2" stroke-linecap="round"/></svg></button><div style="position:relative;"><button class="seller-menu-btn" onclick="toggleMenu(this)"><svg width="20" height="20" viewBox="0 0 24 24" fill="black"><circle cx="12" cy="5" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="12" cy="19" r="2"/></svg></button><div class="seller-menu"><button onclick="ouvrirSupprimer(this)" style="color:#ff3b30">Supprimer</button></div></div></div></div>`;
+    h+=photo; h+=`<div class="annonce-infos"><h3>${item.titre}</h3><p style="color:#FFA500;font-weight:800;font-size:20px;">${item.prix} ${item.devise}</p><p>${item.description}</p><p style="font-size:13px;"><b>${item.ville}</b> | ${item.categorie}</p><div style="display:flex;gap:10px;margin-top:12px;"><a href="tel:${item.telephone}" style="background:#0B7E2E;color:white;padding:8px 16px;border-radius:6px;text-decoration:none;font-weight:bold;">Appeler</a>${wa}</div></div>`;
+    d.innerHTML=h; c.appendChild(d);
+  });
+}
+
+document.getElementById('annonceForm').addEventListener('submit', async(e)=>{
+  e.preventDefault(); let msg=document.getElementById('formMsg'); msg.innerText='En cours...';
+  let data=Object.fromEntries(new FormData(e.target).entries());
+  data.date=new Date().toLocaleString('fr-FR'); data.vendeur=localStorage.getItem('vendeurNom')||''; data.entreprise=localStorage.getItem('entrepriseNom')||'';
+  try{
+    let r=await fetch(SHEETDB,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:[data]})});
+    if(r.ok){ msg.innerText='Publiee'; e.target.reset(); setTimeout(()=>{closeModal();fetchAnnonces();msg.innerText='';},1200); }
+    else{ msg.innerText='Erreur'; }
+  }catch(err){ msg.innerText=err.message; }
+});
+
+function fermerModal(id){ const modal=document.getElementById(id); if(modal) modal.style.display='none'; document.body.style.overflow="auto"; }
+function ouvrirPhotoProfilF(){ const src=document.getElementById('previewProfil').src; document.getElementById('photoGrande').src=src; document.getElementById('modalPhotoProfil').style.display='flex'; }
+function fermerPhotoProfil(){ document.getElementById('modalPhotoProfil').style.display='none'; }
 </script>
-
 <!-- MODAL PHOTO PROFIL STYLE WHATSAPP VRAI -->
 <div id="modalPhotoProfil" onclick="fermerPhotoProfil()" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#0b141a;z-index:9999;flex-direction:column;">
   <!-- Header avec flèche retour comme WhatsApp -->
