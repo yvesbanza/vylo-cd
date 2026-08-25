@@ -77,3 +77,209 @@ body{font-family:system-ui;margin:0;background:#f5f5f5}
 <button onclick="enregistrerProfil()" style="width:100%;margin-top:18px;background:#111;color:#fff;padding:16px;border-radius:12px;border:none;font-weight:bold;font-size:16px">Enregistrer le profil</button>
 <div id="affTel" style="text-align:center;margin-top:12px;color:#888;font-size:13px"></div>
 </div></div></div>
+<div id="fondMenuPhoto" onclick="fermerMenuPhoto()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:9998"></div>
+<div id="menuPhoto" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;z-index:9999;padding:10px">
+<button onclick="ouvrirGalerie()" style="width:100%;padding:16px;border:none;background:none;text-align:left;border-bottom:1px solid #eee">📁 Choisir dans la galerie</button>
+<button onclick="prendreCamera()" style="width:100%;padding:16px;border:none;background:none;text-align:left;border-bottom:1px solid #eee">📷 Prendre une photo</button>
+<button onclick="supprimerPhotoProfil()" style="width:100%;padding:16px;border:none;background:none;text-align:left;color:red">🗑️ Supprimer la photo</button>
+<button onclick="fermerMenuPhoto()" style="width:100%;padding:14px;margin-top:8px;background:#f2f2f2;border:none;border-radius:10px">Annuler</button>
+</div>
+<div id="modalPhotoProfil" onclick="fermerPhotoProfil()" style="display:none;position:fixed;inset:0;background:#000;z-index:10000;flex-direction:column">
+<div style="padding:15px;display:flex;align-items:center;gap:20px;"><span onclick="fermerPhotoProfil()" style="color:white;font-size:24px;">←</span><span style="color:white;">Photo de profil</span></div>
+<div style="flex:1;display:flex;justify-content:center;align-items:center;"><img id="imgFullProfil" src="" style="width:85%;max-width:350px;aspect-ratio:1;border-radius:50%;object-fit:cover"></div>
+</div>
+<div id="modalPartage" class="modal"><div class="modal-content"><h3>Partager</h3><a id="shareWhatsapp">WhatsApp</a><br><a id="shareFacebook">Facebook</a><br><button onclick="copierLien()">Copier lien</button><br><button onclick="fermerPartage()">Fermer</button></div></div>
+<div id="modalModifier" class="modal"><div class="modal-content"><input id="editTitre"><textarea id="editDescription"></textarea><input id="editPrix"><select id="editDevise"><option>FC</option><option>$</option></select><input id="editTelephone"><input id="editWhatsapp"><button onclick="enregistrerModification()">Enregistrer</button><button onclick="fermerModifier()">Fermer</button></div></div>
+<div id="modalSupprimer" class="modal"><div class="modal-content"><p>Supprimer?</p><button onclick="confirmerSupprimer()">Oui</button><button onclick="fermerSupprimer()">Non</button></div></div>
+
+<script>
+const SHEETDB='https://sheetdb.io/api/v1/ulpea3mizvmlt';
+
+function openModal(){document.getElementById('formModal').style.display='block'}
+function closeModal(){document.getElementById('formModal').style.display='none'}
+function ouvrirProfil(){document.getElementById('modalProfil').style.display='flex'}
+function fermerProfil(){document.getElementById('modalProfil').style.display='none';}
+function ouvrirMenuPhoto(){document.getElementById('menuPhoto').style.display='block';document.getElementById('fondMenuPhoto').style.display='block';}
+function fermerMenuPhoto(){document.getElementById('menuPhoto').style.display='none';document.getElementById('fondMenuPhoto').style.display='none';}
+
+function enregistrerProfil(){
+  localStorage.setItem('vendeurNom',document.getElementById('profilNom').value);
+  localStorage.setItem('entrepriseNom',document.getElementById('profilEntreprise').value);
+  localStorage.setItem('entrepriseTel',document.getElementById('profilTel').value);
+  localStorage.setItem('profilEmail',document.getElementById('profilEmail').value);
+  localStorage.setItem('profilAdresse',document.getElementById('profilAdresse').value);
+  localStorage.setItem('profilQui',document.getElementById('profilQui').value);
+  document.getElementById('affNom').innerText=document.getElementById('profilNom').value;
+  document.getElementById('affEntreprise').innerText=document.getElementById('profilEntreprise').value;
+  document.getElementById('affTel').innerText=document.getElementById('profilTel').value;
+  alert('Profil enregistre');fermerProfil();
+}
+
+function ouvrirGalerie(){fermerMenuPhoto();setTimeout(()=>{document.getElementById('inputGalerie').click();},200);}
+function prendreCamera(){fermerMenuPhoto();setTimeout(()=>{document.getElementById('inputCamera').click();},200);}
+
+function changerPhotoFichier(input){
+  if(!input.files||!input.files[0])return;
+  let f=input.files[0];let reader=new FileReader();
+  reader.onload=function(e){
+    let img=new Image();
+    img.onload=function(){
+      let canvas=document.createElement('canvas');let max=400;
+      let ratio=Math.min(max/img.width,max/img.height);
+      canvas.width=img.width*ratio;canvas.height=img.height*ratio;
+      let ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,canvas.width,canvas.height);
+      let base64=canvas.toDataURL('image/jpeg',0.7);
+      document.getElementById('previewProfil').src=base64;
+      document.getElementById('imgFullProfil').src=base64;
+      document.getElementById('profilAvatar').src=base64;
+      localStorage.setItem('vylo_photo_profil',base64);
+      localStorage.setItem('profilPhoto',base64);
+      fermerMenuPhoto();
+    };img.src=e.target.result;
+  };reader.readAsDataURL(f);
+}
+
+function supprimerPhotoProfil(){
+  localStorage.removeItem('vylo_photo_profil');
+  localStorage.removeItem('profilPhoto');
+  let d='https://cdn-icons-png.flaticon.com/512/149/149071.png';
+  document.getElementById('previewProfil').src=d;
+  document.getElementById('imgFullProfil').src=d;
+  document.getElementById('profilAvatar').src=d;
+  fermerMenuPhoto();
+}
+
+let toutesAnnonces=[];
+let lienPartage="";
+let indexAEditer=-1;
+
+function partagerAnnonce(btn){
+  let card=btn.closest('.annonce-card');
+  let titre=card.querySelector('h3')?.innerText||'Annonce';
+  lienPartage=window.location.href;
+  let txt=titre+" sur VYLO-CD "+lienPartage;
+  let enc=encodeURIComponent(txt);
+  document.getElementById('shareWhatsapp').href="https://wa.me/?text="+enc;
+  document.getElementById('shareFacebook').href="https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(lienPartage);
+  document.getElementById('modalPartage').style.display='flex';
+}
+function fermerPartage(){document.getElementById('modalPartage').style.display='none';}
+function copierLien(){navigator.clipboard.writeText(lienPartage);alert('Lien copie');fermerPartage();}
+
+function ouvrirModifier(btn){
+  let card=btn.closest('.annonce-card');
+  let idx=parseInt(card.dataset.index);
+  indexAEditer=idx;
+  let item=toutesAnnonces[idx];
+  document.getElementById('editTitre').value=item.titre||'';
+  document.getElementById('editDescription').value=item.description||'';
+  document.getElementById('editPrix').value=item.prix||'';
+  document.getElementById('editDevise').value=item.devise||'FC';
+  document.getElementById('editTelephone').value=item.telephone||'';
+  document.getElementById('editWhatsapp').value=item.whatsapp||'';
+  document.getElementById('modalModifier').style.display='flex';
+}
+function fermerModifier(){document.getElementById('modalModifier').style.display='none';}
+function enregistrerModification(){
+  if(indexAEditer<0)return;
+  let it=toutesAnnonces[indexAEditer];
+  it.titre=document.getElementById('editTitre').value;
+  it.description=document.getElementById('editDescription').value;
+  it.prix=document.getElementById('editPrix').value;
+  it.devise=document.getElementById('editDevise').value;
+  it.telephone=document.getElementById('editTelephone').value;
+  it.whatsapp=document.getElementById('editWhatsapp').value;
+  afficherAnnonces(toutesAnnonces);
+  fermerModifier();alert('Modifie');
+}
+
+async function fetchAnnonces(){
+  let c=document.getElementById('annonces');
+  try{
+    let r=await fetch(SHEETDB);
+    let d=await r.json();
+    toutesAnnonces=d.filter(x=>x.titre);
+    afficherAnnonces(toutesAnnonces);
+  }catch(e){c.innerHTML='Erreur:'+e.message}
+}
+
+function afficherAnnonces(list){
+  let c=document.getElementById('annonces');
+  if(list.length==0){c.innerHTML='<p style="text-align:center">Aucune annonce</p>';return;}
+  c.innerHTML='';
+  let rev=list.slice().reverse();
+  rev.forEach((item,revIdx)=>{
+    let idx=list.length-1-revIdx;
+    let d=document.createElement('div');
+    d.className='annonce-card';
+    d.dataset.index=idx;
+
+    let photo='';
+    if(item.photo){
+      photo='<img class="annonce-photo" src="'+item.photo+'">';
+    }
+
+    // --- ICI LES ICONES PETITES DEJA CORRIGEES ---
+    let wa='';
+    if(item.whatsapp){
+      wa='<a href="https://wa.me/'+item.whatsapp+'" target="_blank" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:#25D366;border-radius:8px;overflow:hidden;flex-shrink:0"><img src="IMG-20260821-WA4127.jpg" style="width:28px;height:28px;object-fit:contain"></a>';
+    }
+
+    let h='';
+    h+='<div class="annonce-header"><small>'+(item.date||'')+'</small><div class="right-actions"><button onclick="ouvrirModifier(this)">✏️</button><button onclick="partagerAnnonce(this)">↗️</button><div style="position:relative;"><button onclick="toggleMenu(this)">⋮</button><div class="seller-menu"><button onclick="ouvrirSupprimer(this)" style="color:red">Supprimer</button></div></div></div></div>';
+    h+=photo;
+    h+='<div class="annonce-infos"><h3>'+item.titre+'</h3><p style="color:#FFA500;font-weight:800;font-size:20px;">'+item.prix+' '+item.devise+'</p><p>'+item.description+'</p><p style="font-size:13px;"><b>'+item.ville+'</b> | '+item.categorie+'</p>';
+    h+='<div style="display:flex;gap:8px;margin-top:12px;align-items:center;"><a href="tel:'+item.telephone+'" style="background:#0B7E2E;color:white;padding:0 18px;height:42px;display:flex;align-items:center;border-radius:8px;text-decoration:none;font-weight:bold;font-size:14px;">Appeler</a>'+wa+'</div></div>';
+
+    d.innerHTML=h;
+    c.appendChild(d);
+  });
+}
+
+function searchAnnonces(){let q=document.getElementById('searchBar').value.toLowerCase();let f=toutesAnnonces.filter(i=>(i.titre+i.description+i.ville).toLowerCase().includes(q));afficherAnnonces(f);}
+function toggleMenu(b){document.querySelectorAll('.seller-menu').forEach(m=>{if(m!=b.nextElementSibling)m.classList.remove('show')});b.nextElementSibling.classList.toggle('show');}
+
+let carteASupprimer=null;
+function ouvrirSupprimer(b){carteASupprimer=b.closest('.annonce-card');document.getElementById('modalSupprimer').style.display='flex';b.closest('.seller-menu').classList.remove('show');}
+function fermerSupprimer(){document.getElementById('modalSupprimer').style.display='none';carteASupprimer=null;}
+function confirmerSupprimer(){if(carteASupprimer)carteASupprimer.remove();fermerSupprimer();}
+
+document.getElementById('annonceForm').addEventListener('submit',async(e)=>{
+  e.preventDefault();
+  let msg=document.getElementById('formMsg');msg.innerText='En cours...';
+  let data=Object.fromEntries(new FormData(e.target).entries());
+  data.date=new Date().toLocaleString('fr-FR');
+  data.vendeur=localStorage.getItem('vendeurNom')||'';
+  data.entreprise=localStorage.getItem('entrepriseNom')||'';
+  try{
+    let r=await fetch(SHEETDB,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:[data]})});
+    if(r.ok){msg.innerText='Publiee';e.target.reset();setTimeout(()=>{closeModal();fetchAnnonces();msg.innerText='';},1200);}else{msg.innerText='Erreur';}
+  }catch(err){msg.innerText=err.message}
+});
+
+fetchAnnonces();
+
+window.addEventListener('DOMContentLoaded',()=>{
+  let p=localStorage.getItem('vylo_photo_profil')||localStorage.getItem('profilPhoto');
+  if(p){
+    let p1=document.getElementById('previewProfil');
+    let p2=document.getElementById('imgFullProfil');
+    let p3=document.getElementById('profilAvatar');
+    if(p1)p1.src=p;if(p2)p2.src=p;if(p3)p3.src=p;
+  }
+  let n=localStorage.getItem('vendeurNom');if(n)document.getElementById('profilNom').value=n;
+  let en=localStorage.getItem('entrepriseNom');if(en)document.getElementById('profilEntreprise').value=en;
+  let t=localStorage.getItem('entrepriseTel');if(t)document.getElementById('profilTel').value=t;
+  let em=localStorage.getItem('profilEmail');if(em)document.getElementById('profilEmail').value=em;
+  let ad=localStorage.getItem('profilAdresse');if(ad)document.getElementById('profilAdresse').value=ad;
+  let qui=localStorage.getItem('profilQui');if(qui)document.getElementById('profilQui').value=qui;
+  if(n)document.getElementById('affNom').innerText=n;
+  if(en)document.getElementById('affEntreprise').innerText=en;
+  if(t)document.getElementById('affTel').innerText=t;
+});
+
+function ouvrirPhotoProfil(){const src=document.getElementById('previewProfil').src;document.getElementById('imgFullProfil').src=src;document.getElementById('modalPhotoProfil').style.display='flex';}
+function fermerPhotoProfil(){document.getElementById('modalPhotoProfil').style.display='none';}
+</script>
+</body>
+</html>
