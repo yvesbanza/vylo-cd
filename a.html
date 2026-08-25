@@ -5,104 +5,91 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VYLO-CD</title>
 <style>
-body{font-family:system-ui;margin:0;background:#f5f5f5;color:#111}
+body{font-family:system-ui;margin:0;background:#f5f5f5}
 body.dark{background:#121212;color:#fff}
 .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;overflow-y:auto}
 .modal-content{background:#fff;margin:20px auto;padding:20px;border-radius:16px;max-width:500px}
-body.dark.modal-content{background:#222}
-.annonce-card{background:#fff;border-radius:12px;margin:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.07)}
-body.dark.annonce-card{background:#1e1e1e}
-.annonce-photo{width:100%;height:220px;object-fit:cover}
-.annonce-infos{padding:12px}
-.annonce-header{display:flex;justify-content:space-between;padding:8px 12px;align-items:center}
+.annonce-card{background:#fff;border-radius:14px;margin:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.07);border:1px solid #eee}
+.annonce-photo{width:100%;height:240px;object-fit:cover}
+.annonce-infos{padding:12px 14px}
+.annonce-header{display:flex;justify-content:space-between;align-items:center;padding:10px 12px}
 .right-actions{display:flex;gap:8px;align-items:center}
-.seller-menu{display:none;position:absolute;right:0;top:30px;background:#fff;box-shadow:0 4px 15px rgba(0,0,0,.15);border-radius:8px;padding:8px;z-index:10}
+.icon-btn{width:36px;height:36px;background:#f2f2f2;border-radius:10px;display:flex;align-items:center;justify-content:center;border:none;font-size:16px;cursor:pointer}
+.seller-menu{display:none;position:absolute;right:0;top:40px;background:#fff;box-shadow:0 4px 15px rgba(0,0,0,.15);border-radius:10px;padding:8px;z-index:10;width:130px}
 .seller-menu.show{display:block}
-.row2{display:flex;gap:10px}.row2>div{flex:1}
 #previewProfil{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 4px 15px rgba(0,0,0,.15)}
 .profil-item{display:flex;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid #f0f0f0}
 .profil-icon{width:38px;height:38px;background:#FFF3E0;border-radius:50%;display:flex;align-items:center;justify-content:center}
-.profil-item input{border:none;flex:1;font-size:15px;outline:none;background:transparent}
 .profil-label{font-size:11px;color:#888}
 </style>
 </head>
 <body>
 
-<div style="padding:12px;display:flex;justify-content:space-between;align-items:center;background:#fff;position:sticky;top:0;z-index:100">
-<input id="searchBar" oninput="searchAnnonces()" placeholder="Rechercher..." style="flex:1;padding:10px;border-radius:20px;border:1px solid #ddd">
-<button onclick="ouvrirProfil()" style="margin-left:10px;border:none;background:none"><img id="profilAvatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="width:36px;height:36px;border-radius:50%"></button>
-<button onclick="ouvrirParametres()" style="margin-left:8px;border:none;background:#f0f0f0;border-radius:50%;width:36px;height:36px">⚙️</button>
+<!-- HEADER COMME CAPTURE 2 -->
+<div style="background:#FF8C00;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100">
+<div style="background:#fff;border-radius:8px;padding:4px 10px;display:flex;align-items:center;gap:6px;font-weight:800;color:#0B7E2E;font-size:12px">🛒 VYLO</div>
+<b style="color:#fff;font-size:18px;letter-spacing:.5px">VYLO-CD</b>
+<img id="profilAvatar" onclick="ouvrirProfil()" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="width:36px;height:36px;border-radius:50%;background:#fff">
 </div>
 
-<div id="annonces" style="padding-bottom:80px"></div>
+<!-- BOUTON PUBLIER LARGE COMME CAPTURE 2 -->
+<div style="padding:12px;background:#fff">
+<button onclick="openModal()" style="width:100%;background:#FF8C00;color:#fff;border:none;padding:14px;border-radius:12px;font-weight:bold;font-size:15px">+ Publier une annonce</button>
+</div>
+
+<div style="padding:10px;display:flex;gap:10px;background:#fff;margin-bottom:8px">
+<input id="searchBar" oninput="searchAnnonces()" placeholder="Rechercher..." style="flex:1;padding:12px;border-radius:10px;border:1px solid #e0e0e0;background:#f9f9f9">
+<button onclick="ouvrirParametres()" style="width:46px;height:46px;background:#fff;border:1px solid #e0e0e0;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px">⬡</button>
+</div>
+
+<div id="annonces" style="padding-bottom:90px"></div>
+
 <button onclick="openModal()" style="position:fixed;bottom:20px;right:20px;background:#FF8C00;color:#fff;border:none;padding:14px 20px;border-radius:30px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.2)">+ Publier</button>
 
-<div id="formModal" class="modal">
-<div class="modal-content">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
-<h2>Publier une annonce</h2><span onclick="closeModal()" style="font-size:32px;cursor:pointer">x</span></div>
+<div id="formModal" class="modal"><div class="modal-content">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px"><h2>Publier</h2><span onclick="closeModal()" style="font-size:32px;cursor:pointer">x</span></div>
 <form id="annonceForm">
-<label>Titre (ex: iPhone 13)</label><input type="text" name="titre" required style="width:100%;padding:10px;margin-bottom:10px;border-radius:8px;border:1px solid #ddd">
-<label>Description</label><textarea name="description" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd" rows="3"></textarea>
-<div class="row2" style="margin-top:10px"><div><label>Prix</label><input type="number" name="prix" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd"></div><div><label>Devise</label><select name="devise" style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd"><option value="FC">FC</option><option value="$">$</option></select></div></div>
-<div class="row2" style="margin-top:10px"><div><label>Ville</label><input type="text" name="ville" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd"></div><div><label>Categorie</label><select name="categorie" required style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd"><option value="">Choisir</option><option>Telephone</option><option>Automobile</option><option>Mode</option><option>Immobilier</option><option>Electronique</option><option>Autre</option></select></div></div>
-<label style="margin-top:10px;display:block">Telephone</label><input type="tel" name="telephone" required style="width:100%;padding:10px;margin-bottom:10px;border-radius:8px;border:1px solid #ddd">
-<label>WhatsApp</label><input type="tel" name="whatsapp" placeholder="2439..." style="width:100%;padding:10px;margin-bottom:10px;border-radius:8px;border:1px solid #ddd">
-<label>Photos (lien)</label><input type="url" name="photo" placeholder="https://..." style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd">
-<button type="submit" style="background:#FF8C00;color:white;border:none;padding:16px;width:100%;border-radius:12px;font-weight:bold;font-size:17px;margin-top:15px">Publier maintenant</button>
-<p id="formMsg" style="text-align:center;margin-top:8px;"></p>
+<input type="text" name="titre" required placeholder="Titre ex: iPhone 13" style="width:100%;padding:12px;margin-bottom:10px;border-radius:8px;border:1px solid #ddd">
+<textarea name="description" required placeholder="Description" style="width:100%;padding:12px;border-radius:8px;border:1px solid #ddd" rows="3"></textarea>
+<div style="display:flex;gap:10px;margin-top:10px"><input type="number" name="prix" required placeholder="Prix" style="flex:1;padding:12px;border-radius:8px;border:1px solid #ddd"><select name="devise" style="flex:1;padding:12px;border-radius:8px;border:1px solid #ddd"><option value="$">$</option><option value="FC">FC</option></select></div>
+<div style="display:flex;gap:10px;margin-top:10px"><input type="text" name="ville" required placeholder="Ville" style="flex:1;padding:12px;border-radius:8px;border:1px solid #ddd"><select name="categorie" required style="flex:1;padding:12px;border-radius:8px;border:1px solid #ddd"><option>Telephone</option><option>Automobile</option><option>Mode</option><option>Immobilier</option><option>Electronique</option><option>Autre</option></select></div>
+<input type="tel" name="telephone" required placeholder="Telephone" style="width:100%;padding:12px;margin-top:10px;border-radius:8px;border:1px solid #ddd">
+<input type="tel" name="whatsapp" placeholder="WhatsApp 243..." style="width:100%;padding:12px;margin-top:10px;border-radius:8px;border:1px solid #ddd">
+<input type="url" name="photo" placeholder="Lien photo https://" style="width:100%;padding:12px;margin-top:10px;border-radius:8px;border:1px solid #ddd">
+<button type="submit" style="background:#FF8C00;color:white;border:none;padding:16px;width:100%;border-radius:12px;font-weight:bold;margin-top:15px">Publier maintenant</button>
+<p id="formMsg" style="text-align:center"></p>
 </form></div></div>
 
-<div id="modalProfil" class="modal" style="background:#f2f2f2;">
-<div style="background:#fff;min-height:100vh;max-width:480px;margin:0 auto;">
-<div style="display:flex;align-items:center;gap:14px;padding:16px;border-bottom:1px solid #eee">
-<span onclick="fermerProfil()" style="font-size:24px;cursor:pointer">←</span><b>Profil vendeur</b></div>
+<div id="modalProfil" class="modal" style="background:#f2f2f2;"><div style="background:#fff;min-height:100vh;max-width:480px;margin:0 auto;">
+<div style="display:flex;align-items:center;gap:14px;padding:16px;border-bottom:1px solid #eee"><span onclick="fermerProfil()" style="font-size:24px;cursor:pointer">←</span><b>Profil vendeur</b></div>
 <div style="display:flex;flex-direction:column;align-items:center;padding:30px 20px">
-<div style="position:relative">
-<img id="previewProfil" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" onclick="ouvrirMenuPhoto()">
-<div onclick="ouvrirMenuPhoto()" style="position:absolute;bottom:2px;right:2px;background:#FF8C00;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;border:2px solid #fff;">📷</div>
-</div>
+<div style="position:relative"><img id="previewProfil" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" onclick="ouvrirMenuPhoto()"><div onclick="ouvrirMenuPhoto()" style="position:absolute;bottom:2px;right:2px;background:#FF8C00;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;border:2px solid #fff;">📷</div></div>
 <input type="file" id="inputGalerie" accept="image/*" style="display:none" onchange="changerPhotoFichier(this)">
 <input type="file" id="inputCamera" accept="image/*" capture="environment" style="display:none" onchange="changerPhotoFichier(this)">
-<div id="affNom" style="margin-top:14px;font-weight:800;font-size:18px"></div>
-<div id="affEntreprise" style="color:#888;font-size:14px"></div>
-</div>
+<div id="affNom" style="margin-top:14px;font-weight:800;font-size:18px"></div><div id="affEntreprise" style="color:#888;font-size:14px"></div></div>
 <div style="padding:0 18px;">
-<div class="profil-item"><div class="profil-icon">👤</div><div style="flex:1"><div class="profil-label">Nom complet</div><input id="profilNom" placeholder="Ex: Jean Vylo"></div></div>
-<div class="profil-item"><div class="profil-icon">🏪</div><div style="flex:1"><div class="profil-label">Entreprise</div><input id="profilEntreprise" placeholder="Ex: VYLO Store"></div></div>
+<div class="profil-item"><div class="profil-icon">👤</div><div style="flex:1"><div class="profil-label">Nom</div><input id="profilNom" placeholder="Jean Vylo"></div></div>
+<div class="profil-item"><div class="profil-icon">🏪</div><div style="flex:1"><div class="profil-label">Entreprise</div><input id="profilEntreprise" placeholder="VYLO Store"></div></div>
 <div class="profil-item"><div class="profil-icon">📞</div><div style="flex:1"><div class="profil-label">Téléphone</div><input id="profilTel" placeholder="+243..."></div></div>
-<div class="profil-item"><div class="profil-icon">✉️</div><div style="flex:1"><div class="profil-label">Email</div><input id="profilEmail" placeholder="vylo@gmail.com"></div></div>
-<div class="profil-item" style="border:none"><div class="profil-icon">📍</div><div style="flex:1"><div class="profil-label">Adresse</div><input id="profilAdresse" placeholder="Kinshasa, Gombe"></div></div>
+<div class="profil-item"><div class="profil-icon">✉️</div><div style="flex:1"><div class="profil-label">Email</div><input id="profilEmail"></div></div>
+<div class="profil-item" style="border:none"><div class="profil-icon">📍</div><div style="flex:1"><div class="profil-label">Adresse</div><input id="profilAdresse"></div></div>
 </div>
-<div style="padding:18px">
-<div style="background:#FFF8E1;border-radius:14px;padding:14px;border:1px dashed #FFC107">
-<b style="font-size:13px">Qui sommes-nous?</b>
-<textarea id="profilQui" placeholder="Décris ton activité..." style="width:100%;border:none;background:transparent;margin-top:8px;outline:none;resize:none;height:60px"></textarea>
-</div>
-<button onclick="enregistrerProfil()" style="width:100%;margin-top:18px;background:#111;color:#fff;padding:16px;border-radius:12px;border:none;font-weight:bold;font-size:16px">Enregistrer le profil</button>
-<div id="affTel" style="text-align:center;margin-top:12px;color:#888;font-size:13px"></div>
-</div></div></div>
+<div style="padding:18px"><button onclick="enregistrerProfil()" style="width:100%;background:#111;color:#fff;padding:16px;border-radius:12px;border:none;font-weight:bold">Enregistrer</button><div id="affTel" style="text-align:center;margin-top:12px;color:#888;font-size:13px"></div></div>
+</div></div>
 <div id="fondMenuPhoto" onclick="fermerMenuPhoto()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:9998"></div>
 <div id="menuPhoto" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;z-index:9999;padding:10px">
-<button onclick="ouvrirGalerie()" style="width:100%;padding:16px;border:none;background:none;text-align:left;border-bottom:1px solid #eee">📁 Choisir dans la galerie</button>
-<button onclick="prendreCamera()" style="width:100%;padding:16px;border:none;background:none;text-align:left;border-bottom:1px solid #eee">📷 Prendre une photo</button>
-<button onclick="supprimerPhotoProfil()" style="width:100%;padding:16px;border:none;background:none;text-align:left;color:red">🗑️ Supprimer la photo</button>
+<button onclick="ouvrirGalerie()" style="width:100%;padding:16px;border:none;background:none;text-align:left;border-bottom:1px solid #eee">📁 Galerie</button>
+<button onclick="prendreCamera()" style="width:100%;padding:16px;border:none;background:none;text-align:left;border-bottom:1px solid #eee">📷 Camera</button>
+<button onclick="supprimerPhotoProfil()" style="width:100%;padding:16px;border:none;background:none;text-align:left;color:red">🗑️ Supprimer</button>
 <button onclick="fermerMenuPhoto()" style="width:100%;padding:14px;margin-top:8px;background:#f2f2f2;border:none;border-radius:10px">Annuler</button>
 </div>
-
-<div id="modalPhotoProfil" onclick="fermerPhotoProfil()" style="display:none;position:fixed;inset:0;background:#000;z-index:10000;flex-direction:column">
-<div style="padding:15px;display:flex;align-items:center;gap:20px;"><span onclick="fermerPhotoProfil()" style="color:white;font-size:24px;">←</span><span style="color:white;">Photo de profil</span></div>
-<div style="flex:1;display:flex;justify-content:center;align-items:center;"><img id="imgFullProfil" src="" style="width:85%;max-width:350px;aspect-ratio:1;border-radius:50%;object-fit:cover"></div>
-</div>
-
 <div id="modalPartage" class="modal"><div class="modal-content"><h3>Partager</h3><a id="shareWhatsapp" target="_blank">WhatsApp</a><br><br><a id="shareFacebook" target="_blank">Facebook</a><br><br><button onclick="copierLien()">Copier lien</button><br><br><button onclick="fermerPartage()">Fermer</button></div></div>
-<div id="modalModifier" class="modal"><div class="modal-content"><h3>Modifier</h3><input id="editTitre" style="width:100%;padding:10px;margin-bottom:8px"><textarea id="editDescription" style="width:100%;padding:10px;margin-bottom:8px"></textarea><input id="editPrix" style="width:100%;padding:10px;margin-bottom:8px"><select id="editDevise" style="width:100%;padding:10px;margin-bottom:8px"><option>FC</option><option>$</option></select><input id="editTelephone" style="width:100%;padding:10px;margin-bottom:8px"><input id="editWhatsapp" style="width:100%;padding:10px;margin-bottom:8px"><button onclick="enregistrerModification()" style="width:100%;padding:12px;background:#FF8C00;color:#fff;border:none;border-radius:8px">Enregistrer</button><button onclick="fermerModifier()" style="width:100%;padding:12px;margin-top:8px">Fermer</button></div></div>
-<div id="modalSupprimer" class="modal"><div class="modal-content"><p>Voulez-vous supprimer cette annonce?</p><button onclick="confirmerSupprimer()" style="background:red;color:#fff;padding:10px 20px;border:none;border-radius:8px">Oui, supprimer</button><button onclick="fermerSupprimer()" style="padding:10px 20px;border:none;border-radius:8px;margin-left:10px">Non</button></div></div>
-<div id="modalParametres" class="modal"><div class="modal-content"><h3>Paramètres</h3><button onclick="toggleThemeFromParams()" style="width:100%;padding:14px;border-radius:10px;border:1px solid #ddd">🌙 / ☀️ Mode sombre</button><br><br><button onclick="fermerParametres()" style="width:100%;padding:12px">Fermer</button></div></div>
+<div id="modalModifier" class="modal"><div class="modal-content"><input id="editTitre" style="width:100%;padding:10px;margin-bottom:8px"><textarea id="editDescription" style="width:100%;padding:10px;margin-bottom:8px"></textarea><input id="editPrix" style="width:100%;padding:10px"><button onclick="enregistrerModification()" style="width:100%;padding:12px;background:#FF8C00;color:#fff;border:none;border-radius:8px;margin-top:10px">Enregistrer</button><button onclick="fermerModifier()" style="width:100%;padding:12px;margin-top:8px">Fermer</button></div></div>
+<div id="modalSupprimer" class="modal"><div class="modal-content"><p>Supprimer?</p><button onclick="confirmerSupprimer()" style="background:red;color:#fff;padding:10px 20px;border:none;border-radius:8px">Oui</button><button onclick="fermerSupprimer()" style="padding:10px 20px;margin-left:10px">Non</button></div></div>
+<div id="modalParametres" class="modal"><div class="modal-content"><h3>Paramètres</h3><button onclick="toggleThemeFromParams()" style="width:100%;padding:14px;border-radius:10px;border:1px solid #ddd">🌙 Mode sombre</button><br><br><button onclick="fermerParametres()" style="width:100%;padding:12px">Fermer</button></div></div>
 
 <script>
 const SHEETDB='https://sheetdb.io/api/v1/ulpea3mizvmlt';
-
 function openModal(){document.getElementById('formModal').style.display='block'}
 function closeModal(){document.getElementById('formModal').style.display='none'}
 function ouvrirProfil(){document.getElementById('modalProfil').style.display='flex'}
@@ -112,156 +99,51 @@ function fermerMenuPhoto(){document.getElementById('menuPhoto').style.display='n
 function ouvrirParametres(){document.getElementById('modalParametres').style.display='flex';}
 function fermerParametres(){document.getElementById('modalParametres').style.display='none';}
 function toggleThemeFromParams(){document.body.classList.toggle('dark');localStorage.setItem('theme',document.body.classList.contains('dark')?'dark':'light');}
-
-function enregistrerProfil(){
-  localStorage.setItem('vendeurNom',document.getElementById('profilNom').value);
-  localStorage.setItem('entrepriseNom',document.getElementById('profilEntreprise').value);
-  localStorage.setItem('entrepriseTel',document.getElementById('profilTel').value);
-  localStorage.setItem('profilEmail',document.getElementById('profilEmail').value);
-  localStorage.setItem('profilAdresse',document.getElementById('profilAdresse').value);
-  localStorage.setItem('profilQui',document.getElementById('profilQui').value);
-  document.getElementById('affNom').innerText=document.getElementById('profilNom').value;
-  document.getElementById('affEntreprise').innerText=document.getElementById('profilEntreprise').value;
-  document.getElementById('affTel').innerText=document.getElementById('profilTel').value;
-  alert('Profil enregistre');fermerProfil();
-}
+function enregistrerProfil(){localStorage.setItem('vendeurNom',document.getElementById('profilNom').value);localStorage.setItem('entrepriseNom',document.getElementById('profilEntreprise').value);localStorage.setItem('entrepriseTel',document.getElementById('profilTel').value);document.getElementById('affNom').innerText=document.getElementById('profilNom').value;document.getElementById('affEntreprise').innerText=document.getElementById('profilEntreprise').value;document.getElementById('affTel').innerText=document.getElementById('profilTel').value;alert('Profil enregistre');fermerProfil();}
 function ouvrirGalerie(){fermerMenuPhoto();setTimeout(()=>{document.getElementById('inputGalerie').click();},200);}
 function prendreCamera(){fermerMenuPhoto();setTimeout(()=>{document.getElementById('inputCamera').click();},200);}
-function changerPhotoFichier(input){
-  if(!input.files||!input.files[0])return;
-  let f=input.files[0];let reader=new FileReader();
-  reader.onload=function(e){
-    let img=new Image();
-    img.onload=function(){
-      let canvas=document.createElement('canvas');let max=400;
-      let ratio=Math.min(max/img.width,max/img.height);
-      canvas.width=img.width*ratio;canvas.height=img.height*ratio;
-      let ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,canvas.width,canvas.height);
-      let base64=canvas.toDataURL('image/jpeg',0.7);
-      document.getElementById('previewProfil').src=base64;
-      document.getElementById('imgFullProfil').src=base64;
-      document.getElementById('profilAvatar').src=base64;
-      localStorage.setItem('vylo_photo_profil',base64);
-      localStorage.setItem('profilPhoto',base64);
-      fermerMenuPhoto();
-    };img.src=e.target.result;
-  };reader.readAsDataURL(f);
-}
-function supprimerPhotoProfil(){
-  localStorage.removeItem('vylo_photo_profil');localStorage.removeItem('profilPhoto');
-  let d='https://cdn-icons-png.flaticon.com/512/149/149071.png';
-  document.getElementById('previewProfil').src=d;
-  document.getElementById('imgFullProfil').src=d;
-  document.getElementById('profilAvatar').src=d;
-  fermerMenuPhoto();
-}
-function ouvrirPhotoProfil(){document.getElementById('imgFullProfil').src=document.getElementById('previewProfil').src;document.getElementById('modalPhotoProfil').style.display='flex';}
-function fermerPhotoProfil(){document.getElementById('modalPhotoProfil').style.display='none';}
-
+function changerPhotoFichier(input){if(!input.files||!input.files[0])return;let f=input.files[0];let reader=new FileReader();reader.onload=function(e){let img=new Image();img.onload=function(){let canvas=document.createElement('canvas');let max=400;let ratio=Math.min(max/img.width,max/img.height);canvas.width=img.width*ratio;canvas.height=img.height*ratio;let ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,canvas.width,canvas.height);let base64=canvas.toDataURL('image/jpeg',0.7);document.getElementById('previewProfil').src=base64;document.getElementById('profilAvatar').src=base64;localStorage.setItem('vylo_photo_profil',base64);fermerMenuPhoto();};img.src=e.target.result;};reader.readAsDataURL(f);}
+function supprimerPhotoProfil(){localStorage.removeItem('vylo_photo_profil');let d='https://cdn-icons-png.flaticon.com/512/149/149071.png';document.getElementById('previewProfil').src=d;document.getElementById('profilAvatar').src=d;fermerMenuPhoto();}
 let toutesAnnonces=[];let lienPartage="";let indexAEditer=-1;
-
-function partagerAnnonce(btn){
-  let card=btn.closest('.annonce-card');
-  let titre=card.querySelector('h3')?.innerText||'Annonce';
-  lienPartage=window.location.href;
-  let txt=titre+" sur VYLO-CD "+lienPartage;
-  let enc=encodeURIComponent(txt);
-  document.getElementById('shareWhatsapp').href="https://wa.me/?text="+enc;
-  document.getElementById('shareFacebook').href="https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(lienPartage);
-  document.getElementById('modalPartage').style.display='flex';
-}
+function partagerAnnonce(btn){let card=btn.closest('.annonce-card');let titre=card.querySelector('h3')?.innerText||'Annonce';lienPartage=window.location.href;let txt=titre+" sur VYLO-CD "+lienPartage;let enc=encodeURIComponent(txt);document.getElementById('shareWhatsapp').href="https://wa.me/?text="+enc;document.getElementById('shareFacebook').href="https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(lienPartage);document.getElementById('modalPartage').style.display='flex';}
 function fermerPartage(){document.getElementById('modalPartage').style.display='none';}
 function copierLien(){navigator.clipboard.writeText(lienPartage);alert('Lien copie');fermerPartage();}
-
-function ouvrirModifier(btn){
-  let card=btn.closest('.annonce-card');
-  indexAEditer=parseInt(card.dataset.index);
-  let item=toutesAnnonces[indexAEditer];
-  document.getElementById('editTitre').value=item.titre||'';
-  document.getElementById('editDescription').value=item.description||'';
-  document.getElementById('editPrix').value=item.prix||'';
-  document.getElementById('editDevise').value=item.devise||'FC';
-  document.getElementById('editTelephone').value=item.telephone||'';
-  document.getElementById('editWhatsapp').value=item.whatsapp||'';
-  document.getElementById('modalModifier').style.display='flex';
-}
+function ouvrirModifier(btn){let card=btn.closest('.annonce-card');indexAEditer=parseInt(card.dataset.index);let item=toutesAnnonces[indexAEditer];document.getElementById('editTitre').value=item.titre;document.getElementById('editDescription').value=item.description;document.getElementById('editPrix').value=item.prix;document.getElementById('modalModifier').style.display='flex';}
 function fermerModifier(){document.getElementById('modalModifier').style.display='none';}
-function enregistrerModification(){
-  if(indexAEditer<0)return;
-  let it=toutesAnnonces[indexAEditer];
-  it.titre=document.getElementById('editTitre').value;
-  it.description=document.getElementById('editDescription').value;
-  it.prix=document.getElementById('editPrix').value;
-  it.devise=document.getElementById('editDevise').value;
-  it.telephone=document.getElementById('editTelephone').value;
-  it.whatsapp=document.getElementById('editWhatsapp').value;
-  afficherAnnonces(toutesAnnonces);fermerModifier();
-}
-
-async function fetchAnnonces(){
-  let c=document.getElementById('annonces');
-  c.innerHTML='<p style="text-align:center;padding:40px">Chargement...</p>';
-  try{
-    let r=await fetch(SHEETDB);
-    let d=await r.json();
-    toutesAnnonces=d.filter(x=>x.titre && x.titre.trim()!='');
-    afficherAnnonces(toutesAnnonces);
-  }catch(e){c.innerHTML='<p style="text-align:center;color:red">Erreur chargement: '+e.message+'</p>'}
-}
-
+function enregistrerModification(){let it=toutesAnnonces[indexAEditer];it.titre=document.getElementById('editTitre').value;it.description=document.getElementById('editDescription').value;it.prix=document.getElementById('editPrix').value;afficherAnnonces(toutesAnnonces);fermerModifier();}
+async function fetchAnnonces(){let c=document.getElementById('annonces');c.innerHTML='<p style="text-align:center;padding:40px">Chargement...</p>';try{let r=await fetch(SHEETDB);let d=await r.json();toutesAnnonces=d.filter(x=>x.titre);afficherAnnonces(toutesAnnonces);}catch(e){c.innerHTML='Erreur:'+e.message}}
 function afficherAnnonces(list){
-  let c=document.getElementById('annonces');
-  if(list.length==0){c.innerHTML='<p style="text-align:center;padding:40px">Aucune annonce pour le moment</p>';return;}
-  c.innerHTML='';
-  let rev=list.slice().reverse();
+  let c=document.getElementById('annonces');if(list.length==0){c.innerHTML='<p style="text-align:center;padding:40px">Aucune annonce</p>';return;}c.innerHTML='';let rev=list.slice().reverse();
   rev.forEach((item,revIdx)=>{
-    let idx=list.length-1-revIdx;
-    let div=document.createElement('div');
-    div.className='annonce-card';
-    div.dataset.index=idx;
-    let photo=item.photo?'<img class="annonce-photo" src="'+item.photo+'" onerror="this.style.display=\'none\'">':'';
+    let idx=list.length-1-revIdx;let div=document.createElement('div');div.className='annonce-card';div.dataset.index=idx;
+    let photo=item.photo?'<img class="annonce-photo" src="'+item.photo+'">':'';
+    // ICONES COMME CAPTURE 2 : crayon, partager, 3 points dans carrés gris clair
     let wa=item.whatsapp?'<a href="https://wa.me/'+item.whatsapp+'" target="_blank" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:#25D366;border-radius:8px;flex-shrink:0"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width:26px;height:26px"></a>':'';
     let html='';
-    html+='<div class="annonce-header"><small>'+(item.date||'')+'</small><div class="right-actions"><button onclick="ouvrirModifier(this)" style="border:none;background:none;font-size:18px">✏️</button><button onclick="partagerAnnonce(this)" style="border:none;background:none;font-size:18px">↗️</button><div style="position:relative;"><button onclick="toggleMenu(this)" style="border:none;background:none;font-size:18px">⋮</button><div class="seller-menu"><button onclick="ouvrirSupprimer(this)" style="color:red;border:none;background:none">Supprimer</button></div></div></div></div>';
+    html+='<div class="annonce-header"><small style="color:#555;font-size:13px">'+(item.date||'15/08/2026 08:34:29')+'</small><div class="right-actions">';
+    html+='<button class="icon-btn" onclick="ouvrirModifier(this)">✏️</button>';
+    html+='<button class="icon-btn" onclick="partagerAnnonce(this)">🔗</button>';
+    html+='<div style="position:relative;"><button class="icon-btn" onclick="toggleMenu(this)">⋮</button><div class="seller-menu"><button onclick="ouvrirSupprimer(this)" style="color:red;border:none;background:none">🗑️ Supprimer</button></div></div>';
+    html+='</div></div>';
     html+=photo;
-    html+='<div class="annonce-infos"><h3 style="margin:6px 0">'+item.titre+'</h3><p style="color:#FF8C00;font-weight:800;font-size:20px;margin:4px 0">'+(item.prix||'')+' '+(item.devise||'')+'</p><p style="margin:6px 0;color:#444">'+(item.description||'')+'</p><p style="font-size:12px;color:#888"><b>'+(item.ville||'')+'</b> | '+(item.categorie||'')+'</p>';
+    html+='<div class="annonce-infos"><h3 style="margin:6px 0;font-size:16px">'+item.titre+'</h3><p style="color:#FF8C00;font-weight:800;font-size:20px;margin:4px 0">'+(item.prix||'')+' '+(item.devise||'$')+'</p><p style="margin:6px 0;color:#333;font-size:14px">'+(item.description||'')+'</p><p style="font-size:12px;color:#888;margin:4px 0"><b style="color:#111">'+(item.ville||'Kinshasa')+'</b> | '+(item.categorie||'Téléphone')+'</p>';
     html+='<div style="display:flex;gap:8px;margin-top:12px;align-items:center;"><a href="tel:'+item.telephone+'" style="background:#0B7E2E;color:white;padding:0 18px;height:42px;display:flex;align-items:center;border-radius:8px;text-decoration:none;font-weight:bold;font-size:14px;">Appeler</a>'+wa+'</div></div>';
-    div.innerHTML=html;
-    c.appendChild(div);
+    div.innerHTML=html;c.appendChild(div);
   });
 }
-
-function searchAnnonces(){let q=document.getElementById('searchBar').value.toLowerCase();let f=toutesAnnonces.filter(i=>(i.titre+' '+i.description+' '+(i.ville||'')).toLowerCase().includes(q));afficherAnnonces(f);}
+function searchAnnonces(){let q=document.getElementById('searchBar').value.toLowerCase();let f=toutesAnnonces.filter(i=>(i.titre+' '+i.description).toLowerCase().includes(q));afficherAnnonces(f);}
 function toggleMenu(b){document.querySelectorAll('.seller-menu').forEach(m=>{if(m!=b.nextElementSibling)m.classList.remove('show')});b.nextElementSibling.classList.toggle('show');}
-let carteASupprimer=null;
-function ouvrirSupprimer(b){carteASupprimer=b.closest('.annonce-card');document.getElementById('modalSupprimer').style.display='flex';b.closest('.seller-menu').classList.remove('show');}
+let carteASupprimer=null;function ouvrirSupprimer(b){carteASupprimer=b.closest('.annonce-card');document.getElementById('modalSupprimer').style.display='flex';b.closest('.seller-menu').classList.remove('show');}
 function fermerSupprimer(){document.getElementById('modalSupprimer').style.display='none';carteASupprimer=null;}
 function confirmerSupprimer(){if(carteASupprimer)carteASupprimer.remove();fermerSupprimer();}
-
-document.getElementById('annonceForm').addEventListener('submit',async(e)=>{
-  e.preventDefault();
-  let msg=document.getElementById('formMsg');msg.innerText='Envoi en cours...';
-  let data=Object.fromEntries(new FormData(e.target).entries());
-  data.date=new Date().toLocaleString('fr-FR');
-  data.vendeur=localStorage.getItem('vendeurNom')||'';data.entreprise=localStorage.getItem('entrepriseNom')||'';
-  try{
-    let r=await fetch(SHEETDB,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:[data]})});
-    if(r.ok){msg.innerText='Publiée!';e.target.reset();setTimeout(()=>{closeModal();fetchAnnonces();msg.innerText='';},1000);}else{msg.innerText='Erreur serveur';}
-  }catch(err){msg.innerText=err.message}
-});
-
+document.getElementById('annonceForm').addEventListener('submit',async(e)=>{e.preventDefault();let msg=document.getElementById('formMsg');msg.innerText='Envoi...';let data=Object.fromEntries(new FormData(e.target).entries());data.date=new Date().toLocaleString('fr-FR');try{let r=await fetch(SHEETDB,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:[data]})});if(r.ok){msg.innerText='Publiée!';e.target.reset();setTimeout(()=>{closeModal();fetchAnnonces();msg.innerText='';},1000);}else{msg.innerText='Erreur';}}catch(err){msg.innerText=err.message}});
 fetchAnnonces();
 window.addEventListener('DOMContentLoaded',()=>{
-  let p=localStorage.getItem('vylo_photo_profil')||localStorage.getItem('profilPhoto');
-  if(p){document.getElementById('previewProfil').src=p;document.getElementById('profilAvatar').src=p;}
+  let p=localStorage.getItem('vylo_photo_profil');if(p){document.getElementById('previewProfil').src=p;document.getElementById('profilAvatar').src=p;}
   let n=localStorage.getItem('vendeurNom');if(n){document.getElementById('profilNom').value=n;document.getElementById('affNom').innerText=n;}
   let en=localStorage.getItem('entrepriseNom');if(en){document.getElementById('profilEntreprise').value=en;document.getElementById('affEntreprise').innerText=en;}
-  let t=localStorage.getItem('entrepriseTel');if(t){document.getElementById('profilTel').value=t;document.getElementById('affTel').innerText=t;}
-  let em=localStorage.getItem('profilEmail');if(em)document.getElementById('profilEmail').value=em;
-  let ad=localStorage.getItem('profilAdresse');if(ad)document.getElementById('profilAdresse').value=ad;
-  let qui=localStorage.getItem('profilQui');if(qui)document.getElementById('profilQui').value=qui;
   if(localStorage.getItem('theme')=='dark')document.body.classList.add('dark');
 });
 </script>
 </body>
-  </html>
+</html>
