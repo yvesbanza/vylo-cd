@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VYLO-CD</title>
+<style>
+body{font-family:system-ui;margin:0;background:#f5f5f5}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;overflow-y:auto}
+.modal-content{background:#fff;margin:20px auto;padding:20px;border-radius:16px;max-width:500px}
+.annonce-card{background:#fff;border-radius:12px;margin:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.07)}
+.annonce-photo{width:100%;height:220px;object-fit:cover}
+.annonce-infos{padding:12px}
+.annonce-header{display:flex;justify-content:space-between;padding:8px 12px}
+.right-actions{display:flex;gap:8px;align-items:center}
+.seller-menu{display:none;position:absolute;right:0;top:30px;background:#fff;box-shadow:0 4px 15px rgba(0,0,0,.15);border-radius:8px;padding:8px;z-index:10}
+.seller-menu.show{display:block}
+.row2{display:flex;gap:10px}.row2>div{flex:1}
+#previewProfil{width:110px;height:110px;border-radius:50%;object-fit:cover;border:3px solid #fff;box-shadow:0 4px 15px rgba(0,0,0,.15)}
+.profil-item{display:flex;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid #f0f0f0}
+.profil-icon{width:38px;height:38px;background:#FFF3E0;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.profil-item input{border:none;flex:1;font-size:15px;outline:none;background:transparent}
+.profil-label{font-size:11px;color:#888}
+</style>
+</head>
+<body>
+
+<div style="padding:12px;display:flex;justify-content:space-between;align-items:center;background:#fff;position:sticky;top:0;z-index:100">
+<input id="searchBar" oninput="searchAnnonces()" placeholder="Rechercher..." style="flex:1;padding:10px;border-radius:20px;border:1px solid #ddd">
+<button onclick="ouvrirProfil()" style="margin-left:10px;border:none;background:none"><img id="profilAvatar" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="width:36px;height:36px;border-radius:50%"></button>
+</div>
+
+<div id="annonces"></div>
+<button onclick="openModal()" style="position:fixed;bottom:20px;right:20px;background:#FF8C00;color:#fff;border:none;padding:14px 20px;border-radius:30px;font-weight:bold;box-shadow:0 4px 12px rgba(0,0,0,.2)">+ Publier</button>
+
+<div id="formModal" class="modal">
+<div class="modal-content">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+<h2>Publier</h2><span onclick="closeModal()" style="font-size:32px;cursor:pointer">x</span></div>
+<form id="annonceForm">
+<label>Titre</label><input type="text" name="titre" required style="width:100%;padding:10px;margin-bottom:10px">
+<label>Description</label><textarea name="description" required style="width:100%;padding:10px"></textarea>
+<div class="row2"><div><label>Prix</label><input type="number" name="prix" required style="width:100%;padding:10px"></div><div><label>Devise</label><select name="devise" style="width:100%;padding:10px"><option value="FC">FC</option><option value="$">$</option></select></div></div>
+<div class="row2"><div><label>Ville</label><input type="text" name="ville" required style="width:100%;padding:10px"></div><div><label>Categorie</label><select name="categorie" required style="width:100%;padding:10px"><option value="">Choisir</option><option value="Telephone">Telephone</option><option value="Automobile">Auto</option><option value="Mode">Mode</option><option value="Immobilier">Immo</option><option value="Electronique">Elec</option><option value="Autre">Autre</option></select></div></div>
+<label>Telephone</label><input type="tel" name="telephone" required style="width:100%;padding:10px;margin-bottom:10px">
+<label>WhatsApp</label><input type="tel" name="whatsapp" style="width:100%;padding:10px;margin-bottom:10px">
+<label>Photos</label><input type="url" name="photo" style="width:100%;padding:10px">
+<div class="btn-publier-fixed"><button type="submit" form="annonceForm" style="background:#FF8C00;color:white;border:none;padding:18px;width:100%;border-radius:12px;font-weight:bold;font-size:17px;margin-top:10px">Publier maintenant</button><p id="formMsg" style="text-align:center;margin-top:8px;"></p></div>
+</form></div></div>
+
+<!-- NOUVEAU MODAL PROFIL V2 -->
+<div id="modalProfil" class="modal" style="background:#f2f2f2;">
+<div style="background:#fff;min-height:100vh;max-width:480px;margin:0 auto;">
+<div style="display:flex;align-items:center;gap:14px;padding:16px;border-bottom:1px solid #eee">
+<span onclick="fermerProfil()" style="font-size:24px;cursor:pointer">←</span><b style="font-size:18px">Profil vendeur</b>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;padding:30px 20px 20px">
+<div style="position:relative">
+<img id="previewProfil" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" onclick="ouvrirMenuPhoto()">
+<div onclick="ouvrirMenuPhoto()" style="position:absolute;bottom:2px;right:2px;background:#FF8C00;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;border:2px solid #fff;cursor:pointer">📷</div>
+</div>
+<input type="file" id="inputGalerie" accept="image/*" style="display:none" onchange="changerPhotoFichier(this)">
+<input type="file" id="inputCamera" accept="image/*" capture="environment" style="display:none" onchange="changerPhotoFichier(this)">
+<div id="affNom" style="margin-top:14px;font-weight:800;font-size:18px"></div>
+<div id="affEntreprise" style="color:#888;font-size:14px"></div>
+</div>
+<div style="background:#fff;padding:0 18px;margin-top:10px">
+<div class="profil-item"><div class="profil-icon">👤</div><div style="flex:1"><div class="profil-label">Nom complet</div><input id="profilNom" placeholder="Ex: Jean Vylo"></div><span style="color:#FF8C00">✏️</span></div>
+<div class="profil-item"><div class="profil-icon">🏪</div><div style="flex:1"><div class="profil-label">Entreprise</div><input id="profilEntreprise" placeholder="Ex: VYLO Store"></div><span style="color:#FF8C00">✏️</span></div>
+<div class="profil-item"><div class="profil-icon">📞</div><div style="flex:1"><div class="profil-label">Téléphone</div><input id="profilTel" placeholder="+243..."></div><span style="color:#FF8C00">✏️</span></div>
+<div class="profil-item"><div class="profil-icon">✉️</div><div style="flex:1"><div class="profil-label">Email</div><input id="profilEmail" placeholder="vylo@gmail.com"></div></div>
+<div class="profil-item" style="border:none"><div class="profil-icon">📍</div><div style="flex:1"><div class="profil-label">Adresse</div><input id="profilAdresse" placeholder="Kinshasa, Gombe"></div></div>
+</div>
+<div style="padding:18px">
+<div style="background:#FFF8E1;border-radius:14px;padding:14px;border:1px dashed #FFC107"><b style="font-size:13px">Qui sommes-nous?</b><textarea id="profilQui" placeholder="Décris ton activité..." style="width:100%;border:none;background:transparent;margin-top:8px;outline:none;resize:none;height:60px"></textarea></div>
+<button onclick="enregistrerProfil()" style="width:100%;margin-top:18px;background:#111;color:#fff;padding:16px;border-radius:12px;border:none;font-weight:bold;font-size:16px">Enregistrer le profil</button>
+<div id="affTel" style="text-align:center;margin-top:12px;color:#888;font-size:13px"></div>
+</div></div></div>
