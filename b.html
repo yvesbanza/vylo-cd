@@ -5,24 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>VYLO-CD</title>
 <style>
-body{font-family:system-ui;margin:0;background:#f5f5f5}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;overflow-y:auto}
-.modal-content{background:#fff;margin:20px auto;padding:20px;border-radius:16px;max-width:500px}
-.annonce-card{background:#fff;border-radius:14px;margin:12px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.07);border:1px solid #eee}
-.annonce-photo{width:100%;height:240px;object-fit:cover}
-.annonce-header{display:flex;justify-content:space-between;align-items:center;padding:10px 12px}
+*{box-sizing:border-box} body{font-family:system-ui;margin:0;background:#f5f5f5}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;justify-content:center;align-items:flex-start;padding-top:20px;overflow-y:auto}
+.modal.show{display:flex}
+.modal-content{background:#fff;width:92%;max-width:500px;border-radius:16px;padding:20px;max-height:90vh;overflow-y:auto}
+.annonce-card{background:#fff;border-radius:14px;margin:12px;overflow:hidden;border:1px solid #eee}
+.annonce-photo{width:100%;height:240px;object-fit:cover;display:block}
+.annonce-header{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:#fff}
 .right-actions{display:flex;gap:8px;align-items:center}
-.icon-btn{width:36px;height:36px;background:#f2f2f2;border-radius:10px;display:flex;align-items:center;justify-content:center;border:none;font-size:16px;cursor:pointer}
-.seller-menu{display:none;position:absolute;right:0;top:40px;background:#fff;box-shadow:0 4px 15px rgba(0,0,0,.15);border-radius:10px;padding:8px;z-index:10;width:130px}
+.icon-btn{width:36px;height:36px;background:#f2f2f2;border-radius:10px;display:flex;align-items:center;justify-content:center;border:none;cursor:pointer}
+.seller-menu{display:none;position:absolute;right:0;top:40px;background:#fff;box-shadow:0 4px 15px rgba(0,0,0,.2);border-radius:10px;padding:8px;z-index:20;width:140px}
 .seller-menu.show{display:block}
+.input{width:100%;padding:12px;margin-bottom:10px;border-radius:10px;border:1px solid #ddd}
 #previewProfil{width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid #FF8C00}
-.profil-input{width:100%;padding:12px;margin-bottom:10px;border-radius:10px;border:1px solid #ddd;outline:none}
 </style>
 </head>
 <body>
 
 <div style="background:#FF8C00;padding:10px 12px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100">
-<div style="background:#fff;border-radius:8px;padding:4px 10px;font-weight:800;color:#0B7E2E;font-size:12px">🛒 VYLO</div>
+<div style="background:#fff;border-radius:8px;padding:4px 10px;font-weight:900;color:#0B7E2E">🛒 VYLO</div>
 <b style="color:#fff;font-size:18px">VYLO-CD</b>
 <img id="profilAvatar" onclick="ouvrirProfil()" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" style="width:36px;height:36px;border-radius:50%;background:#fff;cursor:pointer">
 </div>
@@ -30,181 +31,206 @@ body{font-family:system-ui;margin:0;background:#f5f5f5}
 <div style="padding:12px;background:#fff">
 <button onclick="openModal()" style="width:100%;background:#FF8C00;color:#fff;border:none;padding:14px;border-radius:12px;font-weight:bold;font-size:15px">+ Publier une annonce</button>
 </div>
-
 <div style="padding:10px;display:flex;gap:10px;background:#fff;margin-bottom:8px">
-<input id="searchBar" oninput="searchAnnonces()" placeholder="Rechercher iPhone, voiture..." style="flex:1;padding:12px;border-radius:10px;border:1px solid #e0e0e0;background:#f9f9f9">
+<input id="searchBar" oninput="searchAnnonces()" placeholder="Rechercher..." style="flex:1;padding:12px;border-radius:10px;border:1px solid #e0e0e0;background:#f9f9f9">
 <button onclick="ouvrirParametres()" style="width:46px;height:46px;background:#fff;border:1px solid #e0e0e0;border-radius:10px;font-size:20px">⚙️</button>
 </div>
 
-<div id="annonces" style="padding-bottom:90px"></div>
+<div id="annonces" style="padding-bottom:40px"></div>
 
-<!-- MODAL PUBLIER -->
-<div id="formModal" class="modal"><div class="modal-content">
-<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px"><h2>Publier</h2><span onclick="closeModal()" style="font-size:28px;cursor:pointer">x</span></div>
+<div id="formModal" class="modal" onclick="if(event.target==this) closeModal()">
+<div class="modal-content">
+<div style="display:flex;justify-content:space-between"><h3>Publier</h3><span onclick="closeModal()" style="font-size:26px;cursor:pointer">×</span></div>
 <form id="annonceForm">
-<input type="text" name="titre" required placeholder="Titre ex: iPhone 13" class="profil-input">
-<textarea name="description" required placeholder="Description" class="profil-input" rows="3"></textarea>
-<div style="display:flex;gap:10px"><input type="number" name="prix" required placeholder="Prix" class="profil-input"><select name="devise" class="profil-input"><option value="$">$</option><option value="FC">FC</option></select></div>
-<div style="display:flex;gap:10px"><input type="text" name="ville" required placeholder="Ville" class="profil-input"><select name="categorie" required class="profil-input"><option>Telephone</option><option>Automobile</option><option>Mode</option><option>Immobilier</option><option>Electronique</option><option>Autre</option></select></div>
-<input type="tel" name="telephone" required placeholder="Telephone" class="profil-input">
-<input type="tel" name="whatsapp" placeholder="WhatsApp 243..." class="profil-input">
-<input type="url" name="photo" placeholder="Lien photo https://" class="profil-input">
-<button type="submit" style="background:#FF8C00;color:white;border:none;padding:16px;width:100%;border-radius:12px;font-weight:bold;margin-top:10px">Publier maintenant</button>
+<input class="input" type="text" name="titre" required placeholder="Titre ex: iPhone 13">
+<textarea class="input" name="description" required placeholder="Description" rows="3"></textarea>
+<div style="display:flex;gap:8px"><input class="input" type="number" name="prix" required placeholder="Prix"><select class="input" name="devise"><option>$</option><option>FC</option></select></div>
+<div style="display:flex;gap:8px"><input class="input" type="text" name="ville" required placeholder="Ville"><select class="input" name="categorie"><option>Telephone</option><option>Automobile</option><option>Mode</option><option>Immobilier</option><option>Electronique</option><option>Autre</option></select></div>
+<input class="input" type="tel" name="telephone" required placeholder="Téléphone">
+<input class="input" type="tel" name="whatsapp" placeholder="WhatsApp 243...">
+<input class="input" type="url" name="photo" placeholder="Lien image https://...">
+<button type="submit" style="width:100%;background:#FF8C00;color:#fff;border:none;padding:14px;border-radius:12px;font-weight:bold">Publier maintenant</button>
 <p id="formMsg" style="text-align:center"></p>
-</form></div></div>
+</form>
+</div>
+</div>
 
-<!-- MON PROFIL - NOUVEAU DESIGN AVEC NEWS -->
-<div id="modalProfil" class="modal" style="background:#fff">
-<div style="width:100%;max-width:480px;margin:0 auto;min-height:100vh;background:#fff">
-<div style="background:#FF8C00;padding:12px;display:flex;align-items:center;gap:12px;position:sticky;top:0">
-<span onclick="fermerProfil()" style="color:#fff;font-size:24px;cursor:pointer">←</span><b style="color:#fff;font-size:17px">Mon Profil</b>
-</div>
-<div style="display:flex;flex-direction:column;align-items:center;padding:24px 20px">
-<div style="position:relative">
-<img id="previewProfil" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" onclick="ouvrirMenuPhoto()">
-<div onclick="ouvrirMenuPhoto()" style="position:absolute;bottom:0;right:0;background:#FF8C00;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;border:2px solid #fff;font-size:14px">📷</div>
-</div>
-<input type="file" id="inputGalerie" accept="image/*" style="display:none" onchange="changerPhotoFichier(this)">
-<input type="file" id="inputCamera" accept="image/*" capture="environment" style="display:none" onchange="changerPhotoFichier(this)">
-<h3 id="affNom" style="margin:14px 0 2px 0"></h3>
-<p id="affEntreprise" style="margin:0;color:#888;font-size:13px"></p>
-<p id="affTel" style="margin:4px 0;color:#888;font-size:13px"></p>
+<div id="modalProfil" class="modal" onclick="if(event.target==this) fermerProfil()">
+<div class="modal-content" style="padding:0;overflow:hidden">
+<div style="background:#FF8C00;padding:12px;display:flex;align-items:center;gap:12px"><span onclick="fermerProfil()" style="color:#fff;font-size:22px;cursor:pointer">←</span><b style="color:#fff">Mon Profil</b></div>
+<div style="display:flex;flex-direction:column;align-items:center;padding:20px">
+<div style="position:relative"><img id="previewProfil" src="https://cdn-icons-png.flaticon.com/512/149/149071.png" onclick="ouvrirMenuPhoto()" style="cursor:pointer"><div onclick="ouvrirMenuPhoto()" style="position:absolute;bottom:0;right:0;background:#FF8C00;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;border:2px solid #fff">📷</div></div>
+<b id="affNom" style="margin-top:10px"></b><small id="affEntreprise" style="color:#888"></small><small id="affTel" style="color:#888"></small>
 </div>
 <div style="padding:0 16px">
-<input id="profilNom" placeholder="Nom complet" class="profil-input">
-<input id="profilEntreprise" placeholder="Nom boutique / Entreprise" class="profil-input">
-<input id="profilTel" placeholder="Téléphone" class="profil-input">
-<input id="profilEmail" placeholder="Email" class="profil-input">
-<input id="profilAdresse" placeholder="Adresse Kinshasa" class="profil-input">
-<div style="background:#FFF8E1;border:1px dashed #FFC107;border-radius:12px;padding:12px;margin-top:8px">
-<b style="font-size:13px">Qui sommes-nous?</b>
-<textarea id="profilQui" placeholder="Décris ton activité..." style="width:100%;border:none;background:transparent;margin-top:6px;outline:none;resize:none;height:60px"></textarea>
-</div>
+<input id="profilNom" class="input" placeholder="Nom">
+<input id="profilEntreprise" class="input" placeholder="Boutique">
+<input id="profilTel" class="input" placeholder="Téléphone">
+<input id="profilEmail" class="input" placeholder="Email">
+<input id="profilAdresse" class="input" placeholder="Adresse">
+<textarea id="profilQui" class="input" placeholder="Qui sommes-nous?" rows="2"></textarea>
 </div>
 <div style="padding:16px">
-<button onclick="ouvrirNewsVendeur()" style="width:100%;background:#111;color:#fff;padding:16px;border-radius:12px;border:none;font-weight:bold;font-size:16px;display:flex;align-items:center;justify-content:center;gap:8px">📰 Voir mes News Vylo</button>
-<p style="text-align:center;color:#999;font-size:11px;margin-top:10px">Sauvegarde automatique ✏️</p>
-</div>
-<div id="zoneNews" style="padding:16px;border-top:1px solid #eee;display:none">
-<h4 style="margin:0 0 12px 0">📰 News de ma boutique</h4>
+<button onclick="ouvrirNews()" style="width:100%;background:#111;color:#fff;padding:14px;border-radius:12px;border:none;font-weight:bold">📰 Mes News Vylo</button>
+<div id="zoneNews" style="display:none;margin-top:12px">
 <div id="listeNews"></div>
-<div style="margin-top:12px;display:flex;gap:8px">
-<input id="inputNews" placeholder="Nouvel article, boutique, challenge..." style="flex:1;padding:12px;border-radius:10px;border:1px solid #ddd">
-<button onclick="publierNews()" style="background:#FF8C00;color:#fff;border:none;padding:0 16px;border-radius:10px;font-weight:bold">Publier</button>
+<div style="display:flex;gap:8px;margin-top:10px"><input id="inputNews" class="input" style="margin:0" placeholder="Nouveau..."><button onclick="publierNews()" style="background:#FF8C00;color:#fff;border:none;padding:0 14px;border-radius:10px">OK</button></div>
 </div>
+<p style="text-align:center;color:#aaa;font-size:11px;margin-top:8px">Sauvegarde auto</p>
 </div>
 </div>
   </div>
-<div id="fondMenuPhoto" onclick="fermerMenuPhoto()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:9998"></div>
-<div id="menuPhoto" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-radius:20px 20px 0 0;z-index:9999;padding:10px">
-<button onclick="ouvrirGalerie()" style="width:100%;padding:16px;border:none;background:none;text-align:left;border-bottom:1px solid #eee">📁 Galerie</button>
-<button onclick="prendreCamera()" style="width:100%;padding:16px;border:none;background:none;text-align:left;border-bottom:1px solid #eee">📷 Caméra</button>
-<button onclick="supprimerPhotoProfil()" style="width:100%;padding:16px;border:none;background:none;text-align:left;color:red">🗑️ Supprimer</button>
-<button onclick="fermerMenuPhoto()" style="width:100%;padding:14px;margin-top:8px;background:#f2f2f2;border:none;border-radius:10px">Annuler</button>
+  <div id="fondMenuPhoto" onclick="fermerMenuPhoto()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:10000"></div>
+<div id="menuPhoto" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#fff;border-radius:16px 16px 0 0;z-index:10001;padding:10px">
+<button onclick="ouvrirGalerie()" style="width:100%;padding:14px;text-align:left;border:none;background:none;border-bottom:1px solid #eee">📁 Galerie</button>
+<button onclick="prendreCamera()" style="width:100%;padding:14px;text-align:left;border:none;background:none;border-bottom:1px solid #eee">📷 Caméra</button>
+<button onclick="supprimerPhotoProfil()" style="width:100%;padding:14px;text-align:left;border:none;background:none;color:red">🗑️ Supprimer photo</button>
+<button onclick="fermerMenuPhoto()" style="width:100%;padding:12px;margin-top:8px;background:#f2f2f2;border:none;border-radius:10px">Annuler</button>
 </div>
-<div id="modalPartage" class="modal"><div class="modal-content"><h3>Partager</h3><a id="shareWhatsapp" target="_blank">WhatsApp</a><br><br><a id="shareFacebook" target="_blank">Facebook</a><br><br><button onclick="copierLien()">Copier lien</button><br><br><button onclick="fermerPartage()">Fermer</button></div></div>
-<div id="modalModifier" class="modal"><div class="modal-content"><h3>Modifier</h3><input id="editTitre" class="profil-input"><textarea id="editDescription" class="profil-input"></textarea><input id="editPrix" class="profil-input"><button onclick="enregistrerModification()" style="width:100%;padding:12px;background:#FF8C00;color:#fff;border:none;border-radius:8px;margin-top:10px">Enregistrer</button><button onclick="fermerModifier()" style="width:100%;padding:12px;margin-top:8px">Fermer</button></div></div>
-<div id="modalSupprimer" class="modal"><div class="modal-content"><p>Supprimer cette annonce?</p><button onclick="confirmerSupprimer()" style="background:red;color:#fff;padding:10px 20px;border:none;border-radius:8px">Oui</button><button onclick="fermerSupprimer()" style="padding:10px 20px;margin-left:10px">Non</button></div></div>
-<div id="modalParametres" class="modal"><div class="modal-content"><h3>Paramètres</h3><button onclick="toggleThemeFromParams()" style="width:100%;padding:14px;border-radius:10px;border:1px solid #ddd">🌙 Mode sombre</button><br><br><button onclick="fermerParametres()" style="width:100%;padding:12px">Fermer</button></div></div>
+<input type="file" id="inputGalerie" accept="image/*" style="display:none" onchange="changerPhoto(this)">
+<input type="file" id="inputCamera" accept="image/*" capture="environment" style="display:none" onchange="changerPhoto(this)">
+
+<div id="modalPartage" class="modal" onclick="if(event.target==this) fermerPartage()"><div class="modal-content"><h3>Partager</h3><a id="shareWhatsapp" target="_blank" style="display:block;padding:12px;background:#25D366;color:#fff;border-radius:8px;text-align:center;text-decoration:none;margin-bottom:8px">WhatsApp</a><a id="shareFacebook" target="_blank" style="display:block;padding:12px;background:#1877F2;color:#fff;border-radius:8px;text-align:center;text-decoration:none">Facebook</a><br><button onclick="copierLien()" style="width:100%;padding:12px">📋 Copier lien</button><br><br><button onclick="fermerPartage()" style="width:100%;padding:10px">Fermer</button></div></div>
+<div id="modalModifier" class="modal" onclick="if(event.target==this) fermerModifier()"><div class="modal-content"><h3>Modifier</h3><input id="editTitre" class="input"><textarea id="editDescription" class="input"></textarea><input id="editPrix" class="input"><button onclick="enregistrerModif()" style="width:100%;background:#FF8C00;color:#fff;padding:12px;border:none;border-radius:8px">Enregistrer</button><button onclick="fermerModifier()" style="width:100%;margin-top:8px;padding:10px">Annuler</button></div></div>
+<div id="modalSupprimer" class="modal" onclick="if(event.target==this) fermerSupprimer()"><div class="modal-content" style="text-align:center"><p>Supprimer?</p><button onclick="confirmerSupprimer()" style="background:red;color:#fff;padding:10px 20px;border:none;border-radius:8px">Oui</button> <button onclick="fermerSupprimer()" style="padding:10px 20px">Non</button></div></div>
+<div id="modalParametres" class="modal" onclick="if(event.target==this) fermerParametres()"><div class="modal-content"><h3>⚙️ Paramètres</h3><p style="color:#666;font-size:14px">VYLO-CD v1.0</p><button onclick="alert('Mode sombre bientôt')" style="width:100%;padding:12px;border:1px solid #ddd;border-radius:10px">🌙 Mode sombre</button><br><br><button onclick="fermerParametres()" style="width:100%;padding:10px">Fermer</button></div></div>
 
 <script>
 const SHEETDB='https://sheetdb.io/api/v1/ulpea3mizvmlt';
-function openModal(){document.getElementById('formModal').style.display='block'}
-function closeModal(){document.getElementById('formModal').style.display='none'}
-function ouvrirProfil(){document.getElementById('modalProfil').style.display='flex'}
-function fermerProfil(){document.getElementById('modalProfil').style.display='none';}
-function ouvrirMenuPhoto(){document.getElementById('menuPhoto').style.display='block';document.getElementById('fondMenuPhoto').style.display='block';}
-function fermerMenuPhoto(){document.getElementById('menuPhoto').style.display='none';document.getElementById('fondMenuPhoto').style.display='none';}
-function ouvrirParametres(){document.getElementById('modalParametres').style.display='flex';}
-function fermerParametres(){document.getElementById('modalParametres').style.display='none';}
-function toggleThemeFromParams(){document.body.classList.toggle('dark');}
-function ouvrirGalerie(){fermerMenuPhoto();setTimeout(()=>{document.getElementById('inputGalerie').click();},200);}
-function prendreCamera(){fermerMenuPhoto();setTimeout(()=>{document.getElementById('inputCamera').click();},200);}
-function changerPhotoFichier(input){if(!input.files||!input.files[0])return;let f=input.files[0];let reader=new FileReader();reader.onload=function(e){let img=new Image();img.onload=function(){let canvas=document.createElement('canvas');let max=400;let ratio=Math.min(max/img.width,max/img.height);canvas.width=img.width*ratio;canvas.height=img.height*ratio;let ctx=canvas.getContext('2d');ctx.drawImage(img,0,0,canvas.width,canvas.height);let base64=canvas.toDataURL('image/jpeg',0.7);document.getElementById('previewProfil').src=base64;document.getElementById('profilAvatar').src=base64;localStorage.setItem('vylo_photo_profil',base64);fermerMenuPhoto();};img.src=e.target.result;};reader.readAsDataURL(f);}
-function supprimerPhotoProfil(){localStorage.removeItem('vylo_photo_profil');let d='https://cdn-icons-png.flaticon.com/512/149/149071.png';document.getElementById('previewProfil').src=d;document.getElementById('profilAvatar').src=d;fermerMenuPhoto();}
-
-let toutesAnnonces=[];let lienPartage="";let indexAEditer=-1;
-function partagerAnnonce(btn){let card=btn.closest('.annonce-card');let titre=card.querySelector('h3')?.innerText||'Annonce';lienPartage=window.location.href;let txt=titre+" sur VYLO-CD "+lienPartage;let enc=encodeURIComponent(txt);document.getElementById('shareWhatsapp').href="https://wa.me/?text="+enc;document.getElementById('shareFacebook').href="https://www.facebook.com/sharer/sharer.php?u="+encodeURIComponent(lienPartage);document.getElementById('modalPartage').style.display='flex';}
-function fermerPartage(){document.getElementById('modalPartage').style.display='none';}
-function copierLien(){navigator.clipboard.writeText(lienPartage);alert('Lien copie');fermerPartage();}
-function ouvrirModifier(btn){let card=btn.closest('.annonce-card');indexAEditer=parseInt(card.dataset.index);let item=toutesAnnonces[indexAEditer];document.getElementById('editTitre').value=item.titre;document.getElementById('editDescription').value=item.description;document.getElementById('editPrix').value=item.prix;document.getElementById('modalModifier').style.display='flex';}
-function fermerModifier(){document.getElementById('modalModifier').style.display='none';}
-function enregistrerModification(){let it=toutesAnnonces[indexAEditer];it.titre=document.getElementById('editTitre').value;it.description=document.getElementById('editDescription').value;it.prix=document.getElementById('editPrix').value;afficherAnnonces(toutesAnnonces);fermerModifier();}
-
-async function fetchAnnonces(){let c=document.getElementById('annonces');c.innerHTML='<p style="text-align:center;padding:40px">Chargement...</p>';try{let r=await fetch(SHEETDB);let d=await r.json();toutesAnnonces=d.filter(x=>x.titre);afficherAnnonces(toutesAnnonces);}catch(e){c.innerHTML='Erreur:'+e.message}}
-function afficherAnnonces(list){
-  let c=document.getElementById('annonces');if(list.length==0){c.innerHTML='<p style="text-align:center;padding:40px">Aucune annonce</p>';return;}c.innerHTML='';let rev=list.slice().reverse();
-  rev.forEach((item,revIdx)=>{
-    let idx=list.length-1-revIdx;let div=document.createElement('div');div.className='annonce-card';div.dataset.index=idx;
-    let photo=item.photo?'<img class="annonce-photo" src="'+item.photo+'">':'';
-    let wa=item.whatsapp?'<a href="https://wa.me/'+item.whatsapp+'" target="_blank" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:#25D366;border-radius:8px;flex-shrink:0"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width:26px;height:26px"></a>':'';
-    let html='';
-    html+='<div class="annonce-header"><small style="color:#555;font-size:13px">'+(item.date||'')+'</small><div class="right-actions">';
-    html+='<button class="icon-btn" onclick="ouvrirModifier(this)">✏️</button>';
-    html+='<button class="icon-btn" onclick="partagerAnnonce(this)">🔗</button>';
-    html+='<div style="position:relative;"><button class="icon-btn" onclick="toggleMenu(this)">⋮</button><div class="seller-menu"><button onclick="ouvrirSupprimer(this)" style="color:red;border:none;background:none">🗑️ Supprimer</button></div></div>';
-    html+='</div></div>'+photo;
-    html+='<div style="padding:12px"><h3 style="margin:6px 0">'+item.titre+'</h3><p style="color:#FF8C00;font-weight:800;font-size:20px;margin:4px 0">'+(item.prix||'')+' '+(item.devise||'$')+'</p><p style="margin:6px 0;color:#333;font-size:14px">'+(item.description||'')+'</p><p style="font-size:12px;color:#888"><b style="color:#111">'+(item.ville||'')+'</b> | '+(item.categorie||'')+'</p>';
-    html+='<div style="display:flex;gap:8px;margin-top:12px;align-items:center;"><a href="tel:'+item.telephone+'" style="background:#0B7E2E;color:white;padding:0 18px;height:42px;display:flex;align-items:center;border-radius:8px;text-decoration:none;font-weight:bold;font-size:14px;">Appeler</a>'+wa+'</div></div>';
-    div.innerHTML=html;c.appendChild(div);
-  });
+let toutesAnnonces=[], lienPartage="", indexEdit=-1, carteSuppr=null;
+function openModal(){document.getElementById('formModal').classList.add('show')}
+function closeModal(){document.getElementById('formModal').classList.remove('show')}
+function ouvrirProfil(){document.getElementById('modalProfil').classList.add('show')}
+function fermerProfil(){document.getElementById('modalProfil').classList.remove('show')}
+function ouvrirParametres(){document.getElementById('modalParametres').classList.add('show')}
+function fermerParametres(){document.getElementById('modalParametres').classList.remove('show')}
+function ouvrirMenuPhoto(){document.getElementById('menuPhoto').style.display='block';document.getElementById('fondMenuPhoto').style.display='block'}
+function fermerMenuPhoto(){document.getElementById('menuPhoto').style.display='none';document.getElementById('fondMenuPhoto').style.display='none'}
+function ouvrirGalerie(){fermerMenuPhoto();setTimeout(()=>document.getElementById('inputGalerie').click(),100)}
+function prendreCamera(){fermerMenuPhoto();setTimeout(()=>document.getElementById('inputCamera').click(),100)}
+function changerPhoto(input){
+ if(!input.files[0])return;
+ let r=new FileReader();
+ r.onload=e=>{
+  let img=new Image();
+  img.onload=()=>{
+   let c=document.createElement('canvas');let max=400;let ratio=Math.min(max/img.width,max/img.height);
+   c.width=img.width*ratio;c.height=img.height*ratio;
+   c.getContext('2d').drawImage(img,0,0,c.width,c.height);
+   let b64=c.toDataURL('image/jpeg',0.7);
+   document.getElementById('previewProfil').src=b64;
+   document.getElementById('profilAvatar').src=b64;
+   localStorage.setItem('vylo_photo',b64);
+  }; img.src=e.target.result;
+ }; r.readAsDataURL(input.files[0]);
 }
-function searchAnnonces(){let q=document.getElementById('searchBar').value.toLowerCase();let f=toutesAnnonces.filter(i=>(i.titre+' '+i.description).toLowerCase().includes(q));afficherAnnonces(f);}
-function toggleMenu(b){document.querySelectorAll('.seller-menu').forEach(m=>{if(m!=b.nextElementSibling)m.classList.remove('show')});b.nextElementSibling.classList.toggle('show');}
-let carteASupprimer=null;function ouvrirSupprimer(b){carteASupprimer=b.closest('.annonce-card');document.getElementById('modalSupprimer').style.display='flex';b.closest('.seller-menu').classList.remove('show');}
-function fermerSupprimer(){document.getElementById('modalSupprimer').style.display='none';carteASupprimer=null;}
-function confirmerSupprimer(){if(carteASupprimer)carteASupprimer.remove();fermerSupprimer();}
-
-// MON PROFIL LOGIQUE
-function ouvrirNewsVendeur(){
-  let zone=document.getElementById('zoneNews');
-  zone.style.display=zone.style.display=='none'?'block':'none';
-  afficherNews();
+function supprimerPhotoProfil(){let d='https://cdn-icons-png.flaticon.com/512/149/149071.png';document.getElementById('previewProfil').src=d;document.getElementById('profilAvatar').src=d;localStorage.removeItem('vylo_photo');fermerMenuPhoto()}
+function partagerAnnonce(btn){
+ let card=btn.closest('.annonce-card');
+ let titre=card.querySelector('h3').innerText;
+ lienPartage=location.href;
+ let msg=encodeURIComponent(titre+' sur VYLO-CD '+lienPartage);
+ document.getElementById('shareWhatsapp').href='https://wa.me/?text='+msg;
+ document.getElementById('shareFacebook').href='https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent(lienPartage);
+ document.getElementById('modalPartage').classList.add('show');
 }
-function afficherNews(){
-  let news=JSON.parse(localStorage.getItem('vylo_news')||'[]');
-  let cont=document.getElementById('listeNews');
-  if(news.length==0){cont.innerHTML='<p style="color:#888;font-size:13px">Aucune news. Publie tes nouveaux articles, boutiques, challenges...</p>';return;}
-  cont.innerHTML=news.map(n=>`<div style="padding:10px;background:#f9f9f9;border-radius:10px;margin-bottom:8px">📄 ${n.texte}<br><small style="color:#888">${n.date}</small></div>`).join('');
+function fermerPartage(){document.getElementById('modalPartage').classList.remove('show')}
+function copierLien(){navigator.clipboard.writeText(lienPartage);alert('Lien copié');fermerPartage()}
+function ouvrirModifier(btn){
+ let card=btn.closest('.annonce-card');
+ indexEdit=parseInt(card.dataset.index);
+ let it=toutesAnnonces[indexEdit];
+ document.getElementById('editTitre').value=it.titre;
+ document.getElementById('editDescription').value=it.description;
+ document.getElementById('editPrix').value=it.prix;
+ document.getElementById('modalModifier').classList.add('show');
 }
-function publierNews(){
-  let input=document.getElementById('inputNews');
-  let texte=input.value.trim();
-  if(!texte) return;
-  let news=JSON.parse(localStorage.getItem('vylo_news')||'[]');
-  news.unshift({texte:texte,date:new Date().toLocaleString('fr-FR')});
-  localStorage.setItem('vylo_news',JSON.stringify(news));
-  input.value='';afficherNews();
+function fermerModifier(){document.getElementById('modalModifier').classList.remove('show')}
+function enregistrerModif(){
+ let it=toutesAnnonces[indexEdit];
+ it.titre=document.getElementById('editTitre').value;
+ it.description=document.getElementById('editDescription').value;
+ it.prix=document.getElementById('editPrix').value;
+ afficher(toutesAnnonces);fermerModifier();
 }
-
-// Auto save profil
+function toggleMenu(btn){
+ document.querySelectorAll('.seller-menu').forEach(m=>{if(m!==btn.nextElementSibling) m.classList.remove('show')});
+ btn.nextElementSibling.classList.toggle('show');
+}
+function ouvrirSupprimer(btn){carteSuppr=btn.closest('.annonce-card');document.getElementById('modalSupprimer').classList.add('show');btn.closest('.seller-menu').classList.remove('show')}
+function fermerSupprimer(){document.getElementById('modalSupprimer').classList.remove('show');carteSuppr=null}
+function confirmerSupprimer(){if(carteSuppr) carteSuppr.remove();fermerSupprimer()}
+async function fetchAnnonces(){
+ let c=document.getElementById('annonces');c.innerHTML='<p style="text-align:center;padding:30px">Chargement...</p>';
+ try{let r=await fetch(SHEETDB);let d=await r.json();toutesAnnonces=d.filter(x=>x.titre);afficher(toutesAnnonces)}catch(e){c.innerHTML='Erreur: '+e.message}
+}
+function afficher(list){
+ let c=document.getElementById('annonces');
+ if(list.length==0){c.innerHTML='<p style="text-align:center;padding:30px">Aucune annonce</p>';return}
+ c.innerHTML='';
+ let rev=list.slice().reverse();
+ rev.forEach((item,revIdx)=>{
+  let idx=list.length-1-revIdx;
+  let div=document.createElement('div');div.className='annonce-card';div.dataset.index=idx;
+  let photo=item.photo?`<img class="annonce-photo" src="${item.photo}" onerror="this.style.display='none'">`:'';
+  let wa=item.whatsapp?`<a href="https://wa.me/${item.whatsapp}" target="_blank" style="width:42px;height:42px;display:flex;align-items:center;justify-content:center;background:#25D366;border-radius:8px"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" style="width:24px"></a>`:'';
+  div.innerHTML=`
+   <div class="annonce-header"><small style="color:#777">${item.date||''}</small>
+    <div class="right-actions">
+     <button class="icon-btn" onclick="ouvrirModifier(this)">✏️</button>
+     <button class="icon-btn" onclick="partagerAnnonce(this)">🔗</button>
+     <div style="position:relative"><button class="icon-btn" onclick="toggleMenu(this)">⋮</button><div class="seller-menu"><button onclick="ouvrirSupprimer(this)" style="border:none;background:none;color:red">🗑️ Supprimer</button></div></div>
+    </div>
+   </div>
+   ${photo}
+   <div style="padding:12px">
+    <h3 style="margin:6px 0">${item.titre}</h3>
+    <b style="color:#FF8C00;font-size:20px">${item.prix||''} ${item.devise||'$'}</b>
+    <p style="margin:6px 0;font-size:14px;color:#333">${item.description||''}</p>
+    <p style="font-size:12px;color:#888"><b style="color:#000">${item.ville||''}</b> | ${item.categorie||''}</p>
+    <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+     <a href="tel:${item.telephone}" style="background:#0B7E2E;color:#fff;padding:0 18px;height:42px;display:flex;align-items:center;border-radius:8px;text-decoration:none;font-weight:bold">Appeler</a>${wa}
+    </div>
+   </div>`;
+  c.appendChild(div);
+ });
+}
+function searchAnnonces(){let q=document.getElementById('searchBar').value.toLowerCase();let f=toutesAnnonces.filter(i=>(i.titre+' '+i.description).toLowerCase().includes(q));afficher(f)}
+function ouvrirNews(){let z=document.getElementById('zoneNews');z.style.display=z.style.display=='none'?'block':'none';renderNews()}
+function renderNews(){let n=JSON.parse(localStorage.getItem('vylo_news')||'[]');let l=document.getElementById('listeNews');l.innerHTML=n.length?n.map(x=>`<div style="padding:8px;background:#f9f9f9;border-radius:8px;margin-bottom:6px">📄 ${x.texte}<br><small style="color:#888">${x.date}</small></div>`).join(''):'<small style="color:#888">Aucune news</small>'}
+function publierNews(){let i=document.getElementById('inputNews');if(!i.value.trim())return;let n=JSON.parse(localStorage.getItem('vylo_news')||'[]');n.unshift({texte:i.value,date:new Date().toLocaleString('fr-FR')});localStorage.setItem('vylo_news',JSON.stringify(n));i.value='';renderNews()}
 ['profilNom','profilEntreprise','profilTel','profilEmail','profilAdresse','profilQui'].forEach(id=>{
-  let el=document.getElementById(id);
-  if(el){el.addEventListener('input',()=>{
-    localStorage.setItem('vendeurNom',document.getElementById('profilNom').value);
-    localStorage.setItem('entrepriseNom',document.getElementById('profilEntreprise').value);
-    localStorage.setItem('entrepriseTel',document.getElementById('profilTel').value);
-    localStorage.setItem('profilEmail',document.getElementById('profilEmail').value);
-    localStorage.setItem('profilAdresse',document.getElementById('profilAdresse').value);
-    localStorage.setItem('profilQui',document.getElementById('profilQui').value);
-    document.getElementById('affNom').innerText=document.getElementById('profilNom').value;
-    document.getElementById('affEntreprise').innerText=document.getElementById('profilEntreprise').value;
-    document.getElementById('affTel').innerText=document.getElementById('profilTel').value;
-  });}
+ let el=document.getElementById(id);
+ el.addEventListener('input',()=>{
+  localStorage.setItem('vylo_nom',document.getElementById('profilNom').value);
+  localStorage.setItem('vylo_entreprise',document.getElementById('profilEntreprise').value);
+  localStorage.setItem('vylo_tel',document.getElementById('profilTel').value);
+  localStorage.setItem('vylo_email',document.getElementById('profilEmail').value);
+  localStorage.setItem('vylo_adresse',document.getElementById('profilAdresse').value);
+  localStorage.setItem('vylo_qui',document.getElementById('profilQui').value);
+  document.getElementById('affNom').innerText=document.getElementById('profilNom').value;
+  document.getElementById('affEntreprise').innerText=document.getElementById('profilEntreprise').value;
+  document.getElementById('affTel').innerText=document.getElementById('profilTel').value;
+ });
 });
-
-document.getElementById('annonceForm').addEventListener('submit',async(e)=>{e.preventDefault();let msg=document.getElementById('formMsg');msg.innerText='Envoi...';let data=Object.fromEntries(new FormData(e.target).entries());data.date=new Date().toLocaleString('fr-FR');try{let r=await fetch(SHEETDB,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:[data]})});if(r.ok){msg.innerText='Publiée!';e.target.reset();setTimeout(()=>{closeModal();fetchAnnonces();msg.innerText='';},1000);}else{msg.innerText='Erreur';}}catch(err){msg.innerText=err.message}});
-fetchAnnonces();
-window.addEventListener('DOMContentLoaded',()=>{
-  let p=localStorage.getItem('vylo_photo_profil');if(p){document.getElementById('previewProfil').src=p;document.getElementById('profilAvatar').src=p;}
-  let n=localStorage.getItem('vendeurNom');if(n){document.getElementById('profilNom').value=n;document.getElementById('affNom').innerText=n;}
-  let en=localStorage.getItem('entrepriseNom');if(en){document.getElementById('profilEntreprise').value=en;document.getElementById('affEntreprise').innerText=en;}
-  let t=localStorage.getItem('entrepriseTel');if(t){document.getElementById('profilTel').value=t;document.getElementById('affTel').innerText=t;}
-  let em=localStorage.getItem('profilEmail');if(em)document.getElementById('profilEmail').value=em;
-  let ad=localStorage.getItem('profilAdresse');if(ad)document.getElementById('profilAdresse').value=ad;
-  let qui=localStorage.getItem('profilQui');if(qui)document.getElementById('profilQui').value=qui;
-  afficherNews();
+document.getElementById('annonceForm').addEventListener('submit',async e=>{
+ e.preventDefault();
+ let msg=document.getElementById('formMsg');msg.innerText='Envoi...';
+ let data=Object.fromEntries(new FormData(e.target).entries());
+ data.date=new Date().toLocaleString('fr-FR');
+ try{let r=await fetch(SHEETDB,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({data:[data]})});if(r.ok){msg.innerText='✅ Publiée!';e.target.reset();setTimeout(()=>{closeModal();fetchAnnonces();msg.innerText=''},1000)}else msg.innerText='Erreur'}catch(err){msg.innerText=err.message}
 });
+window.onload=()=>{
+ fetchAnnonces();
+ let p=localStorage.getItem('vylo_photo');if(p){document.getElementById('previewProfil').src=p;document.getElementById('profilAvatar').src=p}
+ let n=localStorage.getItem('vylo_nom');if(n){document.getElementById('profilNom').value=n;document.getElementById('affNom').innerText=n}
+ let en=localStorage.getItem('vylo_entreprise');if(en){document.getElementById('profilEntreprise').value=en;document.getElementById('affEntreprise').innerText=en}
+ let t=localStorage.getItem('vylo_tel');if(t){document.getElementById('profilTel').value=t;document.getElementById('affTel').innerText=t}
+ let em=localStorage.getItem('vylo_email');if(em)document.getElementById('profilEmail').value=em;
+ let ad=localStorage.getItem('vylo_adresse');if(ad)document.getElementById('profilAdresse').value=ad;
+ let qui=localStorage.getItem('vylo_qui');if(qui)document.getElementById('profilQui').value=qui;
+ renderNews();
+}
 </script>
 </body>
-</html>
+  </html>
